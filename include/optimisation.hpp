@@ -7,10 +7,14 @@
 using namespace std;
 
 class grille{
+    protected:
+        int taille_X;
+        int taille_Y;
+        int Temps;
+        float pas;
+        float resolution;
     public:
-    int taille_X;
-    int taille_Y;
-    int Temps;
-    vecteur<vecteur<vecteur<float>>> score;
-    grille(int X, int Y, int T);
+        vecteur<vecteur<vecteur<float>>> score;
+        grille(int X, int Y, int T, float res, float p);
+        vecteur<int> localisation(int x, int y);
 };
