@@ -24,7 +24,7 @@ public:
   vecteur<T>& operator +=(const vecteur<T>& v)
   {
     int n = (*this).size();
-    if (n != v.size()) {cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs"; exit(1);} 
+    if (n != v.size()) {cout << "Erreur : vecteur de tailles différentes"; exit(1);} 
 
     for (int i=0; i<n; i++)
     {
@@ -35,7 +35,7 @@ public:
   vecteur<T>& operator -=(const vecteur<T>& v)
   {
     int n = (*this).size();
-    if (n != v.size()) {cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs"; exit(1);} 
+    if (n != v.size()) {cout << "Erreur : vecteur de tailles différentes"; exit(1);} 
 
     for (int i=0; i<n; i++)
     {
@@ -102,7 +102,7 @@ template<typename T>
 vecteur<T> operator +(const vecteur<T>& u, const vecteur<T>& v)
   {
     int n = u.size();
-    if (n != v.size()) {cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs"; exit(1);}
+    if (n != v.size()) {cout << "Erreur : vecteur de tailles différentes"; exit(1);}
 
     vecteur<T> nouveau(n);
 
