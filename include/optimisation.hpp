@@ -23,3 +23,8 @@ class grille{
             return score[t][j][i]
         }
 };
+
+class commandes_discretes{
+    public:
+    vector<float> commandes; 
+}
