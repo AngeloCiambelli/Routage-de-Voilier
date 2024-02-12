@@ -2,6 +2,8 @@
 #include <vector>
 #include <cstdlib>
 #include <cmath>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -24,7 +26,7 @@ public:
   vecteur<T>& operator +=(const vecteur<T>& v)
   {
     int n = (*this).size();
-    if (n != v.size()) {cout << "Erreur : vecteur de tailles différentes"; exit(1);} 
+    if (n != v.size()) {cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs"; exit(1);} 
 
     for (int i=0; i<n; i++)
     {
@@ -35,7 +37,7 @@ public:
   vecteur<T>& operator -=(const vecteur<T>& v)
   {
     int n = (*this).size();
-    if (n != v.size()) {cout << "Erreur : vecteur de tailles différentes"; exit(1);} 
+    if (n != v.size()) {cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs"; exit(1);} 
 
     for (int i=0; i<n; i++)
     {
@@ -102,7 +104,7 @@ template<typename T>
 vecteur<T> operator +(const vecteur<T>& u, const vecteur<T>& v)
   {
     int n = u.size();
-    if (n != v.size()) {cout << "Erreur : vecteur de tailles différentes"; exit(1);}
+    if (n != v.size()) {cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs"; exit(1);}
 
     vecteur<T> nouveau(n);
 
@@ -178,22 +180,128 @@ vecteur<T> operator /(const vecteur<T>& u, const T& x)
 template<typename T>
 class bi_vecteur
 {
-    public:
-        pair<vecteur<T>, vecteur<T>> XY;
-        bi_vecteur(const vecteur<T>& X,const vecteur<T>& Y){XY.first=X; XY.second=Y;};
-        pair<T,T> operator[](const int i) const{return pair((*this).XY.first[i],(*this).XY.second[i]);};
-        //pair<T,T>& operator[](const int i){return pair((*this).XY.first[i],(*this).XY.second[i]);};
-        bi_vecteur<T>& pushback(pair<T,T> xy){((*this).XY.first).push_back(xy.first); ((*this).XY.second).push_back(xy.second); return *this;}
+  public:
+    vecteur<T> X;
+    vecteur<T> Y;
+    bi_vecteur(const vecteur<T>& _X,const vecteur<T>& _Y){X = _X; Y = _Y;};
+    bi_vecteur(){X={}; Y={};};
+    pair<T,T> operator [](const int& i) const{return pair((*this).X[i],(*this).Y[i]);};
+    bi_vecteur<T>& operator =(const bi_vecteur<T>& vect){this->X = vect.X; this->Y = vect.Y; return *this;};
+    bi_vecteur<T>& pushback(pair<T,T> xy){(this->X).push_back(xy.first); (this->Y).push_back(xy.second); return *this;}      
 };
 
 //fonctions externes
 template<typename T>
 ostream& operator <<(ostream& out,const bi_vecteur<T>& v)
 { 
-    out << "[" << v.XY.first << "," << v.XY.second << "]";
-    return(out);
+  out << "[" << v.X << "," << v.Y << "]";
+  return(out);
 };
 
+//===========================================================================
+//                          route
+//===========================================================================
+
+template<typename T>
+class route
+{
+  public :
+    pair<T,T> depart;
+    bi_vecteur<T> position;
+    bi_vecteur<T> vitesse;
+
+    route(pair<T,T> _depart, bi_vecteur<T> _position, bi_vecteur<T> _vitesse): position(), vitesse(){depart = _depart; position = _position; vitesse = _vitesse;}
+};
+
+//===========================================================================
+//                          commande
+//===========================================================================
+
+template<typename T1, typename T2>
+class commande
+{
+  public :
+    vecteur<T2> vecteur_commande;
+    string nom_fonction;
+
+    commande(string fonction, vecteur<T1> delta_t)
+    {
+      nom_fonction = fonction;
+      if (fonction=="cos"){for (int i=0; i<size(delta_t); i++){vecteur_commande.push_back(cos(delta_t[i]));};}
+      if (fonction=="sin"){for (int i=0; i<size(delta_t); i++){vecteur_commande.push_back(sin(delta_t[i]));};}
+      if (fonction=="constant"){for (int i=0; i<size(delta_t); i++){int c = 3; vecteur_commande.push_back(c*delta_t[i]);};}
+      if (fonction==""){for (int i=0; i<size(delta_t); i++){vecteur_commande.push_back(0*delta_t[i]);};}
+    }
+};
+
+//csv to string, code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+string fichier_vers_string(const string& chemin) 
+{
+  auto ss = ostringstream{};
+  ifstream input_file(chemin);
+  if (!input_file.is_open()) {
+    cerr << "impossible ouvrir le fichier - '" << chemin << "'" << endl;
+    exit(1);
+  }
+  ss << input_file.rdbuf();
+  return ss.str();
+}
+
+// template<typename T>
+// class polaire
+// {
+//   public:
+//   bi_vecteur<string> ligne_colonne;
+//   vecteur<vecteur<T>> vitesse_voilier;
+
+//   polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+//   {
+//     string contenu = fichier_vers_string(chemin); // contenu du .csv en string
+//     istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
+//     std::vector<string> element; //element de la ligne entiere
+//     string memoire; // element entre chaque séparateur normalement "espace nombre espace"
+
+//     //Compteurs pour savoir dans quelle ligne on est 
+//     int compteur_1 = 0;
+   
+
+//     while (std::getline(sstream, memoire)) // Pour toutes les lignes
+//     {
+
+//       istringstream ligne(memoire); //transformer la ligne en type "stream" necessaire pour getline()
+      
+//       // A quel élément de la ligne (compteur_2) on est.
+//       int compteur_2 = 0;
 
 
+//       while (std::getline(ligne, memoire, separateur)) { //trouver tous les elements de chaques lignes
+//         if (compteur_2==0)  // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
+//         {
+//           ligne_colonne.X.push_back(memoire);
+//         }
+//         else 
+//         {
+//           memoire.erase(remove_if(memoire.begin(), memoire.end(), isspace), memoire.end());
+//           element.push_back(memoire);
+//         }
+//       }
+//     // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
+//     //if (compteur_1==0){ligne_colonne.Y = element;}
+//     // else {vitesse_voilier.push_back(element);}
 
+//     //Nettoyer les variables
+//     element.clear();
+//     compteur_1 += 1;
+//     }
+
+//   };
+// };
+
+// template<typename T>
+// class voilier
+// {
+//   public:
+//   pair<T, T> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
+//   polaire polaire_voilier;
+
+// };
