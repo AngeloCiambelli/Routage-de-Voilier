@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     //test vecteur
     cout << vecteur({1,2,3}) << endl;
     
-   //test
+    //test 1
     //Test bi_vecteur
     vecteur<int> A({1,2,3});
     vecteur<int> B({1,2,3});
