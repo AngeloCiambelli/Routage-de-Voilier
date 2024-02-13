@@ -1,8 +1,11 @@
+#ifndef DEF_OPTIMISATION_HPP
+#define DEF_OPTIMISATION_HPP
+
 #include <iostream>
 #include <vector>
 #include <cstdlib>
 #include <cmath>
-#include "routage_voilier.hpp"
+#include "utilitaire.hpp"
 
 using namespace std;
 
@@ -28,3 +31,5 @@ class commandes_discretes{
     public:
     vector<float> commandes; 
 };
+
+#endif
