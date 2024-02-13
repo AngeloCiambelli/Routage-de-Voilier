@@ -14,3 +14,5 @@ class HJB{
     Grille<float> grille;
     
 };
+
+#endif
