@@ -29,8 +29,9 @@ int main(int argc, char *argv[])
     //test commande
     string fun = "cos";
     commande<int, float> com(fun, A);
-    cout << com.vecteur_commande;
-    string chemin = "test.csv";
-    // polaire<string> pol(chemin, ',');
+    cout << com.vecteur_commande << endl;
+    string chemin = "include/test.csv";
+    polaire<string> pol(chemin, ';');
+    cout << pol.ligne_colonne << endl;
 }
 
