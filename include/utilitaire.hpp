@@ -2,6 +2,7 @@
 #define DEF_UTILITAIRE_HPP
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cstdlib>
 #include <cmath>
@@ -244,13 +245,13 @@ class polaire
 {
   public:
   bi_vecteur<string> ligne_colonne;
-  vecteur<vecteur<T>> vitesse_voilier;
+  vector<vector<T>> vitesse_voilier;
 
   polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
   {
     string contenu = fichier_vers_string(chemin); // contenu du .csv en string
     istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
-    vector<string> element; //element de la ligne entiere
+    vector<T> element; //element de la ligne entiere
     string memoire; // element entre chaque séparateur normalement "espace nombre espace"
 
     //Compteurs pour savoir dans quelle ligne on est 
@@ -270,13 +271,25 @@ class polaire
         }
         else 
         {
+          // Nettoyer les elements des espaces autour
           memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x) {return std::isspace(x); }),memoire.end());
+          
           // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
           if ((compteur_1==0) && (compteur_2!=0)){(ligne_colonne.Y).push_back(memoire);}
-          // else {vitesse_voilier[compteur_1-1][compteur_2-1] = memoire;}
+          else 
+          {
+            T memoire_float; 
+            istringstream(memoire) >> memoire_float; 
+            element.push_back(memoire_float);
+          }
         }
         compteur_2 += 1;
       }
+
+      // Remplir le tableau de valeur des polaires du voilier
+      // cout << element << endl;
+      if (compteur_1 != 0) {vitesse_voilier.push_back(element);}
+
       //Nettoyer les variables
       element.clear();
       compteur_1 += 1;
@@ -284,13 +297,13 @@ class polaire
   };
 };
 
-// template<typename T>
-// class voilier
-// {
-//   public:
-//   pair<T, T> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
-//   polaire polaire_voilier;
-// };
+template<typename T>
+class voilier
+{
+  public:
+  pair<T, T> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
+  polaire<T> polaire_voilier;
+};
 
 
 
@@ -299,91 +312,91 @@ class polaire
 //===========================================================================
 
 
-template<typename T>
-class Grille{
-    public:
-        int taille_X;
-        int taille_Y;
-        int Temps;
-        float pas;
-        float resolution;
-        vecteur<vecteur<vecteur<T>>> valeur;
-        Grille(int X, int Y, int Time, float res, float p);
-        bi_vecteur<int> localisation(const float &x, const float &y);
-        float operator ()(int t, int j, int i){
-            if(i>=taille_X || j>=taille_Y){
-                cout << "Erreur : indices non-valides"; exit(1);}
-            return score[t][j][i];
-        };
-        T interpolation(const float &x, const float &y, const int &timestamp);
-};
+// template<typename T>
+// class Grille{
+//     public:
+//         int taille_X;
+//         int taille_Y;
+//         int Temps;
+//         float pas;
+//         float resolution;
+//         vecteur<vecteur<vecteur<T>>> valeur;
+//         Grille(int X, int Y, int Time, float res, float p);
+//         bi_vecteur<int> localisation(const float &x, const float &y);
+//         float operator ()(int t, int j, int i){
+//             if(i>=taille_X || j>=taille_Y){
+//                 cout << "Erreur : indices non-valides"; exit(1);}
+//             return score[t][j][i];
+//         };
+//         T interpolation(const float &x, const float &y, const int &timestamp);
+// };
 
 
-template<typename T>
-Grille<T>::Grille(int X, int Y, int Time, float res, float p){
-    vecteur<vecteur<vecteur<float>>> tmp(
-        Time,
-        vecteur<vecteur<float>>(
-        Y,
-        vecteur<float>(X)
-        ));
-    taille_X =  X;
-    taille_Y = Y;
-    Temps = Time;
-    resolution = res;
-    pas = p;
-    valeur = tmp;
-}
+// template<typename T>
+// Grille<T>::Grille(int X, int Y, int Time, float res, float p){
+//     vecteur<vecteur<vecteur<float>>> tmp(
+//         Time,
+//         vecteur<vecteur<float>>(
+//         Y,
+//         vecteur<float>(X)
+//         ));
+//     taille_X =  X;
+//     taille_Y = Y;
+//     Temps = Time;
+//     resolution = res;
+//     pas = p;
+//     valeur = tmp;
+// }
 
-template<typename T>
-bi_vecteur<int> Grille<T>::localisation(const float &x, const float &y){
-    // rend les quatres indices des points ABCD correspondant au rectangle ABCD
-    // dans lequel se trouve le point de coordonnée (x,y) (A en bas gauche, D au-dessus de A)
-    vecteur<int> Xs(4);
-    vecteur<int> Ys(4);
-    Xs[0] = int(floor(x/resolution));
-    Ys[0] = int(floor(y/resolution));
-    Xs[1] = Xs[0] + 1;
-    Ys[1] = Ys[0];
-    Xs[2] = Xs[1];
-    Ys[2] = Ys[1] + 1;
-    Xs[3] = Xs[0];
-    Ys[3] = Ys[2];
-    bi_vecteur<int> result(Xs,Ys);
-    return result;
-}
+// template<typename T>
+// bi_vecteur<int> Grille<T>::localisation(const float &x, const float &y){
+//     // rend les quatres indices des points ABCD correspondant au rectangle ABCD
+//     // dans lequel se trouve le point de coordonnée (x,y) (A en bas gauche, D au-dessus de A)
+//     vecteur<int> Xs(4);
+//     vecteur<int> Ys(4);
+//     Xs[0] = int(floor(x/resolution));
+//     Ys[0] = int(floor(y/resolution));
+//     Xs[1] = Xs[0] + 1;
+//     Ys[1] = Ys[0];
+//     Xs[2] = Xs[1];
+//     Ys[2] = Ys[1] + 1;
+//     Xs[3] = Xs[0];
+//     Ys[3] = Ys[2];
+//     bi_vecteur<int> result(Xs,Ys);
+//     return result;
+// }
 
 
-template<typename T>
-T Grille<T>::interpolation(const float &x, const float &y, const int &timestamp){
-  T sum = T();
-  bi_vecteur position = localisation(const float &x, const float &y);
-  float w11;float w12;float w21; float w22;
-  float x1;float x2;float y1; float y2;
-  x1 = position.X[0];x2 = position.X[2];
-  y1 = position.Y[0];y2 = position.Y[2];
-  float D = (x2-x1)(y2-y1);
-  w11 = (x2 - x)(y2 - y)/D;
-  w12 = (x2 - x)(y - y1)/D;
-  w21 = (x - x1)(y2 - y)/D;
-  w22 = (x - x1)(y - y1)/D;
-  sum = valeur[timestamp][y1][x1]*w11 + valeur[timestamp][y2][x1]*w21 + valeur[timestamp][y1][x2]*w12 + valeur[timestamp][y2][x2]*w22;
-  return sum;
-};
+// template<typename T>
+// T Grille<T>::interpolation(const float &x, const float &y, const int &timestamp){
+//   T sum = T();
+//   bi_vecteur position = localisation(const float &x, const float &y);
+//   float w11;float w12;float w21; float w22;
+//   float x1;float x2;float y1; float y2;
+//   x1 = position.X[0];x2 = position.X[2];
+//   y1 = position.Y[0];y2 = position.Y[2];
+//   float D = (x2-x1)(y2-y1);
+//   w11 = (x2 - x)(y2 - y)/D;
+//   w12 = (x2 - x)(y - y1)/D;
+//   w21 = (x - x1)(y2 - y)/D;
+//   w22 = (x - x1)(y - y1)/D;
+//   sum = valeur[timestamp][y1][x1]*w11 + valeur[timestamp][y2][x1]*w21 + valeur[timestamp][y1][x2]*w12 + valeur[timestamp][y2][x2]*w22;
+//   return sum;
+// };
 
-class commandes_discretes{
-    public:
-    vector<float> commandes;
-    float contrainte;
-    bool check_commandes(){
-      float a = commandes[0];
-      for (int i = 1; i<commandes.size();i++){
-        if ( fmod(abs (commandes[i] - a), 360.) > contrainte){
-          cout<<"Erreur : commande invalide. Il y a un changment brusque de direction.";
-        }
-        a = commandes[i];
-      }
-    } 
-};
+// class commandes_discretes{
+//     public:
+//     vector<float> commandes;
+//     float contrainte;
+//     bool check_commandes(){
+//       float a = commandes[0];
+//       for (int i = 1; i<commandes.size();i++){
+//         if ( fmod(abs (commandes[i] - a), 360.) > contrainte){
+//           cout<<"Erreur : commande invalide. Il y a un changment brusque de direction.";
+//         }
+//         a = commandes[i];
+//       }
+//     } 
+// };
 
 #endif

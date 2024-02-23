@@ -9,10 +9,10 @@
 
 using namespace std;
 
-class HJB{
-    public:
-    Grille<float> grille;
+// class HJB{
+//     public:
+//     Grille<float> grille;
     
-};
+// };
 
 #endif

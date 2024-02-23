@@ -31,7 +31,10 @@ int main(int argc, char *argv[])
     commande<int, float> com(fun, A);
     cout << com.vecteur_commande << endl;
     string chemin = "include/test.csv";
-    polaire<string> pol(chemin, ';');
+
+    //test polaire
+    polaire<float> pol(chemin, ';');
     cout << pol.ligne_colonne << endl;
+    cout << pol.vitesse_voilier << endl;
 }
 
