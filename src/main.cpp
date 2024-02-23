@@ -24,17 +24,22 @@ int main(int argc, char *argv[])
     //test route
     bi_vecteur<int> pos(B,A);
     route<int> route1(pair(1,3), pos, champs);
-    cout << route1.position << endl;
+    cout << route1.position << endl << endl;
 
     //test commande
     string fun = "cos";
     commande<int, float> com(fun, A);
-    cout << com.vecteur_commande << endl;
-    string chemin = "include/test.csv";
+    cout << com.vecteur_commande << endl << endl;
 
     //test polaire
-    polaire<float> pol(chemin, ';');
+    string chemin = "include/test.csv";
+    polaire<int> pol(chemin, ';');
     cout << pol.ligne_colonne << endl;
-    cout << pol.vitesse_voilier << endl;
+    cout << pol.vitesse_voilier << endl << endl;
+
+    //test voilier
+    pair<int, int> min_max_com(3,200);
+    voilier<int, float> voilier_the_first(min_max_com, chemin, ';');
+    cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl;
 }
 

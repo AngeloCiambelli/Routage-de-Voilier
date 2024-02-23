@@ -167,21 +167,22 @@ template<typename T>
 vecteur<T> operator *(const T& x, const vecteur<T>& u) {return u*x;} // x*u
 template<typename T>
 vecteur<T> operator /(const vecteur<T>& u, const T& x)
+{
+  int n = u.size();
+  vecteur<T> nouveau(n);
+
+  for (int i=0; i<n; i++)
   {
-    int n = u.size();
-    vecteur<T> nouveau(n);
-
-    for (int i=0; i<n; i++)
-    {
-      nouveau[i] = u[i]/x;
-    }
-    return nouveau;
-  } // u / x
+    nouveau[i] = u[i]/x;
+  }
+  return nouveau;
+} // u / x
 
 
 //===========================================================================
-//                          bi-vecteur
+//                            bi-vecteur
 //===========================================================================
+
 
 template<typename T>
 class bi_vecteur
@@ -204,9 +205,11 @@ ostream& operator <<(ostream& out,const bi_vecteur<T>& v)
   return(out);
 };
 
+
 //===========================================================================
-//                          route
+//                            route
 //===========================================================================
+
 
 template<typename T>
 class route
@@ -219,9 +222,11 @@ class route
     route(pair<T,T> _depart, bi_vecteur<T> _position, bi_vecteur<T> _vitesse): position(), vitesse(){depart = _depart; position = _position; vitesse = _vitesse;}
 };
 
+
 //===========================================================================
-//                          commande
+//                            commande
 //===========================================================================
+
 
 template<typename T1, typename T2>
 class commande
@@ -240,6 +245,12 @@ class commande
     }
 };
 
+
+//===========================================================================
+//                            polaire
+//===========================================================================
+
+
 template<typename T>
 class polaire
 {
@@ -247,64 +258,92 @@ class polaire
   bi_vecteur<string> ligne_colonne;
   vector<vector<T>> vitesse_voilier;
 
-  polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
-  {
-    string contenu = fichier_vers_string(chemin); // contenu du .csv en string
-    istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
-    vector<T> element; //element de la ligne entiere
-    string memoire; // element entre chaque séparateur normalement "espace nombre espace"
-
-    //Compteurs pour savoir dans quelle ligne on est 
-    int compteur_1 = 0;
-
-    while (std::getline(sstream, memoire)) // Pour toutes les lignes
-    {
-      istringstream ligne(memoire); //transformer la ligne en type "stream" necessaire pour getline()
-      
-      // A quel élément de la ligne (compteur_2) on est.
-      int compteur_2 = 0;
-
-      while (std::getline(ligne, memoire, separateur)) { //trouver tous les elements de chaques lignes
-        if ((compteur_2==0) && (compteur_1!=0))  // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
-        {
-          ligne_colonne.X.push_back(memoire);
-        }
-        else 
-        {
-          // Nettoyer les elements des espaces autour
-          memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x) {return std::isspace(x); }),memoire.end());
-          
-          // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
-          if ((compteur_1==0) && (compteur_2!=0)){(ligne_colonne.Y).push_back(memoire);}
-          else 
-          {
-            T memoire_float; 
-            istringstream(memoire) >> memoire_float; 
-            element.push_back(memoire_float);
-          }
-        }
-        compteur_2 += 1;
-      }
-
-      // Remplir le tableau de valeur des polaires du voilier
-      // cout << element << endl;
-      if (compteur_1 != 0) {vitesse_voilier.push_back(element);}
-
-      //Nettoyer les variables
-      element.clear();
-      compteur_1 += 1;
-    }
-  };
+  polaire(const string& chemin, char separateur); //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 };
 
-template<typename T>
+template <typename T>
+polaire<T>::polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+{
+  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
+  istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
+  vector<T> element; //element de la ligne entiere
+  string memoire; // element entre chaque séparateur normalement "espace nombre espace"
+
+  //Compteurs pour savoir dans quelle ligne on est 
+  int compteur_1 = 0;
+
+  while (std::getline(sstream, memoire)) // Pour toutes les lignes
+  {
+    istringstream ligne(memoire); //transformer la ligne en type "stream" necessaire pour getline()
+      
+    // A quel élément de la ligne (compteur_2) on est.
+    int compteur_2 = 0;
+
+    while (std::getline(ligne, memoire, separateur)) { //trouver tous les elements de chaques lignes
+      if ((compteur_2==0) && (compteur_1!=0))  // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
+      {
+        ligne_colonne.X.push_back(memoire);
+      }
+      else 
+      {
+        // Nettoyer les elements des espaces autour
+        memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x) {return std::isspace(x); }),memoire.end());
+          
+        // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
+        if ((compteur_1==0) && (compteur_2!=0)){(ligne_colonne.Y).push_back(memoire);}
+        else 
+        {
+          T memoire_float; 
+          istringstream(memoire) >> memoire_float; // Convertir le type string dans le type T
+          element.push_back(memoire_float); // Ajouter cet element a la ligne d'element
+        }
+      }
+      compteur_2 += 1;
+    }
+
+    // Remplir le tableau de valeur des polaires du voilier
+    // cout << element << endl;
+    if (compteur_1 != 0) {vitesse_voilier.push_back(element);}
+
+    //Nettoyer les variables
+    element.clear();
+    compteur_1 += 1;
+  }
+};
+
+
+//===========================================================================
+//                            voilier
+//===========================================================================
+
+
+template<typename T1, typename T2>
 class voilier
 {
   public:
-  pair<T, T> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
-  polaire<T> polaire_voilier;
+  pair<T1, T1> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
+  polaire<T2> polaire_voilier;
+  voilier(const pair<T1,T1>& contraintes, const string& chemin, const char sep);
 };
 
+template<typename T1, typename T2>
+voilier<T1,T2>::voilier(const pair<T1,T1>& contraintes, const string& chemin, const char sep) : polaire_voilier(chemin, sep)
+{
+  contrainte_commande = contraintes;
+}
+
+
+//===========================================================================
+//                            bassin
+//===========================================================================
+
+
+template<typename T>
+class bassin
+{
+  public:
+  vecteur<vecteur< pair<T>> champs;
+}
 
 
 //===========================================================================
