@@ -1,9 +1,8 @@
-#include <iostream>
 #include "utilitaire.hpp"
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Hello world!" << std::endl;
+    cout << "Hello world!" << std::endl;
 
     //test vecteur
     cout << vecteur({1,2,3}) << endl;

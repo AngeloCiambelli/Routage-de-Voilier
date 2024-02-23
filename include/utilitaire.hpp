@@ -338,12 +338,12 @@ voilier<T1,T2>::voilier(const pair<T1,T1>& contraintes, const string& chemin, co
 //===========================================================================
 
 
-template<typename T>
-class bassin
-{
-  public:
-  vecteur<vecteur< pair<T>> champs;
-}
+// template<typename T>
+// class bassin
+// {
+//   public:
+//   vecteur<vecteur< pair<T>> champs;
+// }
 
 
 //===========================================================================
