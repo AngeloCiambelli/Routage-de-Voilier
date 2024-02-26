@@ -308,7 +308,8 @@ class Grille{
         float pas;
         float resolution;
         vecteur<vecteur<vecteur<T>>> valeur;
-        Grille(int X, int Y, int Time, float res, float p);
+        Grille(int X, int Y, int Time, float res, float p):
+        taille_X(X), taille_Y(Y), Temps(Time), resolution(res), pas(p);
         bi_vecteur<int> localisation(const float &x, const float &y);
         float operator ()(int t, int j, int i){
             if(i>=taille_X || j>=taille_Y){
@@ -320,14 +321,15 @@ class Grille{
 
 
 template<typename T>
-Grille<T>::Grille(int X, int Y, int Time, float res, float p){
+Grille<T>::Grille(int X, int Y, int Time, float res, float p)
+{
     vecteur<vecteur<vecteur<float>>> tmp(
         Time,
         vecteur<vecteur<float>>(
         Y,
         vecteur<float>(X)
         ));
-    taille_X =  X;
+    taille_X = X;
     taille_Y = Y;
     Temps = Time;
     resolution = res;
@@ -384,6 +386,10 @@ class commandes_discretes{
         a = commandes[i];
       }
     } 
+};
+
+class dynamique{
+
 };
 
 #endif
