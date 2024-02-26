@@ -2,6 +2,7 @@
 #define DEF_UTILITAIRE_HPP
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cstdlib>
 #include <cmath>
@@ -166,21 +167,22 @@ template<typename T>
 vecteur<T> operator *(const T& x, const vecteur<T>& u) {return u*x;} // x*u
 template<typename T>
 vecteur<T> operator /(const vecteur<T>& u, const T& x)
+{
+  int n = u.size();
+  vecteur<T> nouveau(n);
+
+  for (int i=0; i<n; i++)
   {
-    int n = u.size();
-    vecteur<T> nouveau(n);
-
-    for (int i=0; i<n; i++)
-    {
-      nouveau[i] = u[i]/x;
-    }
-    return nouveau;
-  } // u / x
+    nouveau[i] = u[i]/x;
+  }
+  return nouveau;
+} // u / x
 
 
 //===========================================================================
-//                          bi-vecteur
+//                            bi-vecteur
 //===========================================================================
+
 
 template<typename T>
 class bi_vecteur
@@ -203,9 +205,11 @@ ostream& operator <<(ostream& out,const bi_vecteur<T>& v)
   return(out);
 };
 
+
 //===========================================================================
-//                          route
+//                            route
 //===========================================================================
+
 
 template<typename T>
 class route
@@ -218,9 +222,11 @@ class route
     route(pair<T,T> _depart, bi_vecteur<T> _position, bi_vecteur<T> _vitesse): position(), vitesse(){depart = _depart; position = _position; vitesse = _vitesse;}
 };
 
+
 //===========================================================================
-//                          commande
+//                            commande
 //===========================================================================
+
 
 template<typename T1, typename T2>
 class commande
@@ -239,59 +245,105 @@ class commande
     }
 };
 
+
+//===========================================================================
+//                            polaire
+//===========================================================================
+
+
 template<typename T>
 class polaire
 {
   public:
   bi_vecteur<string> ligne_colonne;
-  vecteur<vecteur<T>> vitesse_voilier;
+  vector<vector<T>> vitesse_voilier;
 
-  polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
-  {
-    string contenu = fichier_vers_string(chemin); // contenu du .csv en string
-    istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
-    vector<string> element; //element de la ligne entiere
-    string memoire; // element entre chaque séparateur normalement "espace nombre espace"
-
-    //Compteurs pour savoir dans quelle ligne on est 
-    int compteur_1 = 0;
-
-    while (std::getline(sstream, memoire)) // Pour toutes les lignes
-    {
-      istringstream ligne(memoire); //transformer la ligne en type "stream" necessaire pour getline()
-      
-      // A quel élément de la ligne (compteur_2) on est.
-      int compteur_2 = 0;
-
-      while (std::getline(ligne, memoire, separateur)) { //trouver tous les elements de chaques lignes
-        if ((compteur_2==0) && (compteur_1!=0))  // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
-        {
-          ligne_colonne.X.push_back(memoire);
-        }
-        else 
-        {
-          memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x) {return std::isspace(x); }),memoire.end());
-          // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
-          if ((compteur_1==0) && (compteur_2!=0)){(ligne_colonne.Y).push_back(memoire);}
-          // else {vitesse_voilier[compteur_1-1][compteur_2-1] = memoire;}
-        }
-        compteur_2 += 1;
-      }
-      //Nettoyer les variables
-      element.clear();
-      compteur_1 += 1;
-    }
-  };
+  polaire(const string& chemin, char separateur); //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 };
 
+template <typename T>
+polaire<T>::polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+{
+  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
+  istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
+  vector<T> element; //element de la ligne entiere
+  string memoire; // element entre chaque séparateur normalement "espace nombre espace"
+
+  //Compteurs pour savoir dans quelle ligne on est 
+  int compteur_1 = 0;
+
+  while (std::getline(sstream, memoire)) // Pour toutes les lignes
+  {
+    istringstream ligne(memoire); //transformer la ligne en type "stream" necessaire pour getline()
+      
+    // A quel élément de la ligne (compteur_2) on est.
+    int compteur_2 = 0;
+
+    while (std::getline(ligne, memoire, separateur)) { //trouver tous les elements de chaques lignes
+      if ((compteur_2==0) && (compteur_1!=0))  // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
+      {
+        ligne_colonne.X.push_back(memoire);
+      }
+      else 
+      {
+        // Nettoyer les elements des espaces autour
+        memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x) {return std::isspace(x); }),memoire.end());
+          
+        // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
+        if ((compteur_1==0) && (compteur_2!=0)){(ligne_colonne.Y).push_back(memoire);}
+        else 
+        {
+          T memoire_float; 
+          istringstream(memoire) >> memoire_float; // Convertir le type string dans le type T
+          element.push_back(memoire_float); // Ajouter cet element a la ligne d'element
+        }
+      }
+      compteur_2 += 1;
+    }
+
+    // Remplir le tableau de valeur des polaires du voilier
+    // cout << element << endl;
+    if (compteur_1 != 0) {vitesse_voilier.push_back(element);}
+
+    //Nettoyer les variables
+    element.clear();
+    compteur_1 += 1;
+  }
+};
+
+
+//===========================================================================
+//                            voilier
+//===========================================================================
+
+
+template<typename T1, typename T2>
+class voilier
+{
+  public:
+  pair<T1, T1> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
+  polaire<T2> polaire_voilier;
+  voilier(const pair<T1,T1>& contraintes, const string& chemin, const char sep);
+};
+
+template<typename T1, typename T2>
+voilier<T1,T2>::voilier(const pair<T1,T1>& contraintes, const string& chemin, const char sep) : polaire_voilier(chemin, sep)
+{
+  contrainte_commande = contraintes;
+}
+
+
+//===========================================================================
+//                            bassin
+//===========================================================================
+
+
 // template<typename T>
-// class voilier
+// class bassin
 // {
 //   public:
-//   pair<T, T> contrainte_commande;  // (borne sup, borne inf) des actions de la commande
-//   polaire polaire_voilier;
-// };
-
+//   vecteur<vecteur< pair<T>> champs;
+// }
 
 
 //===========================================================================
@@ -337,41 +389,41 @@ Grille<T>::Grille(int X, int Y, int Time, float res, float p)
     valeur = tmp;
 }
 
-template<typename T>
-bi_vecteur<int> Grille<T>::localisation(const float &x, const float &y){
-    // rend les quatres indices des points ABCD correspondant au rectangle ABCD
-    // dans lequel se trouve le point de coordonnée (x,y) (A en bas gauche, D au-dessus de A)
-    vecteur<int> Xs(4);
-    vecteur<int> Ys(4);
-    Xs[0] = int(floor(x/resolution));
-    Ys[0] = int(floor(y/resolution));
-    Xs[1] = Xs[0] + 1;
-    Ys[1] = Ys[0];
-    Xs[2] = Xs[1];
-    Ys[2] = Ys[1] + 1;
-    Xs[3] = Xs[0];
-    Ys[3] = Ys[2];
-    bi_vecteur<int> result(Xs,Ys);
-    return result;
-}
+// template<typename T>
+// bi_vecteur<int> Grille<T>::localisation(const float &x, const float &y){
+//     // rend les quatres indices des points ABCD correspondant au rectangle ABCD
+//     // dans lequel se trouve le point de coordonnée (x,y) (A en bas gauche, D au-dessus de A)
+//     vecteur<int> Xs(4);
+//     vecteur<int> Ys(4);
+//     Xs[0] = int(floor(x/resolution));
+//     Ys[0] = int(floor(y/resolution));
+//     Xs[1] = Xs[0] + 1;
+//     Ys[1] = Ys[0];
+//     Xs[2] = Xs[1];
+//     Ys[2] = Ys[1] + 1;
+//     Xs[3] = Xs[0];
+//     Ys[3] = Ys[2];
+//     bi_vecteur<int> result(Xs,Ys);
+//     return result;
+// }
 
 
-template<typename T>
-T Grille<T>::interpolation(const float &x, const float &y, const int &timestamp){
-  T sum = T();
-  bi_vecteur position = localisation(const float &x, const float &y);
-  float w11;float w12;float w21; float w22;
-  float x1;float x2;float y1; float y2;
-  x1 = position.X[0];x2 = position.X[2];
-  y1 = position.Y[0];y2 = position.Y[2];
-  float D = (x2-x1)(y2-y1);
-  w11 = (x2 - x)(y2 - y)/D;
-  w12 = (x2 - x)(y - y1)/D;
-  w21 = (x - x1)(y2 - y)/D;
-  w22 = (x - x1)(y - y1)/D;
-  sum = valeur[timestamp][y1][x1]*w11 + valeur[timestamp][y2][x1]*w21 + valeur[timestamp][y1][x2]*w12 + valeur[timestamp][y2][x2]*w22;
-  return sum;
-};
+// template<typename T>
+// T Grille<T>::interpolation(const float &x, const float &y, const int &timestamp){
+//   T sum = T();
+//   bi_vecteur position = localisation(const float &x, const float &y);
+//   float w11;float w12;float w21; float w22;
+//   float x1;float x2;float y1; float y2;
+//   x1 = position.X[0];x2 = position.X[2];
+//   y1 = position.Y[0];y2 = position.Y[2];
+//   float D = (x2-x1)(y2-y1);
+//   w11 = (x2 - x)(y2 - y)/D;
+//   w12 = (x2 - x)(y - y1)/D;
+//   w21 = (x - x1)(y2 - y)/D;
+//   w22 = (x - x1)(y - y1)/D;
+//   sum = valeur[timestamp][y1][x1]*w11 + valeur[timestamp][y2][x1]*w21 + valeur[timestamp][y1][x2]*w12 + valeur[timestamp][y2][x2]*w22;
+//   return sum;
+// };
 
 class commandes_discretes{
     public:
