@@ -1,4 +1,5 @@
 #include "utilitaire.hpp"
+#include <cmath>
 
 int main(int argc, char *argv[])
 {
@@ -40,5 +41,14 @@ int main(int argc, char *argv[])
     pair<int, int> min_max_com(3,200);
     voilier<int, float> voilier_the_first(min_max_com, chemin, ';');
     cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl;
+
+    //test bassin
+    functor_vent f;
+    functor_courant g;
+    
+    float pas = 0.1;
+    pair<float, float> bas(0,0);
+    pair<float, float> haut(1,1);
+    bassin(bas,haut,pas,f,g);
 }
 

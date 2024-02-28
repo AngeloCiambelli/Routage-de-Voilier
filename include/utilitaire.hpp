@@ -334,19 +334,6 @@ voilier<T1,T2>::voilier(const pair<T1,T1>& contraintes, const string& chemin, co
 
 
 //===========================================================================
-//                            bassin
-//===========================================================================
-
-
-// template<typename T>
-// class bassin
-// {
-//   public:
-//   vecteur<vecteur< pair<T>> champs;
-// }
-
-
-//===========================================================================
 //                            grilles 
 //===========================================================================
 
@@ -360,13 +347,14 @@ class Grille{
         float pas;
         float resolution;
         vecteur<vecteur<vecteur<T>>> valeur;
-        Grille(int X, int Y, int Time, float res, float p):
-        taille_X(X), taille_Y(Y), Temps(Time), resolution(res), pas(p);
+
+        Grille(int X, int Y, int Time, float res, float p);
+        Grille(){};
         bi_vecteur<int> localisation(const float &x, const float &y);
         float operator ()(int t, int j, int i){
             if(i>=taille_X || j>=taille_Y){
                 cout << "Erreur : indices non-valides"; exit(1);}
-            return score[t][j][i];
+            return valeur[t][j][i];
         };
         T interpolation(const float &x, const float &y, const int &timestamp);
 };
@@ -375,11 +363,11 @@ class Grille{
 template<typename T>
 Grille<T>::Grille(int X, int Y, int Time, float res, float p)
 {
-    vecteur<vecteur<vecteur<float>>> tmp(
+    vecteur<vecteur<vecteur<T>>> tmp(
         Time,
-        vecteur<vecteur<float>>(
+        vecteur<vecteur<T>>(
         Y,
-        vecteur<float>(X)
+        vecteur<T>(X)
         ));
     taille_X = X;
     taille_Y = Y;
@@ -442,6 +430,57 @@ class commandes_discretes{
 
 class dynamique{
 
+};
+
+
+//===========================================================================
+//                            bassin
+//===========================================================================
+
+
+// Functor pour definir analytiquement le champ de vent 
+class functor_vent
+{
+  public:
+  vecteur<float> operator()(float a, float b) const 
+  {
+    return vecteur{sin(a), sin(b)};
+  }
+};
+
+// Functor pour definir analytiquement le champ de courant
+class functor_courant
+{
+  public:
+  vecteur<float> operator()(float a, float b) const 
+  {
+    return vecteur{sin(a), sin(b)};
+  }
+};
+
+class bassin
+{
+  public:
+  pair<float, float> lower_left_corner;
+  pair<float, float> upper_right_corner;
+  Grille<vecteur<float>> champs_vent;
+  Grille<vecteur<float>> champs_courant;
+  bassin(const pair<float, float>& a, const pair<float, float>& b, const float& pas, functor_vent& f_vent, functor_courant& f_courant) : champs_vent((a.first - b.first), (b.second - a.second), 1, 1, pas), champs_courant((a.first - b.first), (b.second - a.second), 1, 1, pas)
+  {
+    lower_left_corner = a;
+    upper_right_corner = b;
+
+    for (int i=0; i<(champs_vent.valeur).size(); i++)
+    {
+      for (int j=0; j<(champs_vent.valeur[i]).size(); j++)
+      {
+        champs_vent.valeur[i][j][0] = f_vent(i*pas, j*pas);
+        champs_courant.valeur[i][j][0] = f_courant(i*pas, j*pas);
+      }
+    }
+  };
+
+  bassin(){};
 };
 
 #endif
