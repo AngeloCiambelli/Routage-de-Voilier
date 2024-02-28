@@ -429,10 +429,10 @@ template<typename T>
 Grille<T>::Grille(int X, int Y, int Time, float res, float p)
 {
     vecteur<vecteur<vecteur<T>>> tmp(
-        Time,
+        Time/res,
         vecteur<vecteur<T>>(
-        Y,
-        vecteur<T>(X)
+        Y/p,
+        vecteur<T>(X/p)
         ));
     taille_X = X;
     taille_Y = Y;
@@ -530,17 +530,18 @@ class bassin
   pair<float, float> upper_right_corner;
   Grille<vecteur<float>> champs_vent;
   Grille<vecteur<float>> champs_courant;
-  bassin(const pair<float, float>& a, const pair<float, float>& b, const float& pas, functor_vent& f_vent, functor_courant& f_courant) : champs_vent((a.first - b.first), (b.second - a.second), 1, 1, pas), champs_courant((a.first - b.first), (b.second - a.second), 1, 1, pas)
+
+  bassin(const pair<float, float>& a, const pair<float, float>& b, const float& pas, functor_vent& f_vent, functor_courant& f_courant) : champs_vent(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas), champs_courant(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas)
   {
     lower_left_corner = a;
     upper_right_corner = b;
 
-    for (int i=0; i<(champs_vent.valeur).size(); i++)
+    for (int i=0; i<(champs_vent.valeur[0]).size(); i++)
     {
-      for (int j=0; j<(champs_vent.valeur[i]).size(); j++)
+      for (int j=0; j<(champs_vent.valeur[0][i]).size(); j++)
       {
-        champs_vent.valeur[i][j][0] = f_vent(i*pas, j*pas);
-        champs_courant.valeur[i][j][0] = f_courant(i*pas, j*pas);
+        champs_vent.valeur[0][i][j] = f_vent(i*pas, j*pas);
+        champs_courant.valeur[0][i][j] = f_courant(i*pas, j*pas);
       }
     }
   };
