@@ -17,7 +17,6 @@ using namespace std;
 //===========================================================================
 
 //On utilise la classe vector de la stl
-
 template<typename T>
 class vecteur : public vector<T>
 {
@@ -184,7 +183,7 @@ vecteur<T> operator /(const vecteur<T>& u, const T& x)
 
 
 //csv to string, code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
-string fichier_vers_string(const string& chemin)
+string fichier_ver_string(const string& chemin)
 {
   auto ss = ostringstream{};
   ifstream input_file(chemin);
@@ -199,7 +198,7 @@ string fichier_vers_string(const string& chemin)
 template<typename T>
 vecteur<vecteur<T>> csv_vers_table (string chemin, char sep)
 {
-  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
+  string contenu = fichier_ver_string(chemin); // contenu du .csv en string
   istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
   vecteur<T> element; //element de la ligne entiere
   string memoire; // element entre chaque séparateur normalement "espace nombre espace"
@@ -231,7 +230,7 @@ vecteur<vecteur<T>> csv_vers_table (string chemin, char sep)
         element.push_back(memoire_float); // Ajouter cet element a la ligne d'element
       }
     }
-    
+
     // Remplir le tableau de valeur des polaires du voilier
     if (compteur != 0) {tableFinale.push_back(element);}
 
@@ -240,7 +239,7 @@ vecteur<vecteur<T>> csv_vers_table (string chemin, char sep)
     compteur += 1;
   };
   return(entete, tableFinale);
-}
+};
 
 
 //===========================================================================
@@ -333,7 +332,7 @@ class polaire
 template <typename T>
 polaire<T>::polaire(const string& chemin, char separateur) //inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 {
-  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
+  string contenu = fichier_ver_string(chemin); // contenu du .csv en string
   istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
   vector<T> element; //element de la ligne entiere
   string memoire; // element entre chaque séparateur normalement "espace nombre espace"
