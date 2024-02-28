@@ -50,5 +50,7 @@ int main(int argc, char *argv[])
     pair<float, float> bas(0,0);
     pair<float, float> haut(1,1);
     bassin(bas,haut,pas,f,g);
+
+    //
 }
 

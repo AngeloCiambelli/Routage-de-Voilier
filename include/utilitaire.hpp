@@ -8,7 +8,6 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
-#include "io.hpp"
 #include <algorithm>
 
 using namespace std;
@@ -180,6 +179,76 @@ vecteur<T> operator /(const vecteur<T>& u, const T& x)
 
 
 //===========================================================================
+//                            CSV vers tableau
+//===========================================================================
+
+
+//csv to string, code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+string fichier_vers_string(const string& chemin)
+{
+  auto ss = ostringstream{};
+  ifstream input_file(chemin);
+  if (!input_file.is_open()) {
+    cerr << "impossible ouvrir le fichier - '" << chemin << "'" << endl;
+    exit(1);
+  }
+  ss << input_file.rdbuf();
+  return ss.str();
+};
+
+template<typename T>
+vecteur<vecteur<T>> csv_vers_table (string chemin, char sep)
+{
+  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
+  istringstream sstream(contenu); // conversion du contenu en "stream" type pour utiliser la fonction getline()
+  vecteur<T> element; //element de la ligne entiere
+  string memoire; // element entre chaque séparateur normalement "espace nombre espace"
+  vecteur<vecteur<T>> tableFinale;
+  vecteur<string> entete;
+
+  //Compteur du numero de la ligne 
+  int compteur = 0;
+
+  while (std::getline(sstream, memoire)) // Pour toutes les lignes
+  {
+    istringstream ligne(memoire); //transformer la ligne en type "stream" necessaire pour getline()
+
+    while (std::getline(ligne, memoire, sep)) //trouver tous les elements de chaques lignes
+    { 
+      // Nettoyer les elements des espaces autour
+      memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x) {return std::isspace(x); }),memoire.end());
+          
+      // Ajouter l'element dans le vecteur d'entête contenant les noms des colonnes ou dans le tableau de valeur
+      if (compteur==0)
+      {
+        entete.push_back(memoire);
+      }
+
+      else 
+      {
+        T memoire_float; 
+        istringstream(memoire) >> memoire_float; // Convertir le type string dans le type T
+        element.push_back(memoire_float); // Ajouter cet element a la ligne d'element
+      }
+    }
+    
+    // Remplir le tableau de valeur des polaires du voilier
+    if (compteur != 0) {tableFinale.push_back(element);}
+
+    //Nettoyer les variables
+    element.clear();
+    compteur += 1;
+  };
+  return(entete, tableFinale);
+}
+
+
+//===========================================================================
+//                            Tableau vers CSV
+//===========================================================================
+
+
+//===========================================================================
 //                            bi-vecteur
 //===========================================================================
 
@@ -327,10 +396,7 @@ class voilier
 };
 
 template<typename T1, typename T2>
-voilier<T1,T2>::voilier(const pair<T1,T1>& contraintes, const string& chemin, const char sep) : polaire_voilier(chemin, sep)
-{
-  contrainte_commande = contraintes;
-}
+voilier<T1,T2>::voilier(const pair<T1,T1>& contraintes, const string& chemin, const char sep) : polaire_voilier(chemin, sep){contrainte_commande = contraintes;}
 
 
 //===========================================================================
