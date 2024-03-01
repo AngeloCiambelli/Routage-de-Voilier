@@ -48,6 +48,17 @@ int main(int argc, char *argv[])
     float pas = 0.1;
     pair<float, float> bas(0,0);
     pair<float, float> haut(1,1);
-    bassin(bas,haut,pas,f,g);
+    string sto("tableau");
+    bassin bassin1(bas,haut,pas,f,g,sto);
+    bassin bassin2();
+
+    cout << endl << bassin1.champs_vent.valeur[0] << endl << endl;
+    cout << endl << bassin1.champs_courant.valeur[0] << endl << endl;
+
+    cout << bassin1.champs_vent.separation().first << endl;
+
+
+    //test csv vers tableau
+
 }
 
