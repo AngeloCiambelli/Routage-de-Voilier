@@ -7,6 +7,7 @@
 #include "Foncteur.hpp"
 #include "Bassin.hpp"
 #include "Fonction_csv.hpp"
+#include "Fonction_externes.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -68,7 +69,8 @@ int main(int argc, char *argv[])
     vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
     cout << test << endl;
 
-    // //test data export
-    // exportToCSV<float>(bassin1.champs_vent.separation().first, "output/X_test");
+    //test data export
+    vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
+    table_vers_csv<float>(test_export[0].first, "output/X_test");
 }
 

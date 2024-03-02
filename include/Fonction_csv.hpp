@@ -83,29 +83,29 @@ vecteur<vecteur<T>> csv_vers_table(const string& chemin, char sep)
 };
 
 //===========================================================================
-//                            Tableau vers CSV
+//                            Tableau vers csv
 //===========================================================================
 
 template<typename T>
-void exportToCSV(const vecteur<vecteur<T>>& data, const string& filename) {
-    ofstream file(filename);
+void table_vers_csv(const vecteur<vecteur<T>>& table, const string& chemin) {
+    ofstream fichier(chemin);
 
-    if (!file.is_open()) {
-        cerr << "Error: Unable to open file " << filename << " for writing." << endl;
+    if (!fichier.is_open()) {
+        cerr << "Ne peut pas ouvrir pour remplir " << chemin << endl;
         return;
     }
 
-    for (const auto& row : data) {
-        for (auto it = row.begin(); it != row.end(); ++it) {
-            file << *it;
-            if (it != row.end() - 1) {
-                file << ',';
+    for (const auto& ligne : table) {
+        for (auto it = ligne.begin(); it != ligne.end(); ++it) {
+            fichier << *it;
+            if (it != ligne.end() - 1) {
+                fichier << ',';
             }
         }
-        file << endl;
+        fichier << endl;
     }
 
-    file.close();
+    fichier.close();
 };
 
 #endif
