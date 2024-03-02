@@ -7,6 +7,7 @@
 #include <cmath>
 #include "Grille.hpp"
 #include "Dynamique.hpp"
+#include "Commande_discrete.hpp"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ using namespace std;
 class Flux{
     public:
     Grille<float> v;
-    dynamique fonction;
+    Dynamique fonction;
     Flux(){};
     float calcul(float u, float i, float j, int n, Grille<float> v_prec){
         Grille<float> tmp(v_prec.taille_X, v_prec.taille_Y, 1, 1, v_prec.pas);
@@ -41,7 +42,7 @@ class Flux{
         }
     }
 
-// };
+};
 
 
 
@@ -92,35 +93,33 @@ void HJB::resolve(int L){
                     }
                 }
                 v.valeur[n][j][i]=v(n-1,j,i)+mini;
-                mini.clear;
-                minimiseur.clear;
             }
         }
     }
 }
 
-class route_optimale{
-    commandes_discretes commandes;
-    Grille<float> grille;
-    int max_iter = 1000;
-    dynamique fonction;
-    commandes_discretes calcul(pair<float, float> x0, int L){
-        float vx = 1;
-        int iter = 0;
-        bi_vecteur<float> x;
-        bi_vecteur.pushback(x0);
-        while(vx>0 && iter<max_iter){
-            n = x.size()-1
-            vecteur<float> tmp(L);
-            float mini = INFINITY;
-            float minimiseur;
-            pair<float, float> next_pos;
-            for(int l=0;l<L;l++){
-                next_pos = x[n] + fonction(x[n], l/L*360)
-            }
-            tmp.clear;
-        }
-    }
-};
+// class route_optimale{
+//     commandes_discretes commandes;
+//     Grille<float> grille;
+//     int max_iter = 1000;
+//     dynamique fonction;
+//     commandes_discretes calcul(pair<float, float> x0, int L){
+//         float vx = 1;
+//         int iter = 0;
+//         bi_vecteur<float> x;
+//         bi_vecteur.pushback(x0);
+//         while(vx>0 && iter<max_iter){
+//             n = x.size()-1
+//             vecteur<float> tmp(L);
+//             float mini = INFINITY;
+//             float minimiseur;
+//             pair<float, float> next_pos;
+//             for(int l=0;l<L;l++){
+//                 next_pos = x[n] + fonction(x[n], l/L*360)
+//             }
+//             tmp.clear;
+//         }
+//     }
+// };
 
 #endif
