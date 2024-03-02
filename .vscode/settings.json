@@ -3,6 +3,8 @@
         "iostream": "cpp",
         "cstdlib": "cpp",
         "*.tcc": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "cmath": "cpp",
+        "tuple": "cpp"
     }
 }

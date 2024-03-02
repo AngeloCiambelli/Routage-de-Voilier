@@ -42,7 +42,7 @@ public:
     Y = {};
   };
 
-  pair<T, T> operator[](const int &i) const { return pair((*this).X[i], (*this).Y[i]); };
+  vecteur<T> operator[](const int &i) const {return vecteur{(*this).X[i], (*this).Y[i]};};
   bi_vecteur<T> &operator=(const bi_vecteur<T> &vect)
   {
     this->X = vect.X;

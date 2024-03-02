@@ -71,6 +71,4 @@ bi_vecteur<int> Grille::localisation(const float &x, const float &y){
     return result;
 }
 
-
-
 #endif

@@ -10,6 +10,7 @@
 #include <sstream>
 #include <algorithm>
 #include "Vecteur.hpp"
+#include "Bi_vecteur.hpp"
 #include "Foncteur.hpp"
 #include "Grille.hpp"
 
@@ -33,8 +34,9 @@ class bassin
 public:
   pair<float, float>      coin_bas_gauche;
   pair<float, float>      coin_haut_droit;
-  Grille<vecteur<float>>  champs_vent;
-  Grille<vecteur<float>>  champs_courant;
+  Grille                  grille;
+  bi_vecteur<float>       champs_vent;
+  bi_vecteur<float>       champs_courant;
   foncteur_vent           fonction_vent;
   foncteur_courant        fonction_courant;
   string                  stockage;
@@ -44,28 +46,25 @@ public:
     coin_bas_gauche = a;
     coin_haut_droit = b;
     stockage = s;
+    fonction_vent = f_vent;
+    fonction_courant = f_courant;
 
-    if (s == "analytique")
+    grille = Grille(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas);
+    champs_vent = bi_vecteur<float>();
+    champs_courant = bi_vecteur<float>();
+
+    if (s == "tableau")
     {
-      fonction_vent = f_vent;
-      fonction_courant = f_courant;
-
-      champs_vent = Grille<vecteur<float>>(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas);
-      champs_courant =  Grille<vecteur<float>>(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas);
-    }
-
-    else if (s == "tableau")
-    {
-      champs_vent = Grille<vecteur<float>>(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas);
-      champs_courant =  Grille<vecteur<float>>(abs(a.first - b.first), abs(b.second - a.second), 1, 1, pas);
-
+      champs_vent = bi_vecteur<float>();
+      champs_courant = bi_vecteur<float>();  
+      
       //  A coder avec des append et utiliser le constructeur vide en haut
-      for (int i = 0; i < (champs_vent.valeur[0]).size(); i++)
+      for (int i = 0; i < grille.taille_Y/grille.pas; i++)
       {
-        for (int j = 0; j < (champs_vent.valeur[0][i]).size(); j++)
+        for (int j = 0; j < grille.taille_X/grille.pas; j++)
         {
-          champs_vent.valeur[0][i][j] = f_vent(i * pas, j * pas);
-          champs_courant.valeur[0][i][j] = f_courant(i * pas, j * pas);
+          champs_vent.pushback(f_vent(i*pas, j*pas));
+          champs_courant.pushback(f_courant(i*pas, j*pas));
         }
       }
     }

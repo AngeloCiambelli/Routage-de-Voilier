@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     bassin bassin1(bas,haut,pas,f,g,sto);
     bassin bassin2();
 
-    // cout << endl << bassin1.champs_vent.valeur[0] << endl << endl;
+    cout << endl << bassin1.champs_vent << endl << endl;
     // cout << endl << bassin1.champs_courant.valeur[0] << endl << endl;
     // cout << bassin1.champs_vent.separation().first << endl;
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
     cout << test << endl;
 
-    //test data export
-    exportToCSV<float>(bassin1.champs_vent.separation().first, "output/X_test");
+    // //test data export
+    // exportToCSV<float>(bassin1.champs_vent.separation().first, "output/X_test");
 }
 
