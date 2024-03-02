@@ -1,4 +1,12 @@
-#include "utilitaire.hpp"
+#include "Vecteur.hpp"
+#include "Bi_vecteur.hpp"
+#include "Route.hpp"
+#include "Commande.hpp"
+#include "Polaire.hpp"
+#include "Voilier.hpp"
+#include "Foncteur.hpp"
+#include "Bassin.hpp"
+#include "Fonction_csv.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -6,7 +14,6 @@ int main(int argc, char *argv[])
 
     //test vecteur
     cout << vecteur({1,2,3}) << endl;
-    
 
     //test bi_vecteur
     vecteur<int> A({1,2,3});
@@ -33,12 +40,35 @@ int main(int argc, char *argv[])
     //test polaire
     string chemin = "include/test.csv";
     polaire<int> pol(chemin, ';');
-    cout << pol.ligne_colonne << endl;
-    cout << pol.vitesse_voilier << endl << endl;
+    // cout << pol.ligne_colonne << endl;
+    // cout << pol.vitesse_voilier << endl << endl;
 
     //test voilier
     pair<int, int> min_max_com(3,200);
     voilier<int, float> voilier_the_first(min_max_com, chemin, ';');
-    cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl;
+    // cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl << endl;
+
+    //test bassin
+    foncteur_vent f;
+    foncteur_courant g;
+    
+    float pas = 0.1;
+    pair<float, float> bas(0,0);
+    pair<float, float> haut(1,1);
+    string sto("tableau");
+    bassin bassin1(bas,haut,pas,f,g,sto);
+    bassin bassin2();
+
+    // cout << endl << bassin1.champs_vent.valeur[0] << endl << endl;
+    // cout << endl << bassin1.champs_courant.valeur[0] << endl << endl;
+    // cout << bassin1.champs_vent.separation().first << endl;
+
+    //test csv vers tableau
+    string chemin_tableau = "include/test_tableau.csv";
+    vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
+    cout << test << endl;
+
+    //test data export
+    exportToCSV<float>(bassin1.champs_vent.separation().first, "output/X_test");
 }
 
