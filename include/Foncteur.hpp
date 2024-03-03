@@ -26,6 +26,16 @@ using namespace std;
 //                 Definition des classes foncteurs 
 //===========================================================================
 
+// foncteur pour definir analytiquement les polaires
+class foncteur_polaire
+{
+public:
+  float operator()(int angle_voilier, float vitesse_vent) const
+  {
+    return abs(sin(angle_voilier))+vitesse_vent;
+  }
+};
+
 // foncteur pour definir analytiquement le champ de vent
 class foncteur_vent
 {

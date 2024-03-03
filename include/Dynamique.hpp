@@ -10,6 +10,10 @@
 #include <sstream>
 #include <algorithm>
 #include "Vecteur.hpp"
+#include "Grille.hpp"
+#include "Bassin.hpp"
+#include "Voilier.hpp"
+#include "Fonction_externes.hpp"
 
 using namespace std;
 
@@ -29,7 +33,38 @@ using namespace std;
 class Dynamique
 {
     public:
-    vecteur<float> operator ()(pair<int,int> xi, float u){};
+    virtual vecteur<float> f(){};
+};
+
+class Dynamique_voile : public Dynamique
+{
+    public:
+
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t, const bassin &bassin, const Voilier<float,float> &voilier)
+    {
+        vecteur<float> valeur;
+        vecteur<float> V_c = interpolation<vecteur<float>, bi_vecteur<float>>((bassin.grille).localisation(y[0],y[1]),  
+                                           y[0], 
+                                           y[1], 
+                                           0, 
+                                           bassin.champs_courant,
+                                           bassin.grille);
+
+        vecteur<float> V_v = interpolation<vecteur<float>, bi_vecteur<float>>((bassin.grille).localisation(y[0],y[1]),  
+                                           y[0], 
+                                           y[1], 
+                                           0, 
+                                           bassin.champs_vent,
+                                           bassin.grille);
+
+        vecteur<float> W_u({cos(u), sin(u)}); 
+
+        valeur = V_c + (W_u|voilier.V_b(acos(V_v[0]/sqrt(V_v|V_v))-u,sqrt(V_v|V_v)));
+
+        return(valeur);
+    };
+
+
 };
 
 #endif

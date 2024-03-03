@@ -11,6 +11,7 @@
 #include <algorithm>
 #include "Vecteur.hpp"
 #include "Polaire.hpp"
+#include "Foncteur.hpp"
 
 using namespace std;
 
@@ -18,24 +19,73 @@ using namespace std;
 //                            Description
 //===========================================================================
 //
-// Classe de stockage des caractéristiques du voilier.
+// Classe de stockage des caractéristiques du Voilier.
 //
 // Note: Pas de fichier cpp a cause des templates
 //
 //===========================================================================
-//                            Defnition de la classe voilier
+//                            Defnition de la classe Voilier
 //===========================================================================
 
 template <typename T1, typename T2>
-class voilier
+class Voilier
 {
 public:
   pair<T1, T1> contrainte_commande; // (borne sup, borne inf) des actions de la commande
   polaire<T2> polaire_voilier;
-  voilier(const pair<T1, T1> &contraintes, const string &chemin, const char sep);
+
+  Voilier(const pair<T1, T1> &contraintes, const string &chemin, const char &sep);
+  Voilier(const pair<T1, T1> &contraintes, const foncteur_polaire &f_polaire);
+
+  float V_b(const float &angle_bateau, const float &vitesse_vent) const;
 };
 
 template <typename T1, typename T2>
-voilier<T1, T2>::voilier(const pair<T1, T1> &contraintes, const string &chemin, const char sep) : polaire_voilier(chemin, sep) { contrainte_commande = contraintes;}
+Voilier<T1, T2>::Voilier(const pair<T1, T1> &contraintes, const string &chemin, const char &sep) : polaire_voilier(chemin, sep, "tabule") { contrainte_commande = contraintes;}
+
+template <typename T1, typename T2>
+Voilier<T1, T2>::Voilier(const pair<T1, T1> &contraintes,  const foncteur_polaire &f_polaire) : polaire_voilier(f_polaire, "analytique") { contrainte_commande = contraintes;}
+
+template <typename T1, typename T2>
+float Voilier<T1,T2>::V_b(const float &angle_bateau_vent, const float &vitesse_vent) const
+{
+  float vitesse_bateau;
+
+  if ((*this).polaire_voilier.methode_stockage == "analytique") 
+  {
+    vitesse_bateau = (*this).polaire_voilier.polaire_analytique(angle_bateau_vent,vitesse_vent);
+  }
+
+  else if ((*this).polaire_voilier.methode_stockage == "tabule")
+  {
+    int indice_vitesse_1; int indice_vitesse_2;
+    int indice_angle_1; int indice_angle_2;
+
+    for (int i=0; i<len((*this).polaire_voilier.polaire_tabule_entete.X); i++)
+    {
+      if((*this).polaire_voilier.polaire_tabule_entete.X[i]<=vitesse_vent and (*this).polaire_voilier.polaire_tabule_entete.X[i+1]>=vitesse_vent)
+      {
+        indice_vitesse_1 = i; indice_vitesse_2 = i+1;
+      };
+    }
+
+    for (int i=0; i<len((*this).polaire_voilier.polaire_tabule_entete.X); i++)
+    {
+      if((*this).polaire_voilier.polaire_tabule_entete.Y[i]<=angle_bateau_vent and (*this).polaire_voilier.polaire_tabule_entete.Y[i+1]>=angle_bateau_vent)
+      {
+        indice_angle_1 = i; indice_angle_2 = i+1;
+      };
+    }
+
+    bi_vecteur indices(vecteur<int>({indice_angle_1,indice_angle_1,indice_angle_2,indice_angle_2}), 
+                       vecteur<int>({indice_vitesse_1,indice_vitesse_2,indice_vitesse_1,indice_vitesse_2}));
+    
+    //Appeler l'interpolation
+
+    vitesse_bateau = interpolation(indices, angle_bateau_vent, vitesse_vent,(*this).polaire_voilier.polaire_tabule_valeur);
+  }
+
+  return(vitesse_bateau);
+}
 
 #endif

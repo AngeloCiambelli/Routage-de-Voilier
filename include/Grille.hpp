@@ -39,7 +39,7 @@ public:
 
   Grille(int X, int Y, int Time, float res, float p);
   Grille(){};
-  bi_vecteur<int> localisation(const float &x, const float &y);
+  bi_vecteur<int> localisation(const float &x, const float &y) const;
   int find(const float &x, const float &y,const float &t)const{
     return x + y*taille_X + t*(taille_Y + taille_X);
   }
@@ -54,7 +54,7 @@ Grille::Grille(int X, int Y, int Time, float res, float p)
   pas = p;
 };
 
-bi_vecteur<int> Grille::localisation(const float &x, const float &y){
+bi_vecteur<int> Grille::localisation(const float &x, const float &y) const {
     // rend les quatres indices des points ABCD correspondant au rectangle ABCD
     // dans lequel se trouve le point de coordonnée (x,y) (A en bas gauche, D au-dessus de A)
     vecteur<int> Xs(4);

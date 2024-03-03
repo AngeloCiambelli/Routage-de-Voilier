@@ -106,6 +106,22 @@ public:
 
     return *this;
   } // u /= x
+  T operator|(const vecteur<T> &v) const
+  {
+    int n = (*this).size();
+    if (n != v.size())
+    {
+      cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs";
+      exit(1);
+    }
+
+    T valeur = T();
+    for (int i = 0; i < n; i++)
+    {
+      valeur += (*this)[i] * v[i];
+    }
+    return valeur;
+  } // u|v
 };  // fin de définition de la classe
 
 //===========================================================================

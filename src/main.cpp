@@ -40,13 +40,13 @@ int main(int argc, char *argv[])
 
     //test polaire
     string chemin = "include/test.csv";
-    polaire<int> pol(chemin, ';');
+    polaire<int> pol(chemin, ';', "tabule");
     // cout << pol.ligne_colonne << endl;
     // cout << pol.vitesse_voilier << endl << endl;
 
     //test voilier
     pair<int, int> min_max_com(3,200);
-    voilier<int, float> voilier_the_first(min_max_com, chemin, ';');
+    Voilier<int, float> voilier_the_first(min_max_com, chemin, ';');
     // cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl << endl;
 
     //test bassin

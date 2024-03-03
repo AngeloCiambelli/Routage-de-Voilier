@@ -11,6 +11,7 @@
 #include <algorithm>
 #include "Vecteur.hpp"
 #include "Fonction_csv.hpp"
+#include "Foncteur.hpp"
 
 using namespace std;
 
@@ -30,20 +31,25 @@ template <typename T>
 class polaire
 {
 public:
-  bi_vecteur<string> ligne_colonne;
-  vecteur<vecteur<T>> vitesse_voilier;
+  bi_vecteur<int> polaire_tabule_entete;
+  vecteur<vecteur<T>> polaire_tabule_valeur;
+  foncteur_polaire polaire_analytique;
+  string methode_stockage;
 
-  polaire(const string &chemin, char separateur);
+  polaire(const string &chemin, char separateur,const string& stockage);
+  polaire(const foncteur_polaire& f_polaire, const string& stockage);
+  polaire();
 };
 
 template <typename T>
-polaire<T>::polaire(const string &chemin, char separateur) // inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+polaire<T>::polaire(const string &chemin, char separateur, const string &stockage) // inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 {
   string contenu = fichier_vers_string(chemin); // contenu du .csv en string
   istringstream sstream(contenu);              // conversion du contenu en "stream" type pour utiliser la fonction getline()
   vecteur<T> element;                           // element de la ligne entiere
   string memoire;                              // element entre chaque séparateur normalement "espace nombre espace"
   int compteur_1 = 0;                          // Compteurs pour savoir dans quelle ligne on est
+  methode_stockage = stockage;
 
   while (getline(sstream, memoire)) // Pour toutes les lignes
   {
@@ -54,7 +60,9 @@ polaire<T>::polaire(const string &chemin, char separateur) // inspiré code http
     {                                             
       if ((compteur_2 == 0) && (compteur_1 != 0)) // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
       {
-        ligne_colonne.X.push_back(memoire);
+        int memoire_int;
+        istringstream(memoire) >> memoire_int; // Convertir le type string en entier
+        (polaire_tabule_entete.X).push_back(memoire_int);
       }
       else
       {
@@ -62,7 +70,9 @@ polaire<T>::polaire(const string &chemin, char separateur) // inspiré code http
 
         if ((compteur_1 == 0) && (compteur_2 != 0)) // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
         {
-          (ligne_colonne.Y).push_back(memoire);
+          int memoire_int;
+          istringstream(memoire) >> memoire_int; // Convertir le type string en entier
+          (polaire_tabule_entete.Y).push_back(memoire_int);
         }
 
         else
@@ -77,12 +87,22 @@ polaire<T>::polaire(const string &chemin, char separateur) // inspiré code http
 
     if (compteur_1 != 0) // Remplir le tableau de valeur des polaires du voilier
     {
-      vitesse_voilier.push_back(element);
+      polaire_tabule_valeur.push_back(element);
     }
 
     element.clear(); // Nettoyer les variables
     compteur_1 += 1;
   }
 };
+
+template <typename T>
+polaire<T>::polaire(const foncteur_polaire& f_polaire, const string& stockage)
+{
+  methode_stockage = stockage;
+  polaire_analytique = f_polaire;
+}
+
+template <typename T>
+polaire<T>::polaire() : polaire_tabule_entete(), polaire_tabule_valeur(vecteur<T>()), methode_stockage(){}
 
 #endif
