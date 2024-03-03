@@ -7,6 +7,7 @@
 #include "Foncteur.hpp"
 #include "Bassin.hpp"
 #include "Fonction_csv.hpp"
+#include "Fonction_externes.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     bassin bassin1(bas,haut,pas,f,g,sto);
     bassin bassin2();
 
-    // cout << endl << bassin1.champs_vent.valeur[0] << endl << endl;
+    cout << endl << bassin1.champs_vent << endl << endl;
     // cout << endl << bassin1.champs_courant.valeur[0] << endl << endl;
     // cout << bassin1.champs_vent.separation().first << endl;
 
@@ -69,6 +70,7 @@ int main(int argc, char *argv[])
     cout << test << endl;
 
     //test data export
-    exportToCSV<float>(bassin1.champs_vent.separation().first, "output/X_test");
+    vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
+    table_vers_csv<float>(test_export[0].first, "output/X_test");
 }
 

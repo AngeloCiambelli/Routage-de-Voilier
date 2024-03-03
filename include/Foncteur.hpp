@@ -10,6 +10,7 @@
 #include <sstream>
 #include <algorithm>
 #include "Vecteur.hpp"
+#include "Bi_vecteur.hpp"
 
 using namespace std;
 
@@ -29,9 +30,9 @@ using namespace std;
 class foncteur_vent
 {
 public:
-  vecteur<float> operator()(float a, float b) const
+  pair<float,float> operator()(float a, float b) const
   {
-    return vecteur{sin(a), sin(b)};
+    return pair(sin(a), sin(b));
   }
 };
 
@@ -39,9 +40,9 @@ public:
 class foncteur_courant
 {
 public:
-  vecteur<float> operator()(float a, float b) const
+  pair<float,float> operator()(float a, float b) const
   {
-    return vecteur{sin(a)*cos(b), sin(b)*cos(a)};
+    return pair(sin(a), sin(b));
   }
 };
 
