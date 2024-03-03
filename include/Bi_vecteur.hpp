@@ -55,6 +55,7 @@ public:
     (this->Y).push_back(xy.second);
     return *this;
   }
+  int size(){return X.size()}
 };
 
 //===========================================================================

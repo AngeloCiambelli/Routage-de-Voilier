@@ -14,30 +14,27 @@ using namespace std;
 
 class Flux{
     public:
-    Grille<float> v;
+    Grille grille;
     Dynamique fonction;
-    Flux(){};
-    float calcul(float u, float i, float j, int n, Grille<float> v_prec){
-        Grille<float> tmp(v_prec.taille_X, v_prec.taille_Y, 1, 1, v_prec.pas);
-        tmp.valeur[0] = v_prec.valeur[n-1];
-        v = tmp;
+    Flux(const Grille g, const Dynamique f): grille(g),fonction(f){};
+    float calcul(float u, float i, float j, int n, vecteur<float> v_prec){
         pair<float,float> xij;
-        xij = pair(i*v.pas,j*v.pas);
+        xij = pair(i*grille.pas,j*grille.pas);
         vecteur<float> f = fonction(xij, u);
         if(float(int(i))==i){
             if(f[1]>0){
-                return f[1]*v(0,int(i),int(j)+1);
+                return f[1]*v_prec[grille.find(int(j)+1,int(i),n-1)];
             }
             else{
-                return f[1]*v(0,int(i),int(j));
+                return f[1]*v_prec[grille.find(int(j),int(i),n-1)];
             }
         }
         else{
             if(f[0]>0){
-                return f[0]*v(0,int(i)+1,int(j));
+                return f[0]*v_prec[grille.find(int(j),int(i)+1,n-1)];
             }
             else{
-                return f[0]*v(0,int(i),int(j));
+                return f[0]*v_prec[grille.find(int(j),int(i),n-1)];
             }
         }
     }
@@ -48,36 +45,37 @@ class Flux{
 
 class HJB{
     public:
-    Grille<float> v;
+    vecteur<float> v;
+    Grille grille;
     HJB(){};
     HJB(int X, int Y, int Time, float res, float p);
-    HJB(Grille<float> &v0, int Temps);
-    void resolve(int L);
+    HJB(vecteur<float> &v0, int Temps, const Grille &grille);
+    void resolve(int L, Dynamique fonction);
 };
 
 
 HJB::HJB(int X, int Y, int Time, float res, float p){
     // Initialisation "à la main", à éviter
-    Grille<float> tmp(X, Y, Time, res, p);
-    v = tmp;
+    vecteur<float> v(X*Y*Time);
+    Grille grille(X, Y, Time, res, p);
 }
 
-HJB::HJB(Grille<float> &v0, int Temps){
-    Grille<float> tmp(v0.taille_X, v0.taille_Y, Temps, v0.resolution, v0.pas);
-    v = tmp;
-    for(int j=0; j<v.taille_X; j++){
-        for(int i=0;i<v.taille_Y;i++){
-            v.valeur[0][j][i] = v0(0,j,i);
+HJB::HJB(vecteur<float> &v0, int Temps, const Grille &g){
+    Grille grille(g.taille_X, g.taille_Y, Temps, g.resolution, g.pas);
+    vecteur<float> v(grille.taille_X*grille.taille_Y*grille.Temps);
+    for(int j=0; j<grille.taille_X; j++){
+        for(int i=0;i<grille.taille_Y;i++){
+            v[grille.find(i,j,0)] = v0[grille.find(i,j,0)];
         }
     }
 }
 
-void HJB::resolve(int L){
+void HJB::resolve(int L, Dynamique fonction){
     vecteur<vecteur<float>> F(L, vecteur<float>(4));
-    Flux flux;
-    for(int n=1;n<v.Temps;n++){
-        for(int j=0; j<v.taille_X; j++){
-            for(int i=0;i<v.taille_Y;i++){
+    Flux flux(grille, fonction);
+    for(int n=1;n<grille.Temps;n++){
+        for(int j=0; j<grille.taille_X; j++){
+            for(int i=0;i<grille.taille_Y;i++){
                 for(int l=0;l<L;l++){
                     F[l][0] = flux.calcul(l/L*360, i+1/2, j, n, v);
                     F[l][1] = flux.calcul(l/L*360, i-1/2, j, n, v);
@@ -87,39 +85,38 @@ void HJB::resolve(int L){
                 float mini = INFINITY;
                 float minimiseur;
                 for(int ind;ind<L;ind++){
-                    minimiseur = v.resolution/v.pas*(F[ind][0]-F[ind][1]+F[ind][2]-F[ind][3]);
+                    minimiseur = grille.resolution/grille.pas*(F[ind][0]-F[ind][1]+F[ind][2]-F[ind][3]);
                     if (minimiseur<mini){
                         mini = minimiseur;
                     }
                 }
-                v.valeur[n][j][i]=v(n-1,j,i)+mini;
+                v[grille.find(i,j,n)]=v[grille.find(i,j,n-1)]+mini;
             }
         }
     }
 }
 
-// class route_optimale{
-//     commandes_discretes commandes;
-//     Grille<float> grille;
-//     int max_iter = 1000;
-//     dynamique fonction;
-//     commandes_discretes calcul(pair<float, float> x0, int L){
-//         float vx = 1;
-//         int iter = 0;
-//         bi_vecteur<float> x;
-//         bi_vecteur.pushback(x0);
-//         while(vx>0 && iter<max_iter){
-//             n = x.size()-1
-//             vecteur<float> tmp(L);
-//             float mini = INFINITY;
-//             float minimiseur;
-//             pair<float, float> next_pos;
-//             for(int l=0;l<L;l++){
-//                 next_pos = x[n] + fonction(x[n], l/L*360)
-//             }
-//             tmp.clear;
-//         }
-//     }
-// };
+class route_optimale{
+    commandes_discretes commandes;
+    Grille grille;
+    int max_iter = 1000;
+    Dynamique fonction;
+    commandes_discretes calcul(pair<float, float> x0, int L){
+        float vx = 1;
+        int iter = 0;
+        bi_vecteur<float> x;
+        x.pushback(x0);
+        while(vx>0 && iter<max_iter){
+            int n = x.size()-1;
+            vecteur<float> tmp(L);
+            float mini = INFINITY;
+            float minimiseur;
+            pair<float, float> next_pos;
+            for(int l=0;l<L;l++){
+                next_pos = x[n] + fonction(x[n], l/L*360);
+            }
+        }
+    }
+};
 
 #endif
