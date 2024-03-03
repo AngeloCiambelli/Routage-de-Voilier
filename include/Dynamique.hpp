@@ -29,7 +29,7 @@ using namespace std;
 class Dynamique
 {
     public:
-    vecteur<float> operator ()(pair<int,int> xi, float u){};
+    vecteur<float> operator ()(vecteur<float> xi, float u){};
 };
 
 #endif

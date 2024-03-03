@@ -18,8 +18,8 @@ class Flux{
     Dynamique fonction;
     Flux(const Grille g, const Dynamique f): grille(g),fonction(f){};
     float calcul(float u, float i, float j, int n, vecteur<float> v_prec){
-        pair<float,float> xij;
-        xij = pair(i*grille.pas,j*grille.pas);
+        vecteur<float> xij(2,i*grille.pas);
+        xij[1]=j*grille.pas;
         vecteur<float> f = fonction(xij, u);
         if(float(int(i))==i){
             if(f[1]>0){
@@ -111,7 +111,7 @@ class route_optimale{
             vecteur<float> tmp(L);
             float mini = INFINITY;
             float minimiseur;
-            pair<float, float> next_pos;
+            vecteur<float> next_pos;
             for(int l=0;l<L;l++){
                 next_pos = x[n] + fonction(x[n], l/L*360);
             }
