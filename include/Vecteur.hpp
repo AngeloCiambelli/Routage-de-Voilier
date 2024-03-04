@@ -111,7 +111,7 @@ public:
     int n = (*this).size();
     if (n != v.size())
     {
-      cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs";
+      cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs (produit scalaire)";
       exit(1);
     }
 

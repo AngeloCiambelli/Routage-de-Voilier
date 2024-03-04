@@ -29,7 +29,7 @@ using namespace std;
 //                 Definition de la classe Bassin
 //===========================================================================
 
-class bassin
+class Bassin
 {
 public:
   pair<float, float>      coin_bas_gauche;
@@ -41,7 +41,7 @@ public:
   foncteur_courant        fonction_courant;
   string                  stockage;
 
-  bassin(const pair<float, float> &a, const pair<float, float> &b, const float &pas, foncteur_vent &f_vent, foncteur_courant &f_courant, const string &s)
+  Bassin(const pair<float, float> &a, const pair<float, float> &b, const float &pas, foncteur_vent &f_vent, foncteur_courant &f_courant, const string &s)
   {
     coin_bas_gauche = a;
     coin_haut_droit = b;
@@ -53,15 +53,15 @@ public:
     champs_vent = bi_vecteur<float>();
     champs_courant = bi_vecteur<float>();
 
-    if (s == "tableau")
+    if (s == "tabule")
     {
       champs_vent = bi_vecteur<float>();
       champs_courant = bi_vecteur<float>();  
       
       //  A coder avec des append et utiliser le constructeur vide en haut
-      for (int i = 0; i < grille.taille_Y/grille.pas; i++)
+      for (int i = 0; i <= grille.taille_Y/grille.pas; i++)
       {
-        for (int j = 0; j < grille.taille_X/grille.pas; j++)
+        for (int j = 0; j <= grille.taille_X/grille.pas; j++)
         {
           champs_vent.pushback(f_vent(i*pas, j*pas));
           champs_courant.pushback(f_courant(i*pas, j*pas));
@@ -70,7 +70,7 @@ public:
     }
   };
 
-  bassin() : champs_vent(), champs_courant()
+  Bassin() : champs_vent(), champs_courant()
   {
     coin_bas_gauche = pair(0, 0);
     coin_haut_droit = pair(0, 0);

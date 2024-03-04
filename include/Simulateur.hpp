@@ -32,22 +32,28 @@ using namespace std;
 //                 Definition de la classe Simulateur
 //===========================================================================
 
-// class Simulateur
-// {       
-//     public:
-//     float delta_temps;
-//     int nb_pas;
+class Simulateur
+{       
+    public:
+    float delta_temps;
+    int nb_pas;
 
-//     Simulateur(const float &delta, const int &nombre_pas){delta_temps=delta; nb_pas=nombre_pas;};
-//     route<float> mise_en_route(const route<float> &route, const Dynamique_voile &dynamique)
-//     {
-//         for (int i=0; i<=nb_pas; i++)
-//         {
+    Simulateur(const float &delta, const int &nombre_pas){delta_temps=delta; nb_pas=nombre_pas;};
+    route<float> mise_en_route(route<float> &route, const Dynamique &dynamique)
+    {
+        for (int i=0; i<=nb_pas; i++)
+        {   
+            float u = acos(route.vitesse[i][0]/sqrt(route.vitesse[i]|route.vitesse[i]));
+            
+            // Vitesse voilier au temps i
+            route.vitesse.pushback(dynamique.f(route.position[i], u, i));
 
-//         }
+            // Nouvelle position au temps i+1
+            (route.position).pushback(route.position[i]+delta_temps*route.vitesse[i]);
+        }
         
-//         return(route);
-//     };
-// };
+        return(route);
+    };
+};
 
 #endif

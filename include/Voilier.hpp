@@ -10,8 +10,10 @@
 #include <sstream>
 #include <algorithm>
 #include "Vecteur.hpp"
+#include "Bi_vecteur.hpp"
 #include "Polaire.hpp"
 #include "Foncteur.hpp"
+#include "Fonction_externes.hpp"
 
 using namespace std;
 
@@ -36,6 +38,7 @@ public:
 
   Voilier(const pair<T1, T1> &contraintes, const string &chemin, const char &sep);
   Voilier(const pair<T1, T1> &contraintes, const foncteur_polaire &f_polaire);
+  Voilier(){};
 
   float V_b(const float &angle_bateau, const float &vitesse_vent) const;
 };
@@ -50,6 +53,7 @@ template <typename T1, typename T2>
 float Voilier<T1,T2>::V_b(const float &angle_bateau_vent, const float &vitesse_vent) const
 {
   float vitesse_bateau;
+  // cout << angle_bateau_vent << vitesse_vent << endl <<endl;
 
   if ((*this).polaire_voilier.methode_stockage == "analytique") 
   {
@@ -58,20 +62,22 @@ float Voilier<T1,T2>::V_b(const float &angle_bateau_vent, const float &vitesse_v
 
   else if ((*this).polaire_voilier.methode_stockage == "tabule")
   {
-    int indice_vitesse_1; int indice_vitesse_2;
-    int indice_angle_1; int indice_angle_2;
+    int indice_vitesse_1=0; int indice_vitesse_2=0;
+    int indice_angle_1=0; int indice_angle_2=0;
 
-    for (int i=0; i<len((*this).polaire_voilier.polaire_tabule_entete.X); i++)
+    for (int i=0; i<((*this).polaire_voilier.polaire_tabule_entete.Y).size(); i++)
     {
-      if((*this).polaire_voilier.polaire_tabule_entete.X[i]<=vitesse_vent and (*this).polaire_voilier.polaire_tabule_entete.X[i+1]>=vitesse_vent)
+      if((*this).polaire_voilier.polaire_tabule_entete.Y[i]<=vitesse_vent and (*this).polaire_voilier.polaire_tabule_entete.Y[i+1]>=vitesse_vent)
       {
         indice_vitesse_1 = i; indice_vitesse_2 = i+1;
       };
     }
 
-    for (int i=0; i<len((*this).polaire_voilier.polaire_tabule_entete.X); i++)
+    // cout << (*this).polaire_voilier.polaire_tabule_entete.X;
+
+    for (int i=0; i<((*this).polaire_voilier.polaire_tabule_entete.X).size(); i++)
     {
-      if((*this).polaire_voilier.polaire_tabule_entete.Y[i]<=angle_bateau_vent and (*this).polaire_voilier.polaire_tabule_entete.Y[i+1]>=angle_bateau_vent)
+      if((*this).polaire_voilier.polaire_tabule_entete.X[i]<=angle_bateau_vent and (*this).polaire_voilier.polaire_tabule_entete.X[i+1]>=angle_bateau_vent)
       {
         indice_angle_1 = i; indice_angle_2 = i+1;
       };
@@ -79,12 +85,10 @@ float Voilier<T1,T2>::V_b(const float &angle_bateau_vent, const float &vitesse_v
 
     bi_vecteur indices(vecteur<int>({indice_angle_1,indice_angle_1,indice_angle_2,indice_angle_2}), 
                        vecteur<int>({indice_vitesse_1,indice_vitesse_2,indice_vitesse_1,indice_vitesse_2}));
-    
-    //Appeler l'interpolation
 
+    //Appeler l'interpolation
     vitesse_bateau = interpolation(indices, angle_bateau_vent, vitesse_vent,(*this).polaire_voilier.polaire_tabule_valeur);
   }
-
   return(vitesse_bateau);
 }
 

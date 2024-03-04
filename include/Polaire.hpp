@@ -62,7 +62,7 @@ polaire<T>::polaire(const string &chemin, char separateur, const string &stockag
       {
         int memoire_int;
         istringstream(memoire) >> memoire_int; // Convertir le type string en entier
-        (polaire_tabule_entete.X).push_back(memoire_int);
+        (polaire_tabule_entete.X).push_back(memoire_int-90);
       }
       else
       {
@@ -74,7 +74,6 @@ polaire<T>::polaire(const string &chemin, char separateur, const string &stockag
           istringstream(memoire) >> memoire_int; // Convertir le type string en entier
           (polaire_tabule_entete.Y).push_back(memoire_int);
         }
-
         else
         {
           T memoire_T;
@@ -103,6 +102,6 @@ polaire<T>::polaire(const foncteur_polaire& f_polaire, const string& stockage)
 }
 
 template <typename T>
-polaire<T>::polaire() : polaire_tabule_entete(), polaire_tabule_valeur(vecteur<T>()), methode_stockage(){}
+polaire<T>::polaire() : polaire_tabule_entete(), polaire_tabule_valeur(), methode_stockage(){}
 
 #endif

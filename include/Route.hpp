@@ -31,14 +31,20 @@ class route
 {
 public:
   vecteur<T> depart;
+  vecteur<T> vitesse_initiale;
   bi_vecteur<T> position;
   bi_vecteur<T> vitesse;
 
-  route(vecteur<T> _depart, bi_vecteur<T> _position, bi_vecteur<T> _vitesse) : position(), vitesse()
+  route(vecteur<T> _depart, vecteur<T> _vitesse_initiale, bi_vecteur<T> _position, bi_vecteur<T> _vitesse) : position(), vitesse()
   {
     depart = _depart;
+    vitesse_initiale = _vitesse_initiale;;
+
     position = _position;
+    position.pushback(_depart);
+
     vitesse = _vitesse;
+    vitesse.pushback(_vitesse_initiale);
   }
 };
 

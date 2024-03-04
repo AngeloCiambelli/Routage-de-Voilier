@@ -32,7 +32,7 @@ class foncteur_polaire
 public:
   float operator()(int angle_voilier, float vitesse_vent) const
   {
-    return abs(sin(angle_voilier))+vitesse_vent;
+    return abs(sin(angle_voilier)*10)+vitesse_vent;
   }
 };
 
@@ -40,9 +40,9 @@ public:
 class foncteur_vent
 {
 public:
-  pair<float,float> operator()(float a, float b) const
+  vecteur<float> operator()(float a, float b) const
   {
-    return pair(sin(a), sin(b));
+    return vecteur({sin(a), sin(b)});
   }
 };
 
@@ -50,9 +50,9 @@ public:
 class foncteur_courant
 {
 public:
-  pair<float,float> operator()(float a, float b) const
+  vecteur<float> operator()(float a, float b) const
   {
-    return pair(sin(a), sin(b));
+    return vecteur({sin(a), sin(b)});
   }
 };
 

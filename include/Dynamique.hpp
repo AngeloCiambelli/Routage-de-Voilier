@@ -33,16 +33,18 @@ using namespace std;
 class Dynamique
 {
     public:
-    virtual vecteur<float> f()=0;
+    virtual vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const {};
 };
 
 class Dynamique_voile : public Dynamique
 {
     public:
-    bassin bassin;
+    Bassin bassin;
     Voilier<float, float> voilier;
+
+    Dynamique_voile(const Bassin &B, const Voilier<float, float> &v) {bassin = B; voilier = v;};
     
-    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t)
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const override
     {
         vecteur<float> valeur;
         vecteur<float> V_c = interpolation<vecteur<float>, bi_vecteur<float>>((bassin.grille).localisation(y[0],y[1]),  
@@ -61,8 +63,11 @@ class Dynamique_voile : public Dynamique
 
         vecteur<float> W_u({cos(u), sin(u)}); 
 
-        valeur = V_c + (W_u|voilier.V_b(acos(V_v[0]/sqrt(V_v|V_v))-u,sqrt(V_v|V_v)));
+        cout << V_c << V_v << endl <<endl;
 
+        float angle_vent_bateau = (acos(V_v[0]/sqrt(V_v|V_v))*180/(atan(1)*4))-u;
+        valeur = (V_c += (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
+        cout << valeur;
         return(valeur);
     };
 };
@@ -71,7 +76,10 @@ class Dynamique_voile : public Dynamique
 class Dynamique_test : public Dynamique
 {
     public:
-    vecteur<float> f(){return vecteur<float>({1,1});}
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const override 
+    {
+        return vecteur<float>({1,1});
+    }
 };
 
 

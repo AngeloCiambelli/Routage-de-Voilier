@@ -49,7 +49,7 @@ public:
     this->Y = vect.Y;
     return *this;
   };
-  bi_vecteur<T> &pushback(Vecteur<T> xy)
+  bi_vecteur<T> &pushback(vecteur<T> xy)
   {
     (this->X).push_back(xy[0]);
     (this->Y).push_back(xy[1]);
