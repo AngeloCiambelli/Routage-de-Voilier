@@ -4,6 +4,7 @@
         "cstdlib": "cpp",
         "*.tcc": "cpp",
         "list": "cpp",
+        "vector": "cpp",
         "cmath": "cpp",
         "tuple": "cpp"
     }
