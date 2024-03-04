@@ -30,11 +30,11 @@ template <typename T>
 class route
 {
 public:
-  pair<T, T> depart;
+  vecteur<T> depart;
   bi_vecteur<T> position;
   bi_vecteur<T> vitesse;
 
-  route(pair<T, T> _depart, bi_vecteur<T> _position, bi_vecteur<T> _vitesse) : position(), vitesse()
+  route(vecteur<T> _depart, bi_vecteur<T> _position, bi_vecteur<T> _vitesse) : position(), vitesse()
   {
     depart = _depart;
     position = _position;

@@ -45,7 +45,7 @@ template <typename T>
 polaire<T>::polaire(const string &chemin, char separateur, const string &stockage) // inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 {
   string contenu = fichier_vers_string(chemin); // contenu du .csv en string
-  istringstream sstream(contenu);              // conversion du contenu en "stream" type pour utiliser la fonction getline()
+  istringstream sstream(contenu);               // conversion du contenu en "stream" type pour utiliser la fonction getline()
   vecteur<T> element;                           // element de la ligne entiere
   string memoire;                              // element entre chaque séparateur normalement "espace nombre espace"
   int compteur_1 = 0;                          // Compteurs pour savoir dans quelle ligne on est

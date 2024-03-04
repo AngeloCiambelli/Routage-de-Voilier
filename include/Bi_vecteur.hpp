@@ -49,13 +49,13 @@ public:
     this->Y = vect.Y;
     return *this;
   };
-  bi_vecteur<T> &pushback(pair<T, T> xy)
+  bi_vecteur<T> &pushback(Vecteur<T> xy)
   {
-    (this->X).push_back(xy.first);
-    (this->Y).push_back(xy.second);
+    (this->X).push_back(xy[0]);
+    (this->Y).push_back(xy[1]);
     return *this;
   }
-  int size(){return X.size()}
+  int size(){return X.size();}
 };
 
 //===========================================================================
