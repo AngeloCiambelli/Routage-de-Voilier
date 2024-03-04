@@ -33,14 +33,16 @@ using namespace std;
 class Dynamique
 {
     public:
-    virtual vecteur<float> f(){};
+    virtual vecteur<float> f()=0;
 };
 
 class Dynamique_voile : public Dynamique
 {
     public:
-
-    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t, const bassin &bassin, const Voilier<float,float> &voilier)
+    bassin bassin;
+    Voilier<float, float> voilier;
+    
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t)
     {
         vecteur<float> valeur;
         vecteur<float> V_c = interpolation<vecteur<float>, bi_vecteur<float>>((bassin.grille).localisation(y[0],y[1]),  
@@ -63,8 +65,14 @@ class Dynamique_voile : public Dynamique
 
         return(valeur);
     };
-
-
 };
+
+
+class Dynamique_test : public Dynamique
+{
+    public:
+    vecteur<float> f(){return vecteur<float>({1,1});}
+};
+
 
 #endif
