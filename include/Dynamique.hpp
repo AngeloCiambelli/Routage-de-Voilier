@@ -39,8 +39,10 @@ class Dynamique
 class Dynamique_voile : public Dynamique
 {
     public:
+    bassin bassin;
+    Voilier<float,float> voilier;
 
-    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t, const bassin &bassin, const Voilier<float,float> &voilier)
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t)
     {
         vecteur<float> valeur;
         vecteur<float> V_c = interpolation<vecteur<float>, bi_vecteur<float>>((bassin.grille).localisation(y[0],y[1]),  

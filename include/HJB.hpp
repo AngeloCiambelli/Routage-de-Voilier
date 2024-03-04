@@ -1,46 +1,21 @@
-#ifndef DEF_OPTIMISATION_HPP
-#define DEF_OPTIMISATION_HPP
+#ifndef DEF_HJB_HPP
+#define DEF_HJB_HPP
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <cstdlib>
 #include <cmath>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#include "Vecteur.hpp"
 #include "Grille.hpp"
 #include "Dynamique.hpp"
-#include "Commande_discrete.hpp"
+#include "Flux.hpp"
+#include "Fonction_externes.hpp"
 
 using namespace std;
-
-
-class Flux{
-    public:
-    Grille grille;
-    Dynamique fonction;
-    Flux(const Grille g, const Dynamique f): grille(g),fonction(f){};
-    float calcul(float u, float i, float j, int n, vecteur<float> v_prec){
-        vecteur<float> xij(2,i*grille.pas);
-        xij[1]=j*grille.pas;
-        vecteur<float> f = fonction(xij, u);
-        if(float(int(i))==i){
-            if(f[1]>0){
-                return f[1]*v_prec[grille.find(int(j)+1,int(i),n-1)];
-            }
-            else{
-                return f[1]*v_prec[grille.find(int(j),int(i),n-1)];
-            }
-        }
-        else{
-            if(f[0]>0){
-                return f[0]*v_prec[grille.find(int(j),int(i)+1,n-1)];
-            }
-            else{
-                return f[0]*v_prec[grille.find(int(j),int(i),n-1)];
-            }
-        }
-    }
-
-};
-
 
 
 class HJB{
@@ -50,7 +25,7 @@ class HJB{
     HJB(){};
     HJB(int X, int Y, int Time, float res, float p);
     HJB(vecteur<float> &v0, int Temps, const Grille &grille);
-    void resolve(int L, Dynamique fonction);
+    void resolve(const int &L, const Dynamique_voile &fonction);
 };
 
 
@@ -70,7 +45,7 @@ HJB::HJB(vecteur<float> &v0, int Temps, const Grille &g){
     }
 }
 
-void HJB::resolve(int L, Dynamique fonction){
+void HJB::resolve(const int &L, const Dynamique_voile &fonction){
     vecteur<vecteur<float>> F(L, vecteur<float>(4));
     Flux flux(grille, fonction);
     for(int n=1;n<grille.Temps;n++){
@@ -96,27 +71,6 @@ void HJB::resolve(int L, Dynamique fonction){
     }
 }
 
-class route_optimale{
-    commandes_discretes commandes;
-    Grille grille;
-    int max_iter = 1000;
-    Dynamique fonction;
-    commandes_discretes calcul(pair<float, float> x0, int L){
-        float vx = 1;
-        int iter = 0;
-        bi_vecteur<float> x;
-        x.pushback(x0);
-        while(vx>0 && iter<max_iter){
-            int n = x.size()-1;
-            vecteur<float> tmp(L);
-            float mini = INFINITY;
-            float minimiseur;
-            vecteur<float> next_pos;
-            for(int l=0;l<L;l++){
-                next_pos = x[n] + fonction(x[n], l/L*360);
-            }
-        }
-    }
-};
+
 
 #endif

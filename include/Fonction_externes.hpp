@@ -1,5 +1,5 @@
-#ifndef DEF_FONCTION_EXTERNE_HPP
-#define DEF_FONCTION_EXTERNE_HPP
+#ifndef DEF_FONCTION_EXTERNES_HPP
+#define DEF_FONCTION_EXTERNES_HPP
 
 #include <iostream>
 #include <string>
