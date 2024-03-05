@@ -21,14 +21,14 @@ template<typename T1, typename T2>
 // T2 : vect ou bivect <float>
 T1 interpolation(const bi_vecteur<int>& position_rect,  const float &x, const float &y, const int &timestamp, const T2& valeur,const Grille& grille){
   T1 sum = T1();
-  int x1 = position_rect.X[0];int x2 = position_rect.X[2];
-  int y1 = position_rect.Y[0];int y2 = position_rect.Y[2];
-  float D = (x2-x1)*(y2-y1);
+  int x1 = position_rect.X[0]*grille.pas;int x2 = position_rect.X[2]*grille.pas;
+  int y1 = position_rect.Y[0]*grille.pas;int y2 = position_rect.Y[2]*grille.pas;
+  float D = abs((x2-x1))*abs((y2-y1));
   float w11 = abs((x2 - x)*(y2 - y)/D);
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
-  sum = valeur[grille.find(x1,y1,timestamp)]*w11 + valeur[grille.find(x1,y2,timestamp)]*w21 + valeur[grille.find(x2,y1,timestamp)]*w12 + valeur[grille.find(x2,y2,timestamp)]*w22;
+  sum = valeur[grille.find(x1,y1,timestamp)]*w11 + valeur[grille.find(x1,y2,timestamp)]*w12 + valeur[grille.find(x2,y1,timestamp)]*w21 + valeur[grille.find(x2,y2,timestamp)]*w22;
   return sum;
 };
 

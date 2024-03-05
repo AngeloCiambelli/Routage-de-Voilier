@@ -37,7 +37,7 @@ HJB::HJB(int X, int Y, int Time, float res, float p){
 
 HJB::HJB(vecteur<float> &v0, int Temps, const Grille &g){
     Grille grille(g.taille_X, g.taille_Y, Temps, g.resolution, g.pas);
-    vecteur<float> v(grille.taille_X*grille.taille_Y*grille.Temps);
+    vecteur<float> v(int(grille.taille_X*grille.taille_Y*grille.Temps/(grille.pas*grille.pas*grille.resolution)));
     for(int j=0; j<grille.taille_X; j++){
         for(int i=0;i<grille.taille_Y;i++){
             v[grille.find(i,j,0)] = v0[grille.find(i,j,0)];
