@@ -9,7 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include "Vecteur.hpp"*
+#include "Vecteur.hpp"
 #include "Bi_vecteur.hpp"
 
 using namespace std;

@@ -33,12 +33,22 @@ class route_optimale{
             vecteur<float> tmp(L);
             float mini = INFINITY;
             float minimiseur;
-            vecteur<float> next_pos;
+            vecteur<float> next_pos(2);
+            float commande;
             for(int l=0;l<L;l++){
                 next_pos = x[n] + fonction.f(x[n], l/L*360, 0)*grille.resolution;
-                minimiseur = interpolation(grille.localisation(next_pos[0], next_pos[1]), next_pos[0], next_pos[1], n, HJB.v, grille);
+                auto loca = grille.localisation(next_pos[0], next_pos[1]);
+                minimiseur = interpolation(loca, next_pos[0], next_pos[1], HJB.v, grille);
+                if(minimiseur<mini){
+                    mini=minimiseur;
+                    commande=l/L*360;
+                }
             }
+            x.pushback(next_pos);
+            commandes.commandes.push_back(commande);
+            vx = mini;
         }
+        return commandes;
     }
 };
 

@@ -19,17 +19,16 @@ using namespace std;
 template<typename T1, typename T2>  
 // T1 : float, int , ou vect<float> X,Y
 // T2 : vect ou bivect <float>
-T1 interpolation(const bi_vecteur<int>& position_rect,  const float &x, const float &y, const int &timestamp, const T2& valeur,const Grille& grille){
-  T1 sum = T1();
-  int x1 = position_rect.X[0]*grille.pas;int x2 = position_rect.X[2]*grille.pas;
-  int y1 = position_rect.Y[0]*grille.pas;int y2 = position_rect.Y[2]*grille.pas;
+T1 interpolation(const bi_vecteur<int>& position_rect, const float &x, const float &y, const int &timestamp, const T2& valeur,const Grille& grille){
+  T1 sum;
+  float x1 = position_rect.X[0]*grille.pas;float x2 = position_rect.X[2]*grille.pas;
+  float y1 = position_rect.Y[0]*grille.pas;float y2 = position_rect.Y[2]*grille.pas;
   float D = abs((x2-x1))*abs((y2-y1));
   float w11 = abs((x2 - x)*(y2 - y)/D);
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
-  cout << "w11=" <<  w11 << "w12=" <<  w12 << "w21=" << w21 << "w22=" << w22 << endl;
-  sum = valeur[grille.find(x1,y1,timestamp)]*w11 + valeur[grille.find(x1,y2,timestamp)]*w21 + valeur[grille.find(x2,y1,timestamp)]*w12 + valeur[grille.find(x2,y2,timestamp)]*w22;
+  sum = valeur[grille.find(x1,y1,timestamp)]*w11 + valeur[grille.find(x1,y2,timestamp)]*w12 + valeur[grille.find(x2,y1,timestamp)]*w21 + valeur[grille.find(x2,y2,timestamp)]*w22;
   return sum;
 };
 
@@ -43,7 +42,7 @@ float interpolation(const bi_vecteur<int>& position_rect, const float &x, const 
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
-  sum = valeur[x1][y1]*w11 + valeur[x1][y2]*w21 + valeur[x2][y1]*w12 + valeur[x2][y2]*w22;
+  sum = valeur[x1][y1]*w11 + valeur[x1][y2]*w12 + valeur[x2][y1]*w21 + valeur[x2][y2]*w22;
   return sum;
 };
 
@@ -67,5 +66,19 @@ vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> bi_vecteur_vers_table(co
   }
   return table;
 };
+
+vecteur<float> create_v0(Grille grille){
+  int n = int(grille.taille_X/grille.pas);
+  int m = int(grille.taille_Y/grille.pas);
+  vecteur<float> v0(n*m);
+  for(int j=0; j<m; j++){
+    for(int i=0;i<n; i++){
+      v0[i+n*j] = (i-2/3*n)^2 + (j-2/3*m)^2 - 1;
+    }
+  }
+  return v0;
+};
+
+
 
 #endif

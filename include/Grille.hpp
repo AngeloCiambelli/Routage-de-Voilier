@@ -41,7 +41,8 @@ public:
   Grille(){};
   bi_vecteur<int> localisation(const float &x, const float &y) const;
   int find(const float &x, const float &y,const float &t)const{
-    return x + y*taille_X/pas + t*(taille_Y/pas + taille_X/pas);
+    // Takes position and time (in unit) and outputs the coordinate in the vector
+    return int(x) + int(y*taille_X/pas) + int(t*(taille_Y/pas + taille_X/pas));
   };
 };
 

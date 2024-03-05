@@ -10,6 +10,7 @@
 #include "Fonction_externes.hpp"
 #include "Dynamique.hpp"
 #include "Simulateur.hpp"
+#include "Flux.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -85,7 +86,16 @@ int main(int argc, char *argv[])
 
     //Test simulateur
     Simulateur simulateur_test(0.05,5);
-    cout << simulateur_test.mise_en_route(route1, dynamique_test1).position;
+    cout << simulateur_test.mise_en_route(route1, dynamique_test1).position<<endl;
+
+    //Test Grille
+    Grille grille(1,1,1,0.05,0.1);
+    cout << grille.localisation(0.5,0.6)<<endl;
+    cout << grille.find(0.5,0.5,0.5)<<endl;
+
+    //Test Flux
+    Dynamique_voile fonction(bassin1, voilier_the_first);
+    Flux flux(grille, fonction);
     
 }
 

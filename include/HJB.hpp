@@ -38,8 +38,8 @@ HJB::HJB(int X, int Y, int Time, float res, float p){
 HJB::HJB(vecteur<float> &v0, int Temps, const Grille &g){
     Grille grille(g.taille_X, g.taille_Y, Temps, g.resolution, g.pas);
     vecteur<float> v(int(grille.taille_X*grille.taille_Y*grille.Temps/(grille.pas*grille.pas*grille.resolution)));
-    for(int j=0; j<grille.taille_X; j++){
-        for(int i=0;i<grille.taille_Y;i++){
+    for(int j=0; j<int(grille.taille_X/grille.pas); j++){
+        for(int i=0;i<int(grille.taille_Y/grille.pas);i++){
             v[grille.find(i,j,0)] = v0[grille.find(i,j,0)];
         }
     }
@@ -48,9 +48,9 @@ HJB::HJB(vecteur<float> &v0, int Temps, const Grille &g){
 void HJB::resolve(const int &L, const Dynamique_voile &fonction){
     vecteur<vecteur<float>> F(L, vecteur<float>(4));
     Flux flux(grille, fonction);
-    for(int n=1;n<grille.Temps;n++){
-        for(int j=0; j<grille.taille_X; j++){
-            for(int i=0;i<grille.taille_Y;i++){
+    for(int n=1;n<int(grille.Temps/grille.resolution);n++){
+        for(int j=0; j<int(grille.taille_X/grille.pas); j++){
+            for(int i=0;i<int(grille.taille_Y/grille.pas);i++){
                 for(int l=0;l<L;l++){
                     F[l][0] = flux.calcul(l/L*360, i+1/2, j, n, v);
                     F[l][1] = flux.calcul(l/L*360, i-1/2, j, n, v);
