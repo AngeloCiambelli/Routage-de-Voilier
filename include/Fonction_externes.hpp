@@ -28,6 +28,7 @@ T1 interpolation(const bi_vecteur<int>& position_rect,  const float &x, const fl
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
+  cout << "w11=" <<  w11 << "w12=" <<  w12 << "w21=" << w21 << "w22=" << w22 << endl;
   sum = valeur[grille.find(x1,y1,timestamp)]*w11 + valeur[grille.find(x1,y2,timestamp)]*w21 + valeur[grille.find(x2,y1,timestamp)]*w12 + valeur[grille.find(x2,y2,timestamp)]*w22;
   return sum;
 };

@@ -63,11 +63,12 @@ class Dynamique_voile : public Dynamique
 
         vecteur<float> W_u({cos(u), sin(u)}); 
 
-        cout << V_c << V_v << endl <<endl;
+        cout << "V_c =" <<  V_c << ", V_v =" << V_v << endl;
 
         float angle_vent_bateau = (acos(V_v[0]/sqrt(V_v|V_v))*180/(atan(1)*4))-u;
-        valeur = (V_c += (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
-        cout << valeur;
+        cout << "Angle vent bateau=" << angle_vent_bateau << endl;
+        valeur = (V_c + (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
+        cout << "Vitesse bateau=" << valeur <<endl <<endl;
         return(valeur);
     };
 };
@@ -78,7 +79,7 @@ class Dynamique_test : public Dynamique
     public:
     vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const override 
     {
-        return vecteur<float>({1,1});
+        return vecteur<float>({0,1});
     }
 };
 

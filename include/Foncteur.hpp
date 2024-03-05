@@ -42,7 +42,7 @@ class foncteur_vent
 public:
   vecteur<float> operator()(float a, float b) const
   {
-    return vecteur({sin(a), sin(b)});
+    return vecteur({sin(a)+float(0.01), sin(b)+float(0.01)});
   }
 };
 
@@ -52,7 +52,7 @@ class foncteur_courant
 public:
   vecteur<float> operator()(float a, float b) const
   {
-    return vecteur({sin(a), sin(b)});
+    return vecteur({sin(a)+float(0.01), sin(b)+float(0.01)});
   }
 };
 
