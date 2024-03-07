@@ -16,6 +16,7 @@
 #include "Fonction_externes.hpp"
 #include "Route.hpp"
 #include "Dynamique.hpp"
+#include "Commande.hpp"
 
 using namespace std;
 
@@ -39,17 +40,20 @@ class Simulateur
     int nb_pas;
 
     Simulateur(const float &delta, const int &nombre_pas){delta_temps=delta; nb_pas=nombre_pas;};
-    route<float> mise_en_route(route<float> &route, const Dynamique &dynamique)
+    route<float> mise_en_route(route<float> &route, const Dynamique &dynamique, const Commande & commande)
     {
         for (int i=0; i<=nb_pas; i++)
         {   
-            float u = acos(route.vitesse[i][0]/sqrt(route.vitesse[i]|route.vitesse[i]));
+            cout << "route vitesse" << route.vitesse[i] << endl;
+            float u = angle(route.vitesse[i]);
             
+            cout << "Angle bateau" << u << endl;
             // Vitesse voilier au temps i
-            route.vitesse.pushback(dynamique.f(route.position[i], u, i));
+            route.vitesse.pushback(dynamique.f(route.position[i], u, i, commande));
 
             // Nouvelle position au temps i+1
-            (route.position).pushback(route.position[i]+delta_temps*route.vitesse[i]);
+            (route.position).pushback(route.position[i]+(delta_temps*route.vitesse[i]));
+            cout << "positions =" << route.position << endl;
         }
         
         return(route);

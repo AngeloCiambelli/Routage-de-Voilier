@@ -12,9 +12,13 @@
 #include "Vecteur.hpp"
 #include "Grille.hpp"
 #include "Bi_vecteur.hpp"
+#include "Bassin.hpp"
 
 using namespace std;
 
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
 
 template<typename T1, typename T2>  
 // T1 : float, int , ou vect<float> X,Y
@@ -36,16 +40,20 @@ T1 interpolation(const bi_vecteur<int>& position_rect, const float& x, const flo
 };
 
 
-float interpolation(const bi_vecteur<int>& position_rect, const float &x, const float &y, const vecteur<vecteur<float>>& valeur){
+float interpolation(const bi_vecteur<int>& indice_rect, const bi_vecteur<int>& entete, const float &x, const float &y, const vecteur<vecteur<float>>& valeur){
   float sum = float();
-  int x1 = position_rect.X[2];int x2 = position_rect.X[1];
-  int y1 = position_rect.Y[2];int y2 = position_rect.Y[1];
+  float i1 = indice_rect.X[2];float i2 = indice_rect.X[1];
+  float j1 = indice_rect.Y[2];float j2 = indice_rect.Y[1];
+
+  float x1 = entete.X[i1];float x2 = entete.X[i2];
+  float y1 = entete.Y[j1];float y2 = entete.Y[j2];
+
   float D = (x2-x1)*(y2-y1);
   float w11 = abs((x2 - x)*(y2 - y)/D);
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
-  sum = valeur[x1][y1]*w11 + valeur[x1][y2]*w12 + valeur[x2][y1]*w21 + valeur[x2][y2]*w22;
+  sum = valeur[i1][j1]*w11 + valeur[i1][j2]*w12 + valeur[i2][j1]*w21 + valeur[i2][j2]*w22;
   return sum;
 };
 
@@ -69,6 +77,24 @@ vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> bi_vecteur_vers_table(co
   }
   return table;
 };
+
+bool controle_position(const vecteur<float> &position, const Bassin &bassin)
+{ 
+  cout << bassin.coin_bas_gauche.second << bassin.coin_haut_droit.second;
+  bool test     ((bassin.coin_bas_gauche.first <= position[0]) 
+            and (position[0] <= bassin.coin_haut_droit.first) 
+            and (bassin.coin_bas_gauche.second <= position[1]) 
+            and (position[1] <= bassin.coin_haut_droit.second));
+  return test;
+};
+
+float angle(vecteur<float> v)
+{
+  float valeur;
+  if (v[0] < 0){valeur = 180 - (acos(-v[0]/sqrt(v|v))*180/(atan(1)*4));}
+  else {valeur = acos(v[0]/sqrt(v|v))*180/(atan(1)*4);}
+  return sgn(v[1])*valeur;
+}
 
 vecteur<float> create_v0(Grille grille){
   int n = int(grille.taille_X/grille.pas);
