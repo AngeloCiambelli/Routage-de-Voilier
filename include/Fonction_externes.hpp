@@ -23,17 +23,19 @@ template <typename T> int sgn(T val) {
 template<typename T1, typename T2>  
 // T1 : float, int , ou vect<float> X,Y
 // T2 : vect ou bivect <float>
-T1 interpolation(const bi_vecteur<int>& position_rect,  const float &x, const float &y, const int &timestamp, const T2& valeur,const Grille& grille){
-  T1 sum = T1();
-  float x1 = float(position_rect.X[0])*grille.pas; float x2 = float(position_rect.X[2])*grille.pas;
-  float y1 = float(position_rect.Y[0])*grille.pas; float y2 = float(position_rect.Y[2])*grille.pas;
+T1 interpolation(const bi_vecteur<int>& position_rect, const float& x, const float& y, const int& timestamp, const T2 &valeur,const Grille& grille){
+  T1 sum;
+  float x1 = float(position_rect.X[0])*grille.pas;float x2 = float(position_rect.X[2])*grille.pas;
+  float y1 = float(position_rect.Y[0])*grille.pas;float y2 = float(position_rect.Y[2])*grille.pas;
   float D = (x2-x1)*(y2-y1);
-  float w11 = (x2 - x)*(y2 - y)/D;
-  float w12 = (x2 - x)*(y - y1)/D;
-  float w21 = (x - x1)*(y2 - y)/D;
-  float w22 = (x - x1)*(y - y1)/D;
-  cout << "w11=" <<  w11 << "w12=" <<  w12 << "w21=" << w21 << "w22=" << w22 << endl;
-  sum = (valeur[grille.find(x1/grille.pas,y1/grille.pas,timestamp)]*w11) + (valeur[grille.find(x1/grille.pas,y2/grille.pas,timestamp)]*w12) + (valeur[grille.find(x2/grille.pas,y1/grille.pas,timestamp)]*w21) + (valeur[grille.find(x2/grille.pas,y2/grille.pas,timestamp)]*w22);
+  float w11 = abs((x2 - x)*(y2 - y)/D);
+  float w12 = abs((x2 - x)*(y - y1)/D);
+  float w21 = abs((x - x1)*(y2 - y)/D);
+  float w22 = abs((x - x1)*(y - y1)/D);
+  sum = valeur[grille.find(position_rect.X[0],position_rect.Y[0],timestamp)]*w11 + 
+        valeur[grille.find(position_rect.X[0],position_rect.Y[2],timestamp)]*w12 + 
+        valeur[grille.find(position_rect.X[2],position_rect.Y[0],timestamp)]*w21 + 
+        valeur[grille.find(position_rect.X[2],position_rect.Y[2],timestamp)]*w22;
   return sum;
 };
 
