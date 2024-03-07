@@ -73,8 +73,8 @@ class Dynamique_voile : public Dynamique
         
         else if (bassin.stockage=="analytique")
         {
-            V_c = bassin.fonction_vent(y[0], y[1]);
-            V_v = bassin.fonction_courant(y[0], y[1]);
+            V_c = bassin.fonction_courant(y[0], y[1]);
+            V_v = bassin.fonction_vent(y[0], y[1]);
         }
 
         //Vérification de la contrainte sur la commande

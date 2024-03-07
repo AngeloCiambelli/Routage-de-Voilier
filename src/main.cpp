@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     //test polaire
     string chemin = "include/test.csv";
-    polaire<float> pol(chemin, ';', "analytique");
+    polaire<float> pol(chemin, ';', "tabule");
     cout << pol.polaire_tabule_entete << endl;
     cout << pol.polaire_tabule_valeur << endl << endl;
 
@@ -64,10 +64,10 @@ int main(int argc, char *argv[])
     foncteur_vent f;
     foncteur_courant g;
     
-    float pas = 0.01;
+    float pas = 0.2;
     pair<float, float> bas(0,0);
     pair<float, float> haut(10,10);
-    string sto("analytique"); //"tabule"
+    string sto("tabule"); //"tabule"
     Bassin bassin1(bas,haut,pas,f,g,sto);
     Bassin bassin2();
 
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
 
     //Test simulateur
-    Simulateur simulateur_test(0.05,5);
+    Simulateur simulateur_test(0.3,50);
     cout << simulateur_test.mise_en_route(route1, dynamique_test1, com).position<<endl;
 
     //Test Grille
@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
 
     
     //Test Flux
-    Dynamique_voile fonction(bassin1, voilier_the_first);
-    Flux flux(grille, fonction);
+    // Dynamique_voile fonction(bassin1, voilier_the_first);
+    // Flux flux(grille, fonction);
 
 }
 
