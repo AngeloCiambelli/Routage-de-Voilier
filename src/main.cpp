@@ -36,13 +36,15 @@ int main(int argc, char *argv[])
     vecteur<float> x_start(0);
     vecteur<float> y_start(0);
     bi_vecteur<float> pos(x_start,y_start);
-    route<float> route1(vecteur<float>({0, 0}), vecteur<float>({0,1}), pos, champs);
-    cout << route1.position << endl << endl;
+    bi_vecteur<float> vit(x_start,y_start);
+    route<float> route1(vecteur<float>({0, 0}), vecteur<float>({1,1}), pos, vit);
+    cout << route1.position << endl;
+    cout << route1.vitesse << endl << endl;
 
     //test commande
-    string fun = "cos";
-    commande<float, float> com(fun, A);
-    cout << com.vecteur_commande << endl << endl;
+    foncteur_commande fun;
+    Commande com(fun);
+    cout << com.commande_f(1) << endl << endl;
 
     //test polaire
     string chemin = "include/test.csv";
@@ -52,40 +54,42 @@ int main(int argc, char *argv[])
 
     //test voilier
     pair<float, float> min_max_com(3,200);
-    Voilier<float, float> voilier_the_first(min_max_com, chemin, ';');
+    foncteur_polaire polaire_analytique;
+    //Voilier<float, float> voilier_the_first(min_max_com, chemin, ';');
+    Voilier<float, float> voilier_the_first(min_max_com, polaire_analytique);
     // cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl << endl;
 
     //test Bassin
     foncteur_vent f;
     foncteur_courant g;
     
-    float pas = 0.1;
+    float pas = 0.01;
     pair<float, float> bas(0,0);
-    pair<float, float> haut(1,1);
-    string sto("tabule");
+    pair<float, float> haut(10,10);
+    string sto("analytique"); //"tabule"
     Bassin bassin1(bas,haut,pas,f,g,sto);
     Bassin bassin2();
 
-    cout << endl << bassin1.champs_courant << endl << endl;
-    cout << endl << bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].first << endl << endl;
+    // cout << endl << bassin1.champs_courant << endl << endl;
+    // cout << endl << "X= " << bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].first << endl;
+    // cout << endl << "Y= " << bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].second << endl << endl;
 
     //test csv vers tableau
     string chemin_tableau = "include/test_tableau.csv";
     vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
-    cout << test << endl;
+    // cout << test << endl;
 
     //test data export
-    vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
-    table_vers_csv<float>(test_export[0].first, "output/X_test");
+    // vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
+    // table_vers_csv<float>(test_export[0].first, "output/X_test");
 
     //Test dynamique
     Dynamique_voile dynamique_test1(bassin1, voilier_the_first);
-    cout << acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4) << endl;
-    dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0);
+    // cout << acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4) << endl;
+    // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
 
     //Test simulateur
-    Simulateur simulateur_test(0.05,5);
-    cout << simulateur_test.mise_en_route(route1, dynamique_test1).position;
-    
+    Simulateur simulateur_test(0.3,50);
+    cout << simulateur_test.mise_en_route(route1, dynamique_test1, com).position;
 }
 

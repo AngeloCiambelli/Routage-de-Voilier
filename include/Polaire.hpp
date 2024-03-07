@@ -62,7 +62,7 @@ polaire<T>::polaire(const string &chemin, char separateur, const string &stockag
       {
         int memoire_int;
         istringstream(memoire) >> memoire_int; // Convertir le type string en entier
-        (polaire_tabule_entete.X).push_back(memoire_int-90);
+        (polaire_tabule_entete.X).push_back(memoire_int);
       }
       else
       {

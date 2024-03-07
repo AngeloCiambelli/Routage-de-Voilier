@@ -87,7 +87,7 @@ float Voilier<T1,T2>::V_b(const float &angle_bateau_vent, const float &vitesse_v
                        vecteur<int>({indice_vitesse_1,indice_vitesse_2,indice_vitesse_1,indice_vitesse_2}));
 
     //Appeler l'interpolation
-    vitesse_bateau = interpolation(indices, angle_bateau_vent, vitesse_vent,(*this).polaire_voilier.polaire_tabule_valeur);
+    vitesse_bateau = interpolation(indices, (*this).polaire_voilier.polaire_tabule_entete, angle_bateau_vent, vitesse_vent,(*this).polaire_voilier.polaire_tabule_valeur);
   }
   return(vitesse_bateau);
 }

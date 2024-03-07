@@ -10,6 +10,7 @@
 #include <sstream>
 #include <algorithm>
 #include "Vecteur.hpp"
+#include "Foncteur.hpp"
 
 
 using namespace std;
@@ -26,45 +27,14 @@ using namespace std;
 //                            Definition de la classe
 //===========================================================================
 
-template <typename T1, typename T2>
-class commande
+class Commande
 {
 public:
-  vecteur<T2> vecteur_commande;
-  string nom_fonction;
+  foncteur_commande commande_f;
 
-  commande(string fonction, vecteur<T1> delta_t)
+  Commande(const foncteur_commande& f)
   {
-    nom_fonction = fonction;
-    if (fonction == "cos")
-    {
-      for (int i = 0; i < size(delta_t); i++)
-      {
-        vecteur_commande.push_back(cos(delta_t[i]));
-      };
-    }
-    if (fonction == "sin")
-    {
-      for (int i = 0; i < size(delta_t); i++)
-      {
-        vecteur_commande.push_back(sin(delta_t[i]));
-      };
-    }
-    if (fonction == "constant")
-    {
-      for (int i = 0; i < size(delta_t); i++)
-      {
-        int c = 3;
-        vecteur_commande.push_back(c * delta_t[i]);
-      };
-    }
-    if (fonction == "")
-    {
-      for (int i = 0; i < size(delta_t); i++)
-      {
-        vecteur_commande.push_back(0 * delta_t[i]);
-      };
-    }
+    commande_f = f;
   }
 };
 
