@@ -94,4 +94,19 @@ float angle(vecteur<float> v)
   return sgn(v[1])*valeur;
 }
 
+vecteur<float> create_v0(Grille grille){
+  int n = int(grille.taille_X/grille.pas);
+  int m = int(grille.taille_Y/grille.pas);
+  vecteur<float> v0(n*m);
+  for(int j=0; j<m; j++){
+    for(int i=0;i<n; i++){
+      float floati = float(i);float floatj = float(j);float floatn = float(n);float floatm = float(m);
+      v0[i+n*j] = float(pow(floati-2./3.*floatn, 2.) + pow(floatj-2./3.*floatm, 2.) - 1.);
+    }
+  }
+  return v0;
+};
+
+
+
 #endif
