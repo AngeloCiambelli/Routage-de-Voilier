@@ -6,4 +6,4 @@ src/main.o: src/main.cpp include/Vecteur.hpp include/Bi_vecteur.hpp \
  include/Bassin.hpp include/Fonction_csv.hpp \
  include/Fonction_externes.hpp include/Dynamique.hpp include/Bassin.hpp \
  include/Voilier.hpp include/Simulateur.hpp include/Route.hpp \
- include/Dynamique.hpp
+ include/Dynamique.hpp include/Flux.hpp include/Commande_discrete.hpp

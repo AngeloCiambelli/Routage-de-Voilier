@@ -90,12 +90,26 @@ int main(int argc, char *argv[])
 
     //Test Grille
     Grille grille(1,1,1,0.05,0.1);
-    cout << grille.localisation(0.5,0.6)<<endl;
-    cout << grille.find(0.5,0.5,0.5)<<endl;
+    bi_vecteur<int> x = grille.localisation(0.5,0.6);
+    cout << x <<endl;
 
+    cout << grille.find(0.5,0.6,0)<<endl;
+
+    //Test interpolation
+    const float &y1 = 0.5; const float &y2 = 0.6; 
+    const int &zero = 0;
+    vecteur<float> v0 = create_v0(grille);
+    cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, create_v0(grille), grille) << endl;
+    cout << v0(grille.find(x.X[0], x.Y[0], 0)) << ", ";
+    cout << v0(grille.find(x.X[1], x.Y[1], 0)) << ", "<<endl;
+    cout << v0(grille.find(x.X[2], x.Y[2], 0)) << ", ";
+    cout << v0(grille.find(x.X[3], x.Y[3], 0)) << ", "<<endl;
+    cout << v0<< endl;
+
+    
     //Test Flux
     Dynamique_voile fonction(bassin1, voilier_the_first);
     Flux flux(grille, fonction);
-    
+
 }
 

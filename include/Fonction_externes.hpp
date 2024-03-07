@@ -19,16 +19,16 @@ using namespace std;
 template<typename T1, typename T2>  
 // T1 : float, int , ou vect<float> X,Y
 // T2 : vect ou bivect <float>
-T1 interpolation(const bi_vecteur<int>& position_rect, const float &x, const float &y, const int &timestamp, const T2& valeur,const Grille& grille){
+T1 interpolation(const bi_vecteur<int>& position_rect, const float& x, const float& y, const int& timestamp, const T2 &valeur,const Grille& grille){
   T1 sum;
-  float x1 = position_rect.X[0]*grille.pas;float x2 = position_rect.X[2]*grille.pas;
-  float y1 = position_rect.Y[0]*grille.pas;float y2 = position_rect.Y[2]*grille.pas;
+  float x1 = float(position_rect.X[0])*grille.pas;float x2 = float(position_rect.X[2])*grille.pas;
+  float y1 = float(position_rect.Y[0])*grille.pas;float y2 = float(position_rect.Y[2])*grille.pas;
   float D = abs((x2-x1))*abs((y2-y1));
   float w11 = abs((x2 - x)*(y2 - y)/D);
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
-  sum = valeur[grille.find(x1,y1,timestamp)]*w11 + valeur[grille.find(x1,y2,timestamp)]*w12 + valeur[grille.find(x2,y1,timestamp)]*w21 + valeur[grille.find(x2,y2,timestamp)]*w22;
+  sum = valeur[grille.find(x1/grille.pas,y1/grille.pas,timestamp)]*w11 + valeur[grille.find(x1/grille.pas,y2/grille.pas,timestamp)]*w12 + valeur[grille.find(x2/grille.pas,y1/grille.pas,timestamp)]*w21 + valeur[grille.find(x2/grille.pas,y2/grille.pas,timestamp)]*w22;
   return sum;
 };
 
@@ -73,7 +73,8 @@ vecteur<float> create_v0(Grille grille){
   vecteur<float> v0(n*m);
   for(int j=0; j<m; j++){
     for(int i=0;i<n; i++){
-      v0[i+n*j] = (i-2/3*n)^2 + (j-2/3*m)^2 - 1;
+      float floati = float(i);float floatj = float(j);float floatn = float(n);float floatm = float(m);
+      v0[i+n*j] = float(pow(floati-2./3.*floatn, 2.) + pow(floatj-2./3.*floatm, 2.) - 1.);
     }
   }
   return v0;

@@ -42,7 +42,7 @@ public:
   bi_vecteur<int> localisation(const float &x, const float &y) const;
   int find(const float &x, const float &y,const float &t)const{
     // Takes position and time (in unit) and outputs the coordinate in the vector
-    return int(x) + int(y*taille_X/pas) + int(t*(taille_Y/pas + taille_X/pas));
+    return int(x) + int(y)*int(taille_X/pas) + int(t)*int(taille_Y/pas + taille_X/pas);
   };
 };
 
