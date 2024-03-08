@@ -32,6 +32,11 @@ T1 interpolation(const bi_vecteur<int>& position_rect, const float& x, const flo
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
+  cout << "bas_gauche" << valeur[grille.find(position_rect.X[0],position_rect.Y[0],timestamp)] 
+       << "haut_gauche" << valeur[grille.find(position_rect.X[0],position_rect.Y[2],timestamp)] 
+       << "bas_droit" << valeur[grille.find(position_rect.X[2],position_rect.Y[0],timestamp)] 
+       << "haut_droit" << valeur[grille.find(position_rect.X[2],position_rect.Y[2],timestamp)] << endl;
+
   sum = valeur[grille.find(position_rect.X[0],position_rect.Y[0],timestamp)]*w11 + 
         valeur[grille.find(position_rect.X[0],position_rect.Y[2],timestamp)]*w12 + 
         valeur[grille.find(position_rect.X[2],position_rect.Y[0],timestamp)]*w21 + 
@@ -91,8 +96,8 @@ bool controle_position(const vecteur<float> &position, const Bassin &bassin)
 float angle(vecteur<float> v)
 {
   float valeur;
-  if (v[0] < 0){valeur = 180 - (acos(-v[0]/sqrt(v|v))*180/(atan(1)*4));}
-  else {valeur = acos(v[0]/sqrt(v|v))*180/(atan(1)*4);}
+  if (v[0] < 0){valeur = float(180) - (acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4)));}
+  else {valeur = acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4));}
   return sgn(v[1])*valeur;
 }
 

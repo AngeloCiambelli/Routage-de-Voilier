@@ -58,13 +58,13 @@ public:
       champs_vent = bi_vecteur<float>();
       champs_courant = bi_vecteur<float>();  
       
-      for (int i = 0; i < grille.taille_Y/grille.pas; i++)
+      for (int i = 0; i <= grille.taille_Y/grille.pas; i++)
       {
-        for (int j = 0; j < grille.taille_X/grille.pas; j++)
+        for (int j = 0; j <= grille.taille_X/grille.pas; j++)
         {
-          champs_vent.pushback(f_vent(i*pas, j*pas));
+          champs_vent.pushback(f_vent(float(j)*pas, float(i)*pas));
           //cout << "champs vent" << champs_vent;
-          champs_courant.pushback(f_courant(i*pas, j*pas));
+          champs_courant.pushback(f_courant(float(j)*pas, float(i)*pas));
           //cout << "champs courant" << champs_courant;
         }
       }

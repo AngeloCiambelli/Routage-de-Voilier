@@ -30,9 +30,6 @@ int main(int argc, char *argv[])
     champs.pushback(vecteur({a,b}));
     cout << champs << endl;
 
-    // A=B;
-    // cout << A;
-
     //test route
     vecteur<float> x_start(0);
     vecteur<float> y_start(0);
@@ -54,7 +51,7 @@ int main(int argc, char *argv[])
     cout << pol.polaire_tabule_valeur << endl << endl;
 
     //test voilier
-    pair<float, float> min_max_com(3,200);
+    pair<float, float> min_max_com(80,80);
     foncteur_polaire polaire_analytique;
     //Voilier<float, float> voilier_the_first(min_max_com, chemin, ';');
     Voilier<float, float> voilier_the_first(min_max_com, polaire_analytique);
@@ -64,7 +61,7 @@ int main(int argc, char *argv[])
     foncteur_vent f;
     foncteur_courant g;
     
-    float pas = 0.2;
+    float pas = 0.01;
     pair<float, float> bas(0,0);
     pair<float, float> haut(10,10);
     string sto("tabule"); //"tabule"
@@ -90,8 +87,11 @@ int main(int argc, char *argv[])
     // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
 
     //Test simulateur
-    Simulateur simulateur_test(0.3,50);
-    cout << simulateur_test.mise_en_route(route1, dynamique_test1, com).position<<endl;
+    Simulateur simulateur_test(0.1,50, com);
+    cout << simulateur_test.mise_en_route(route1, dynamique_test1).position<<endl;
+
+
+    //=======================================Test ROUTAGE OPTIMAL===========================================//
 
     //Test Grille
     Grille grille(1.,1.,1.,0.05,0.1);

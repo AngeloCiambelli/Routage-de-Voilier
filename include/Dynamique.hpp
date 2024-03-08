@@ -35,7 +35,7 @@ using namespace std;
 class Dynamique
 {
     public:
-    virtual vecteur<float> f(const vecteur<float> &y,const float &u, const int &t, const Commande& commande) const {};
+    virtual vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const {};
 };
 
 class Dynamique_voile : public Dynamique
@@ -46,7 +46,7 @@ class Dynamique_voile : public Dynamique
 
     Dynamique_voile(const Bassin &B, const Voilier<float, float> &v) {bassin = B; voilier = v;};
     
-    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t, const Commande& commande) const override
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const override
     {
         vecteur<float> valeur;
         vecteur<float> V_c;
@@ -78,7 +78,7 @@ class Dynamique_voile : public Dynamique
         }
 
         //Vérification de la contrainte sur la commande
-        vecteur<float> W_u = commande.commande_f(u);
+        vecteur<float> W_u({cos(u*atan(float(1))*float(4)/float(180)), sin(u*atan(float(1))*float(4)/float(180))});
 
         
         cout << "V_c =" <<  V_c << ", V_v =" << V_v << endl;
@@ -98,7 +98,7 @@ class Dynamique_voile : public Dynamique
 class Dynamique_test : public Dynamique
 {
     public:
-    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t, const Commande& commande) const override 
+    vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const override 
     {
         return vecteur<float>({0,1});
     }

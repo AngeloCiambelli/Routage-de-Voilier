@@ -38,18 +38,30 @@ class Simulateur
     public:
     float delta_temps;
     int nb_pas;
+    Commande commande;
 
-    Simulateur(const float &delta, const int &nombre_pas){delta_temps=delta; nb_pas=nombre_pas;};
-    route<float> mise_en_route(route<float> &route, const Dynamique &dynamique, const Commande & commande)
+    Simulateur(const float &delta, const int &nombre_pas, const Commande& com){delta_temps=delta; nb_pas=nombre_pas; commande=com;};
+    route<float> mise_en_route(route<float> &route, const Dynamique &dynamique)
     {
         for (int i=0; i<=nb_pas; i++)
         {   
             cout << "route vitesse" << route.vitesse[i] << endl;
-            float u = angle(route.vitesse[i]);
+            
+            float u;
+
+            // Angle du bateau par rapport a son ancienne direction de vitesse
+            if(commande.stockage=="analytique")
+            {
+                float u = commande.commande_f(angle(route.vitesse[i]));
+            } 
+            else if (commande.stockage=="tabule")
+            {
+                float u = commande.commande_f(angle(route.vitesse[i]));
+            }
             
             cout << "Angle bateau" << u << endl;
             // Vitesse voilier au temps i
-            route.vitesse.pushback(dynamique.f(route.position[i], u, i, commande));
+            route.vitesse.pushback(dynamique.f(route.position[i], u, i));
 
             // Nouvelle position au temps i+1
             (route.position).pushback(route.position[i]+(delta_temps*route.vitesse[i]));
