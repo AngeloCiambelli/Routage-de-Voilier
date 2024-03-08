@@ -24,7 +24,7 @@ class route_optimale{
     Dynamique_voile fonction;
     HJB HJB;
     commandes_discretes calcul(vecteur<float> x0, int L){
-        float vx = 1;
+        float vx = 1.f;
         int iter = 0;
         bi_vecteur<float> x;
         x.pushback(x0);
@@ -36,12 +36,12 @@ class route_optimale{
             vecteur<float> next_pos(2);
             float commande;
             for(int l=0;l<L;l++){
-                next_pos = x[n] + fonction.f(x[n], l/L*360, 0)*grille.resolution;
+                next_pos = x[n] + fonction.f(x[n], l/L*360.f, 0)*grille.resolution;
                 auto loca = grille.localisation(next_pos[0], next_pos[1]);
-                minimiseur = interpolation(loca, next_pos[0], next_pos[1], HJB.v, grille);
+                minimiseur = interpolation<float, vecteur<float>>(loca, next_pos[0], next_pos[1], n, HJB.v, grille);
                 if(minimiseur<mini){
                     mini=minimiseur;
-                    commande=l/L*360;
+                    commande=l/L*360.f;
                 }
             }
             x.pushback(next_pos);

@@ -23,7 +23,7 @@ template <typename T> int sgn(T val) {
 template<typename T1, typename T2>  
 // T1 : float, int , ou vect<float> X,Y
 // T2 : vect ou bivect <float>
-T1 interpolation(const bi_vecteur<int>& position_rect, const float& x, const float& y, const int& timestamp, const T2 &valeur,const Grille& grille){
+T1 interpolation(const bi_vecteur<int> &position_rect, const float &x, const float &y, const int &timestamp, const T2 &valeur,const Grille& grille){
   T1 sum;
   float x1 = float(position_rect.X[0])*grille.pas;float x2 = float(position_rect.X[2])*grille.pas;
   float y1 = float(position_rect.Y[0])*grille.pas;float y2 = float(position_rect.Y[2])*grille.pas;
