@@ -31,11 +31,20 @@ class Commande
 {
 public:
   foncteur_commande commande_f;
+  vecteur<float> vecteur_commande;
+  string stockage;
 
-  Commande(const foncteur_commande& f)
+  Commande(const foncteur_commande &f)
   {
+    stockage = "analytique";
     commande_f = f;
   }
+  Commande(const vecteur<float> &v)
+  {
+    stockage = "tabule";
+    vecteur_commande = v;
+  }
+  Commande(){}
 };
 
 #endif
