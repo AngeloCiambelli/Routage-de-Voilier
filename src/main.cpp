@@ -101,8 +101,8 @@ int main(int argc, char *argv[])
     cout << grille.find(0.601,0.12,0)<<endl;
 
     //Test interpolation
-    const float &y1 = 0.601; const float &y2 = 0.12; 
-    const int &zero = 0;
+    float y1 = 0.601; float y2 = 0.12; 
+    int zero = 0;
     vecteur<float> v0 = create_v0(grille);
     cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
     cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
