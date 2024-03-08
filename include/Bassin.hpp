@@ -62,9 +62,9 @@ public:
       {
         for (int j = 0; j < grille.taille_X/grille.pas; j++)
         {
-          champs_vent.pushback(f_vent(i*pas, j*pas));
+          champs_vent.pushback(f_vent(float(j)*pas, float(i)*pas));
           //cout << "champs vent" << champs_vent;
-          champs_courant.pushback(f_courant(i*pas, j*pas));
+          champs_courant.pushback(f_courant(float(j)*pas, float(i)*pas));
           //cout << "champs courant" << champs_courant;
         }
       }

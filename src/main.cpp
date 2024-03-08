@@ -90,19 +90,19 @@ int main(int argc, char *argv[])
     // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
 
     //Test simulateur
-    Simulateur simulateur_test(0.3,50);
+    Simulateur simulateur_test(0.3f,50);
     cout << simulateur_test.mise_en_route(route1, dynamique_test1, com).position<<endl;
 
     //Test Grille
-    Grille grille(1.,1.,1.,0.05,0.1);
-    bi_vecteur<int> x = grille.localisation(0.601,0.12);
+    Grille grille(1.f,1.f,1.f,0.05f,0.1f);
+    bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     cout << x <<endl;
 
-    cout << grille.find(0.601,0.12,0)<<endl;
+    cout << grille.find(0.601f,0.12f,0)<<endl;
 
     //Test interpolation
-    const float &y1 = 0.601; const float &y2 = 0.12; 
-    const int &zero = 0;
+    float y1 = 0.601f; float y2 = 0.12f; 
+    int zero = 0;
     vecteur<float> v0 = create_v0(grille);
     cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
     cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";

@@ -38,7 +38,7 @@ class route_optimale{
             for(int l=0;l<L;l++){
                 next_pos = x[n] + fonction.f(x[n], l/L*360, 0)*grille.resolution;
                 auto loca = grille.localisation(next_pos[0], next_pos[1]);
-                minimiseur = interpolation(loca, next_pos[0], next_pos[1], HJB.v, grille);
+                minimiseur = interpolation<float, vecteur<float>>(loca, next_pos[0], next_pos[1],n, HJB.v, grille);
                 if(minimiseur<mini){
                     mini=minimiseur;
                     commande=l/L*360;
