@@ -49,7 +49,7 @@ public:
     fonction_vent = f_vent;
     fonction_courant = f_courant;
 
-    grille = Grille(abs(b.first - a.first), abs(b.second - a.second), 1, 1, pas);
+    grille = Grille(abs(b.first - a.first), abs(b.second - a.second), 1.f, 1.f, pas);
     champs_vent = bi_vecteur<float>();
     champs_courant = bi_vecteur<float>();
 

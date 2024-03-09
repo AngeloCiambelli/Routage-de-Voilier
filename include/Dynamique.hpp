@@ -81,15 +81,15 @@ class Dynamique_voile : public Dynamique
         vecteur<float> W_u({cos(u*atan(float(1))*float(4)/float(180)), sin(u*atan(float(1))*float(4)/float(180))});
 
         
-        cout << "V_c =" <<  V_c << ", V_v =" << V_v << endl;
+        //cout << "V_c =" <<  V_c << ", V_v =" << V_v << endl;
         foncteur_courant vrai_c;
         foncteur_vent vrai_v;
-        cout << "erreur_V_c =" <<  V_c - vrai_c(y[0], y[1]) << ", erreur_V_v =" << V_v - vrai_v(y[0], y[1]) << endl;
+        //cout << "erreur_V_c =" <<  V_c - vrai_c(y[0], y[1]) << ", erreur_V_v =" << V_v - vrai_v(y[0], y[1]) << endl;
 
         float angle_vent_bateau = abs(angle(V_v)-u);
-        cout << "Angle vent bateau=" << angle_vent_bateau << endl;
+        //cout << "Angle vent bateau=" << angle_vent_bateau << endl;
         valeur = (V_c + (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
-        cout << "Vitesse bateau=" << valeur <<endl <<endl;
+        //cout << "Vitesse bateau=" << valeur <<endl <<endl;
         return(valeur);
     };
 };

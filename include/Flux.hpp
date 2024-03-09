@@ -16,10 +16,9 @@ class Flux{
     public:
     Grille grille;
     Dynamique_voile fonction;
-    Flux(const Grille g, const Dynamique_voile f): grille(g),fonction(f){};
+    Flux(const Grille &g, const Dynamique_voile &f): grille(g),fonction(f){};
     float calcul(float u, float i, float j, int n, vecteur<float> v_prec){
-        vecteur<float> xij(2,i*grille.pas);
-        xij[1]=j*grille.pas;
+        vecteur<float> xij({float(i)*grille.pas, float(j)*grille.pas});
         vecteur<float> f = fonction.f(xij, u, n);
         if(float(int(i))==i){
             if(f[1]>0){

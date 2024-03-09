@@ -37,16 +37,16 @@ public:
   float pas;
   float resolution;
 
-  Grille(int X, int Y, int Time, float res, float p);
+  Grille(float X, float Y, float Time, float res, float p);
   Grille(){};
   bi_vecteur<int> localisation(const float &x, const float &y) const;
-  int find(const float &x, const float &y,const float &t)const{
+  int find(const int &x, const int &y,const int &t)const{
     // Takes position and time (in unit) and outputs the coordinate in the vector
-    return int(x) + int(y)*int(taille_X/pas+1) + int(t)*int(taille_Y/pas + taille_X/pas);
+    return x + y*(int(taille_X/pas)+1) + t*(int(taille_Y/pas)+1)*(int(taille_X/pas)+1);
   };
 };
 
-Grille::Grille(int X, int Y, int Time, float res, float p)
+Grille::Grille(float X, float Y, float Time, float res, float p)
 {
   taille_X = X;
   taille_Y = Y;

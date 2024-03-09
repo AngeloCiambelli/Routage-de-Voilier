@@ -7,6 +7,9 @@
         "vector": "cpp",
         "cmath": "cpp",
         "tuple": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "limits": "cpp",
+        "deque": "cpp",
+        "string": "cpp"
     }
 }
