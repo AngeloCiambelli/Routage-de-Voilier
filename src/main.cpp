@@ -12,6 +12,7 @@
 #include "Simulateur.hpp"
 #include "Flux.hpp"
 #include "HJB.hpp"
+#include "route_optimale.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -118,15 +119,22 @@ int main(int argc, char *argv[])
 
     //Test Flux
     Dynamique_voile fonction(bassin1, voilier_the_first);
-    Flux flux(grille, fonction);
-    cout << flux.calcul(0, 5.5, 6, 0, v0)<< endl;
+    // Flux flux(grille, fonction);
+    // cout << flux.calcul(0, 5.5, 6, 0, v0)<< endl;
 
     //Test HJB
-    HJB HJB(v0,grille, fonction);
+    // HJB HJB(v0,grille, fonction);
     
-    print_grille(grille, HJB.v);
-    HJB.resolve(10);
-    print_grille(grille, HJB.v);
+    // print_grille(grille, HJB.v);
+    // HJB.resolve(10);
+    // print_grille(grille, HJB.v);
+
+    //Test route optimale
+    route_optimale route(grille, fonction, v0);
+    vecteur<float> x0({0.1,0.1});
+    commandes_discretes commandes = route.calcul(x0, 14);
+    cout << route.positions<<endl;
+    cout << commandes << endl;
 
 }
 

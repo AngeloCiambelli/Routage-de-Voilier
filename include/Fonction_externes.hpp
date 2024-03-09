@@ -27,6 +27,8 @@ T1 interpolation(const bi_vecteur<int> &position_rect, const float &x, const flo
   T1 sum;
   float x1 = float(position_rect.X[0])*grille.pas;float x2 = float(position_rect.X[2])*grille.pas;
   float y1 = float(position_rect.Y[0])*grille.pas;float y2 = float(position_rect.Y[2])*grille.pas;
+  if (x1<0 || y1<0 || x2>grille.taille_X/grille.pas || y2>grille.taille_Y/grille.pas){
+    throw std::invalid_argument("interpolation en dehors de la zone définie impossible");}
   float D = (x2-x1)*(y2-y1);
   float w11 = abs((x2 - x)*(y2 - y)/D);
   float w12 = abs((x2 - x)*(y - y1)/D);

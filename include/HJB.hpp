@@ -24,6 +24,7 @@ class HJB{
     vecteur<float> v;
     Grille grille;
     Flux flux;
+    bool resolved=0;
 
     HJB(float X, float Y, float Time, float res, float p, Dynamique_voile f);
     HJB(const vecteur<float> &v0, const Grille &g, Dynamique_voile f) : flux(g, f){
@@ -54,18 +55,18 @@ grille(X,Y,Time,res,p), v(X*Y*Time), flux(grille, f){ // Initialisation "à la m
 
 
 void HJB::resolve(const int &L){
-    vecteur<vecteur<float>> F(L, vecteur<float>(4));
+    vecteur<float> F(4);
     for(int n=1;n<=int((*this).grille.Temps/(*this).grille.resolution);n++){
         for(int j=0; j<=int((*this).grille.taille_X/(*this).grille.pas); j++){
             for(int i=0;i<=int((*this).grille.taille_Y/(*this).grille.pas);i++){
                 float mini = numeric_limits<float>::max();
                 float minimiseur;
                 for(int l=0;l<L;l++){
-                    F[l][0] = flux.calcul(float(l)/float(L)*360., float(i)+1./2., float(j), n, v);
-                    F[l][1] = flux.calcul(float(l)/float(L)*360., float(i)-1./2., float(j), n, v);
-                    F[l][2] = flux.calcul(float(l)/float(L)*360., float(i), float(j)+1./2., n, v);
-                    F[l][3] = flux.calcul(float(l)/float(L)*360., float(i), float(j)-1./2., n, v);
-                    minimiseur = (*this).grille.resolution/(*this).grille.pas*(F[l][0]-F[l][1]+F[l][2]-F[l][3]);
+                    F[0] = flux.calcul(float(l)/float(L)*360.-180., float(i)+1./2., float(j), n, v);
+                    F[1] = flux.calcul(float(l)/float(L)*360.-180., float(i)-1./2., float(j), n, v);
+                    F[2] = flux.calcul(float(l)/float(L)*360.-180., float(i), float(j)+1./2., n, v);
+                    F[3] = flux.calcul(float(l)/float(L)*360.-180., float(i), float(j)-1./2., n, v);
+                    minimiseur = (*this).grille.resolution/(*this).grille.pas*(F[0]-F[1]+F[2]-F[3]);
                     if (minimiseur<=mini){
                         mini = minimiseur;
                     }
@@ -74,6 +75,7 @@ void HJB::resolve(const int &L){
             }
         }
     }
+    resolved=1;
 }
 
 
