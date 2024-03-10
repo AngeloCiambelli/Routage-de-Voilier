@@ -11,6 +11,8 @@
 #include "Dynamique.hpp"
 #include "Simulateur.hpp"
 #include "Flux.hpp"
+#include "HJB.hpp"
+#include "route_optimale.hpp"
 
 //===========================================================================
 //                            Description
@@ -25,23 +27,24 @@
 
 // Dans la simulation on fait 50 pas avec un pas de temps de 0.1 (Attention le bateau va vite!)
 
+
 int main(int argc, char *argv[])
 {
-    cout << "Hello world!" << std::endl;
+    // cout << "Hello world!" << std::endl;
 
-    //test vecteur
-    cout << vecteur({1,2,3}) << endl;
+    // //test vecteur
+    // cout << vecteur({1,2,3}) << endl;
 
-    //test bi_vecteur
-    vecteur<float> A({1,2,3});
-    vecteur<float> B({1,2,4});
-    cout << A << endl;
-    bi_vecteur<float> champs(A,B);
-    cout << champs << endl;
-    float a=8;
-    float b=9;
-    champs.pushback(vecteur({a,b}));
-    cout << champs << endl;
+    // //test bi_vecteur
+    // vecteur<float> A({1,2,3});
+    // vecteur<float> B({1,2,4});
+    // cout << A << endl;
+    // bi_vecteur<float> champs(A,B);
+    // cout << champs << endl;
+    // float a=8;
+    // float b=9;
+    // champs.pushback(vecteur({a,b}));
+    // cout << champs << endl;
 
     //test route
     vecteur<float> x_start(0);
@@ -57,11 +60,11 @@ int main(int argc, char *argv[])
     Commande com(fun);
     cout << com.commande_f(1) << endl << endl;
 
-    //test polaire
-    string chemin = "include/test.csv";
-    polaire<float> pol(chemin, ';', "tabule");
-    cout << pol.polaire_tabule_entete << endl;
-    cout << pol.polaire_tabule_valeur << endl << endl;
+    // //test polaire
+    // string chemin = "include/test.csv";
+    // polaire<float> pol(chemin, ';', "tabule");
+    // cout << pol.polaire_tabule_entete << endl;
+    // cout << pol.polaire_tabule_valeur << endl << endl;
 
     //test voilier
     pair<float, float> min_max_com(-80,80); 
@@ -90,21 +93,21 @@ int main(int argc, char *argv[])
     // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].first, "output/X_courant");
     // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].second, "output/Y_courant");
 
-    //test csv vers tableau
-    string chemin_tableau = "include/test_tableau.csv";
-    vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
-    // cout << test << endl;
+    // //test csv vers tableau
+    // string chemin_tableau = "include/test_tableau.csv";
+    // vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
+    // // cout << test << endl;
 
-    //test data export
-    // vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
-    // table_vers_csv<float>(test_export[0].first, "output/X_test");
+    // //test data export
+    // // vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
+    // // table_vers_csv<float>(test_export[0].first, "output/X_test");
 
-    //Test dynamique
+    // //Test dynamique
     Dynamique_voile dynamique_test1(bassin1, voilier_the_first);
-    // cout << acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4) << endl;
-    // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
+    // // cout << acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4) << endl;
+    // // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
 
-    //Test simulateur
+    // //Test simulateur
     Simulateur simulateur_test(0.1,50, com);
     cout << simulateur_test.mise_en_route(route1, dynamique_test1).position<<endl;
 
@@ -112,27 +115,45 @@ int main(int argc, char *argv[])
     //=======================================Test ROUTAGE OPTIMAL===========================================//
 
     //Test Grille
-    Grille grille(1.,1.,1.,0.05,0.1);
-    bi_vecteur<int> x = grille.localisation(0.601,0.12);
-    cout << x <<endl;
+    Grille grille(1.f,1.f,1.f,0.05f,0.1f);
+    // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
+    // cout << x <<endl;
 
-    cout << grille.find(0.601,0.12,0)<<endl;
+    // cout << grille.find(0.601f,0.12f,0)<<endl;
 
-    //Test interpolation
-    float y1 = 0.601; float y2 = 0.12; 
-    int zero = 0;
+    // //Test interpolation
+    // float y1 = 0.601f; float y2 = 0.12f; 
+    // int zero = 0;
     vecteur<float> v0 = create_v0(grille);
-    cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
-    cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
-    cout << v0[grille.find(x.X[1], x.Y[1], 0)] << ", "<<endl;
-    cout << v0[grille.find(x.X[2], x.Y[2], 0)] << ", ";
-    cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
-    cout << v0<< endl;
+    Grille grille_mod = grille;
+    grille_mod.resolution = 2;
+    print_grille(grille_mod, v0);
+    // cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
+    // cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
+    // cout << v0[grille.find(x.X[1], x.Y[1], 0)] << ", "<<endl;
+    // cout << v0[grille.find(x.X[2], x.Y[2], 0)] << ", ";
+    // cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
+    // cout << v0<< endl;
 
 
     //Test Flux
-    // Dynamique_voile fonction(bassin1, voilier_the_first);
+    Dynamique_voile fonction(bassin1, voilier_the_first);
     // Flux flux(grille, fonction);
+    // cout << flux.calcul(0, 5.5, 6, 0, v0)<< endl;
+
+    //Test HJB
+    // HJB HJB(v0,grille, fonction);
+    
+    // print_grille(grille, HJB.v);
+    // HJB.resolve(10);
+    // print_grille(grille, HJB.v);
+
+    //Test route optimale
+    route_optimale route(grille, fonction, v0);
+    vecteur<float> x0({0.1,0.1});
+    commandes_discretes commandes = route.calcul(x0, 14);
+    cout << route.positions<<endl;
+    cout << commandes << endl;
 
 }
 

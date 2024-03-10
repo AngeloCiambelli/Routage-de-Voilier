@@ -39,10 +39,18 @@ public:
       if (fmod(abs(commandes[i] - a), 360.) > contrainte)
       {
         cout << "Erreur : commande invalide. Il y a un changment brusque de direction.";
+        return 0;
       }
       a = commandes[i];
     }
+    return 1;
   }
+};
+
+ostream &operator<<(ostream &out, const commandes_discretes &c)
+{
+  out << c.commandes<< endl;
+  return (out);
 };
 
 #endif

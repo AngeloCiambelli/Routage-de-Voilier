@@ -27,15 +27,17 @@ T1 interpolation(const bi_vecteur<int> &position_rect, const float &x, const flo
   T1 sum;
   float x1 = float(position_rect.X[0])*grille.pas;float x2 = float(position_rect.X[2])*grille.pas;
   float y1 = float(position_rect.Y[0])*grille.pas;float y2 = float(position_rect.Y[2])*grille.pas;
+  if (x1<0 || y1<0 || x2>grille.taille_X/grille.pas || y2>grille.taille_Y/grille.pas){
+    throw std::invalid_argument("interpolation en dehors de la zone définie impossible");}
   float D = (x2-x1)*(y2-y1);
   float w11 = abs((x2 - x)*(y2 - y)/D);
   float w12 = abs((x2 - x)*(y - y1)/D);
   float w21 = abs((x - x1)*(y2 - y)/D);
   float w22 = abs((x - x1)*(y - y1)/D);
-  cout << "bas_gauche" << valeur[grille.find(position_rect.X[0],position_rect.Y[0],timestamp)] 
-       << "haut_gauche" << valeur[grille.find(position_rect.X[0],position_rect.Y[2],timestamp)] 
-       << "bas_droit" << valeur[grille.find(position_rect.X[2],position_rect.Y[0],timestamp)] 
-       << "haut_droit" << valeur[grille.find(position_rect.X[2],position_rect.Y[2],timestamp)] << endl;
+  // cout << "bas_gauche" << valeur[grille.find(position_rect.X[0],position_rect.Y[0],timestamp)] 
+  //      << "haut_gauche" << valeur[grille.find(position_rect.X[0],position_rect.Y[2],timestamp)] 
+  //      << "bas_droit" << valeur[grille.find(position_rect.X[2],position_rect.Y[0],timestamp)] 
+  //      << "haut_droit" << valeur[grille.find(position_rect.X[2],position_rect.Y[2],timestamp)] << endl;
 
   sum = valeur[grille.find(position_rect.X[0],position_rect.Y[0],timestamp)]*w11 + 
         valeur[grille.find(position_rect.X[0],position_rect.Y[2],timestamp)]*w12 + 
@@ -85,7 +87,7 @@ vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> bi_vecteur_vers_table(co
 
 bool controle_position(const vecteur<float> &position, const Bassin &bassin)
 { 
-  cout << bassin.coin_bas_gauche.second << bassin.coin_haut_droit.second;
+  //cout << bassin.coin_bas_gauche.second << bassin.coin_haut_droit.second << endl;
   bool test     ((bassin.coin_bas_gauche.first <= position[0]) 
             and (position[0] <= bassin.coin_haut_droit.first) 
             and (bassin.coin_bas_gauche.second <= position[1]) 
@@ -102,13 +104,15 @@ float angle(vecteur<float> v)
 }
 
 vecteur<float> create_v0(Grille grille){
+  float alpha = 40.*grille.taille_X;
   int n = int(grille.taille_X/grille.pas);
   int m = int(grille.taille_Y/grille.pas);
-  vecteur<float> v0(n*m);
-  for(int j=0; j<m; j++){
-    for(int i=0;i<n; i++){
-      float floati = float(i);float floatj = float(j);float floatn = float(n);float floatm = float(m);
-      v0[i+n*j] = float(pow(floati-2./3.*floatn, 2.) + pow(floatj-2./3.*floatm, 2.) - 1.);
+  vecteur<float> v0((n+1)*(m+1));
+  for(int j=0; j<=m; j++){
+    for(int i=0;i<=n; i++){
+      float floati = float(i)*grille.pas;float floatj = float(j)*grille.pas;
+      float floatn = float(n)*grille.pas;float floatm = float(m)*grille.pas;
+      v0[i+(n+1)*j] = 10./alpha*float(alpha*pow(floati-2./3.*floatn, 2.) + alpha*pow(floatj-2./3.*floatm, 2.) - 1.);
     }
   }
   return v0;
@@ -128,6 +132,18 @@ float angle_relatif(float u, float v)
   }
   cout << angle_relatif << endl;
   return(angle_relatif);
+}
+
+void print_grille(Grille grille, vecteur<float> val){
+  for(int t = 0; t<=int(grille.Temps/grille.resolution); t++){
+        for(int j = 0; j<=int(grille.taille_Y/grille.pas); j++){
+            for(int i = 0; i<=int(grille.taille_X/grille.pas); i++){
+                cout << val[grille.find(i,j,t)]<< " ";
+            }
+            cout << endl;
+        }
+        cout<<endl<<endl<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~"<< endl <<endl;
+    }
 }
 
 #endif
