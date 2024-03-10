@@ -52,14 +52,16 @@ int main(int argc, char *argv[])
     bi_vecteur<float> pos(x_start,y_start);
     bi_vecteur<float> vit(x_start,y_start);
     route<float> route1(vecteur<float>({0.01, 0.01}), vecteur<float>({0,1}), pos, vit);
+    cout << "first line" << endl;
     cout << route1.position << endl;
     cout << route1.vitesse << endl << endl;
-
+    cout << "second line" << endl;
     //test commande
     foncteur_commande fun;
     Commande com(fun);
     cout << com.commande_f(1) << endl << endl;
 
+    cout << "third line" << endl;
     // //test polaire
     // string chemin = "include/test.csv";
     // polaire<float> pol(chemin, ';', "tabule");
@@ -75,7 +77,8 @@ int main(int argc, char *argv[])
 
     //Verification des commandes pour le voilier de bob
     com.verification_commande(voilier_the_first);
-
+    
+    cout << "fourth line" << endl;
     //test Bassin
     foncteur_vent f;
     foncteur_courant g;
@@ -87,6 +90,7 @@ int main(int argc, char *argv[])
     Bassin bassin1(bas,haut,pas,f,g,sto);
     Bassin bassin2();
     
+    cout << "fifth line" << endl;
     // Exporter les données de champs de vent et courant pour l'affichage python
     // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].first, "output/X_vent");
     // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].second, "output/Y_vent");
@@ -108,14 +112,14 @@ int main(int argc, char *argv[])
     // // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
 
     // //Test simulateur
-    Simulateur simulateur_test(0.1,50, com);
-    cout << simulateur_test.mise_en_route(route1, dynamique_test1).position<<endl;
+    // Simulateur simulateur_test(0.1,50, com);
+    // cout << simulateur_test.mise_en_route(route1, dynamique_test1).position<<endl;
 
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//
-
+    cout << "time to shine!" << endl;
     //Test Grille
-    Grille grille(1.f,1.f,1.f,0.05f,0.1f);
+    Grille grille(10.f,10.f,3.f,0.1f,0.5f);
     // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     // cout << x <<endl;
 
@@ -126,7 +130,7 @@ int main(int argc, char *argv[])
     // int zero = 0;
     vecteur<float> v0 = create_v0(grille);
     Grille grille_mod = grille;
-    grille_mod.resolution = 2;
+    grille_mod.resolution = 20;
     print_grille(grille_mod, v0);
     // cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
     // cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
@@ -150,10 +154,11 @@ int main(int argc, char *argv[])
 
     //Test route optimale
     route_optimale route(grille, fonction, v0);
-    vecteur<float> x0({0.1,0.1});
-    commandes_discretes commandes = route.calcul(x0, 14);
+    vecteur<float> x0({1.,1.});
+    commandes_discretes commandes = route.calcul(x0, 15);
     cout << route.positions<<endl;
     cout << commandes << endl;
+    cout << "gg"<<endl;
 
 }
 

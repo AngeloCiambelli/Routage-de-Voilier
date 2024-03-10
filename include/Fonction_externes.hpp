@@ -8,11 +8,13 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 #include <algorithm>
 #include "Vecteur.hpp"
 #include "Grille.hpp"
 #include "Bi_vecteur.hpp"
 #include "Bassin.hpp"
+
 
 using namespace std;
 
@@ -104,7 +106,8 @@ float angle(vecteur<float> v)
 }
 
 vecteur<float> create_v0(Grille grille){
-  float alpha = 40.*grille.taille_X;
+  float b = 40.;
+  float c = grille.taille_X;
   int n = int(grille.taille_X/grille.pas);
   int m = int(grille.taille_Y/grille.pas);
   vecteur<float> v0((n+1)*(m+1));
@@ -112,7 +115,7 @@ vecteur<float> create_v0(Grille grille){
     for(int i=0;i<=n; i++){
       float floati = float(i)*grille.pas;float floatj = float(j)*grille.pas;
       float floatn = float(n)*grille.pas;float floatm = float(m)*grille.pas;
-      v0[i+(n+1)*j] = 10./alpha*float(alpha*pow(floati-2./3.*floatn, 2.) + alpha*pow(floatj-2./3.*floatm, 2.) - 1.);
+      v0[i+(n+1)*j] = float(b/(c*c)*abs(floati-2./3.*c) + b/(c*c)*abs(floatj-2./3.*c) - 1.);
     }
   }
   return v0;
@@ -138,11 +141,14 @@ void print_grille(Grille grille, vecteur<float> val){
   for(int t = 0; t<=int(grille.Temps/grille.resolution); t++){
         for(int j = 0; j<=int(grille.taille_Y/grille.pas); j++){
             for(int i = 0; i<=int(grille.taille_X/grille.pas); i++){
-                cout << val[grille.find(i,j,t)]<< " ";
+              float valeur = val[grille.find(i,j,t)];
+              cout << setprecision(2) << fixed << setw(5) << valeur << " ";
+              
             }
             cout << endl;
         }
-        cout<<endl<<endl<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~"<< endl <<endl;
+        cout << t+1 << endl;
+        cout<<endl<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~"<< endl <<endl;
     }
 }
 

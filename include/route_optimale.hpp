@@ -51,7 +51,7 @@ class route_optimale{
         int iter = 0;
         n = calcul_n(x0);
         positions.pushback(x0);
-        while(vx>0 && iter<=n+1){
+        while(vx>0 && iter<=grille.Temps/grille.resolution){
             float mini = numeric_limits<float>::max();;
             float minimiseur;
             vecteur<float> next_pos(2);
@@ -79,9 +79,11 @@ class route_optimale{
                 throw logic_error("Le bateau ne veut que sortir de la zone !");}
             positions.pushback(opti_pos);
             commandes.commandes.push_back(commande);
+            loca = grille.localisation(opti_pos[0], opti_pos[1]);
             vx = interpolation<float, vecteur<float>>(loca, opti_pos[0], opti_pos[1], 0, HJB.v, grille);
             iter++;
         }
+        if(vx>0){cout<<"semi-";}
         return commandes;
     }
 };
