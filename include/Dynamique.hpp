@@ -86,7 +86,7 @@ class Dynamique_voile : public Dynamique
         foncteur_vent vrai_v;
         //cout << "erreur_V_c =" <<  V_c - vrai_c(y[0], y[1]) << ", erreur_V_v =" << V_v - vrai_v(y[0], y[1]) << endl;
 
-        float angle_vent_bateau = abs(angle(V_v)-u);
+        float angle_vent_bateau = angle_relatif(angle(V_v),u);
         //cout << "Angle vent bateau=" << angle_vent_bateau << endl;
         valeur = (V_c + (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
         //cout << "Vitesse bateau=" << valeur <<endl <<endl;
@@ -98,6 +98,7 @@ class Dynamique_voile : public Dynamique
 class Dynamique_test : public Dynamique
 {
     public:
+    Dynamique_test(){};
     vecteur<float> f(const vecteur<float> &y,const float &u, const int &t) const override 
     {
         return vecteur<float>({0,1});

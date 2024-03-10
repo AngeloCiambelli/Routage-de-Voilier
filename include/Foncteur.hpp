@@ -33,7 +33,7 @@ public:
   float operator()(int angle_voilier, float vitesse_vent) const
   {
     //cout << "vitesse bateau (polaire) = " << vitesse_vent/(float(1)+abs(angle_voilier)) << endl;
-    return vitesse_vent/(float(1)+abs(angle_voilier));
+    return vitesse_vent/(float(1)+0.01*abs(angle_voilier));
   }
 };
 

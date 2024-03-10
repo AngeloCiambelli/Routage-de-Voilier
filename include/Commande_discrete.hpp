@@ -28,11 +28,15 @@ using namespace std;
 
 class commandes_discretes
 {
-public:
-  vecteur<float> commandes;
+  private:
   float contrainte;
+
+  public:
+  vecteur<float> commandes;
+
+
   bool check_commandes()
-  {
+  {  // vérifie que les commandes stockées soit possible (non implémentée au final)
     float a = commandes[0];
     for (int i = 1; i < commandes.size(); i++)
     {
@@ -45,6 +49,7 @@ public:
     }
     return 1;
   }
+  
 };
 
 ostream &operator<<(ostream &out, const commandes_discretes &c)
