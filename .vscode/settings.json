@@ -7,6 +7,8 @@
         "vector": "cpp",
         "cmath": "cpp",
         "tuple": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "random": "cpp",
+        "limits": "cpp"
     }
 }

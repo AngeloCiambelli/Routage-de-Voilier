@@ -1,0 +1,23 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+X_vent = np.loadtxt(open("X_courant", "rb"), delimiter=",", skiprows=0)
+Y_vent = np.loadtxt(open("Y_vent", "rb"), delimiter=",", skiprows=0)
+X_courant = np.loadtxt(open("X_courant", "rb"), delimiter=",", skiprows=0)
+Y_courant = np.loadtxt(open("Y_courant", "rb"), delimiter=",", skiprows=0)
+
+x=np.linspace(0,10, int(10.5/0.5))
+y=np.linspace(0,10, int(10.5/0.5))
+
+xx, yy = np.meshgrid(x,y)
+
+color = np.array('g')
+colors = np.repeat(color, len(x)**2)
+
+plt.quiver(xx, yy, Y_vent, X_vent, color='g' , scale=90, width=0.002, alpha=1)
+plt.quiver(xx, yy, Y_courant, X_courant,color='b', scale=90, width=0.002, alpha=1)
+
+position = [[0.01,0.01,0.05212,0.0943454,0.140885,0.191773,0.247437,0.308342,0.374954,0.44781,0.527496,0.614605,0.709778,0.813765,0.927272,1.05119,1.18639,1.33389,1.49473,1.6702,1.86163,2.07047,2.29838,2.54711,2.8186,3.11497,3.43852,3.79179,4.17757,4.59894,5.05915,5.56177,6.11063,6.70995,7.36445,8.07936,8.86021,9.71293,10.644],[0.01,0.11,0.191918,0.283424,0.386823,0.503046,0.633645,0.780197,0.941542,1.11934,1.31521,1.52601,1.74993,1.98546,2.22394,2.46578,2.70167,2.92939,3.14076,3.33589,3.51574,3.67356,3.81057,3.92795,4.02003,4.08574,4.11988,4.12321,4.09321,4.03332,3.95001,3.85547,3.77095,3.72172,3.72764,3.79462,3.90724,4.02415,4.08801]]
+plt.plot(position[0], position[1], 'o-', color='red')
+
+plt.show()

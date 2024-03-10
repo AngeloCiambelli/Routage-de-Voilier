@@ -49,16 +49,18 @@ class Simulateur
             
             float u;
 
-            // Angle du bateau par rapport a son ancienne direction de vitesse
+            // Calcule de l'angle du bateau par rapport a son ancienne direction de vitesse
             if(commande.stockage=="analytique")
             {
                 float u = commande.commande_f(angle(route.vitesse[i]));
             } 
             else if (commande.stockage=="tabule")
             {
-                float u = commande.commande_f(angle(route.vitesse[i]));
+                float u = commande.vecteur_commande[i];
             }
+
             
+
             cout << "Angle bateau" << u << endl;
             // Vitesse voilier au temps i
             route.vitesse.pushback(dynamique.f(route.position[i], u, i));

@@ -12,6 +12,19 @@
 #include "Simulateur.hpp"
 #include "Flux.hpp"
 
+//===========================================================================
+//                            Description
+//===========================================================================
+//
+// On prend une grille de [0,10]x[0,10] avec un pas de 0.5
+// Le bassin et defini avec les fonctions dans foncteur f_vent et f_courant
+// Dans l'état tel quel le voilier a des polaires qui viennent de test.csv 
+// PS : le bateau aiment pas beaucoup allez dans des direction differentes du vent
+
+// Les vecteurs de courant et vent sont aussi stocké de maniere tabulé.
+
+// Dans la simulation on fait 50 pas avec un pas de temps de 0.1 (Attention le bateau va vite!)
+
 int main(int argc, char *argv[])
 {
     cout << "Hello world!" << std::endl;
@@ -35,7 +48,7 @@ int main(int argc, char *argv[])
     vecteur<float> y_start(0);
     bi_vecteur<float> pos(x_start,y_start);
     bi_vecteur<float> vit(x_start,y_start);
-    route<float> route1(vecteur<float>({0, 0}), vecteur<float>({1,1}), pos, vit);
+    route<float> route1(vecteur<float>({0.01, 0.01}), vecteur<float>({0,1}), pos, vit);
     cout << route1.position << endl;
     cout << route1.vitesse << endl << endl;
 
@@ -51,26 +64,31 @@ int main(int argc, char *argv[])
     cout << pol.polaire_tabule_valeur << endl << endl;
 
     //test voilier
-    pair<float, float> min_max_com(80,80);
+    pair<float, float> min_max_com(-80,80); 
     foncteur_polaire polaire_analytique;
     //Voilier<float, float> voilier_the_first(min_max_com, chemin, ';');
     Voilier<float, float> voilier_the_first(min_max_com, polaire_analytique);
     // cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl << endl;
 
+    //Verification des commandes pour le voilier de bob
+    com.verification_commande(voilier_the_first);
+
     //test Bassin
     foncteur_vent f;
     foncteur_courant g;
     
-    float pas = 0.01;
+    float pas = 0.5;
     pair<float, float> bas(0,0);
     pair<float, float> haut(10,10);
     string sto("tabule"); //"tabule"
     Bassin bassin1(bas,haut,pas,f,g,sto);
     Bassin bassin2();
-
-    // cout << endl << bassin1.champs_courant << endl << endl;
-    // cout << endl << "X= " << bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].first << endl;
-    // cout << endl << "Y= " << bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].second << endl << endl;
+    
+    // Exporter les données de champs de vent et courant pour l'affichage python
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].first, "output/X_vent");
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].second, "output/Y_vent");
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].first, "output/X_courant");
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].second, "output/Y_courant");
 
     //test csv vers tableau
     string chemin_tableau = "include/test_tableau.csv";

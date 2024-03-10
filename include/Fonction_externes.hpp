@@ -75,8 +75,8 @@ vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> bi_vecteur_vers_table(co
     {
       for (int j=0; j<=grille.taille_X/grille.pas; j++)
       {
-        ((table[t]).first)[i][j] = v[j + i*(grille.taille_X/grille.pas+1) + t*(grille.taille_Y + grille.taille_X)/grille.pas][0];
-        ((table[t]).second)[i][j] = v[j + i*(grille.taille_Y/grille.pas+1) + t*(grille.taille_Y + grille.taille_X)/grille.pas][1];
+        ((table[t]).first)[i][j] = v[j + i*(grille.taille_X/grille.pas+1) + t*(grille.taille_Y + grille.taille_X)/grille.pas][1];
+        ((table[t]).second)[i][j] = v[j + i*(grille.taille_Y/grille.pas+1) + t*(grille.taille_Y + grille.taille_X)/grille.pas][0];
       }
     }
   }
@@ -114,6 +114,20 @@ vecteur<float> create_v0(Grille grille){
   return v0;
 };
 
-
+float angle_relatif(float u, float v)
+{
+  // Verifier si l'angle du bateau respecte les contraintes de commande
+  float angle_relatif;
+  if (sgn(u)==sgn(v))
+  {
+    angle_relatif = abs(abs(u)-abs(v));
+  }
+  else
+  {
+    angle_relatif = min(abs(u)+abs(v),(180 - abs(u) + 180 - abs(v)));
+  }
+  cout << angle_relatif << endl;
+  return(angle_relatif);
+}
 
 #endif

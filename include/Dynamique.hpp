@@ -52,7 +52,7 @@ class Dynamique_voile : public Dynamique
         vecteur<float> V_c;
         vecteur<float> V_v;
 
-        if (controle_position(y, bassin)==0){return vecteur<float>({0,0});}
+        if (controle_position(y, bassin)==0){cout << "Le voilier s'est echoué"; exit(1);}
 
         if (bassin.stockage=="tabule")
         {
