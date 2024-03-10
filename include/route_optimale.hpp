@@ -66,14 +66,13 @@ class route_optimale{
                 vecteur<float> vit = vitesse.f(positions[iter], float(l)/float(L)*360.f-180.f, iter);
                 next_pos = positions[iter] + vit*grille.resolution; // calcul de la prochaine position à partir de la vitesse et du pas de temps
                 loca = grille.localisation(next_pos[0], next_pos[1]); // prochaine localisation dans la grille
-                if(loca[0][0]>0 && loca[0][1]>0 && loca[2][0]<=grille.taille_X/grille.pas && loca[2][1]<=grille.taille_Y/grille.pas){
+                if(loca.X[0]>=0 && loca.Y[0]>=0 && loca.X[2]<=int(grille.taille_X/grille.pas) && loca.Y[2]<=int(grille.taille_Y/grille.pas)){
                     // si la commande ne nous amène pas en dehors de la zone d'étude
                     minimiseur = interpolation<float, vecteur<float>>(loca, next_pos[0], next_pos[1], n-iter, HJB.v, grille);
                     if(minimiseur<mini){
                         mini=minimiseur;
                         commande=float(l)/float(L)*360.f-180.f;
-                        opti_pos[0] = next_pos[0];
-                        opti_pos[1] = next_pos[1];
+                        opti_pos = next_pos;
                         erreur = 0; //nous avons pu modifié la commande, il n'y a donc pas eu de blocage en bord de zone
                     }
                 }

@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     cout << com.commande_f(1) << endl << endl;
 
     // //test polaire
-    // string chemin = "include/test.csv";
+    string chemin = "include/test.csv";
     // polaire<float> pol(chemin, ';', "tabule");
     // cout << pol.polaire_tabule_entete << endl;
     // cout << pol.polaire_tabule_valeur << endl << endl;
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//
     //Test Grille
-    Grille grille(10.f,10.f,3.f,0.1f,0.5f);
+    Grille grille(10.f,10.f,1.5f,0.1f,0.5f);
     // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     // cout << x <<endl;
 
@@ -132,8 +132,6 @@ int main(int argc, char *argv[])
     // cout << v0[grille.find(x.X[2], x.Y[2], 0)] << ", ";
     // cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
     // cout << v0<< endl;
-
-
     //Test Flux
     Dynamique_voile fonction(bassin1, voilier_the_first);
     // Flux flux(grille, fonction);
@@ -148,8 +146,8 @@ int main(int argc, char *argv[])
 
     //Test route optimale
     route_optimale route(grille, fonction, v0);
-    vecteur<float> x0({.5,2.});
-    commandes_discretes commandes = route.calcul(x0, 10);
+    vecteur<float> x0({1.,2.});
+    commandes_discretes commandes = route.calcul(x0, 15);
     cout << route.positions<<endl;
     cout << commandes << endl;
     cout << "gg"<<endl;

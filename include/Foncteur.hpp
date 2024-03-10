@@ -30,10 +30,10 @@ using namespace std;
 class foncteur_polaire
 {
 public:
-  float operator()(int angle_voilier, float vitesse_vent) const
+  float operator()(float angle_voilier, float vitesse_vent) const
   {
     //cout << "vitesse bateau (polaire) = " << vitesse_vent/(float(1)+abs(angle_voilier)) << endl;
-    return vitesse_vent/(float(1)+0.01*abs(angle_voilier));
+    return vitesse_vent/atan(1.f)*4.f*(atan(-1.f*abs(0.05f*angle_voilier)+3.f)+atan(1.f)*4./2.f);
   }
 };
 

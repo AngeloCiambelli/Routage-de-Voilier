@@ -40,7 +40,7 @@ class commandes_discretes
     float a = commandes[0];
     for (int i = 1; i < commandes.size(); i++)
     {
-      if (fmod(abs(commandes[i] - a), 360.) > contrainte)
+      if (angle_relatif(commandes[i], a) > contrainte)
       {
         cout << "Erreur : commande invalide. Il y a un changment brusque de direction.";
         return 0;

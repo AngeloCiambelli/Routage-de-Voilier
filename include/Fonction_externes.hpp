@@ -106,7 +106,7 @@ float angle(vecteur<float> v)
 {
   float valeur;
   if (v[0] < 0){valeur = float(180) - (acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4)));}
-  else {valeur = acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4));}
+  else {valeur = acos(v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4));}
   return sgn(v[1])*valeur;
 }
 

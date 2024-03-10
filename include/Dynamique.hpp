@@ -88,7 +88,7 @@ class Dynamique_voile : public Dynamique
 
         float angle_vent_bateau = angle_relatif(angle(V_v),u);
         //cout << "Angle vent bateau=" << angle_vent_bateau << endl;
-        valeur = (V_c + (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
+        valeur = (0.05f*V_c + 0.1f*(W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
         //cout << "Vitesse bateau=" << valeur <<endl <<endl;
         return(valeur);
     };

@@ -68,10 +68,10 @@ void HJB::resolve(const int &L){
                                                             // de sorte que a<mini quelque soit a
                 float minimiseur; // variable dans laquelle on stockera la valeur que l'on veut minimiser
                 for(int l=0;l<L;l++){  // pour chaque angle possible
-                    F[0] = flux.calcul(float(l)/float(L)*360.-180., float(i)+1./2., float(j), n, v);  // calcul du flux  
-                    F[1] = flux.calcul(float(l)/float(L)*360.-180., float(i)-1./2., float(j), n, v);  // et conversion des entiers
-                    F[2] = flux.calcul(float(l)/float(L)*360.-180., float(i), float(j)+1./2., n, v);  // vers les degrés allant de -180° à 180°
-                    F[3] = flux.calcul(float(l)/float(L)*360.-180., float(i), float(j)-1./2., n, v);
+                    F[0] = flux.calcul(float(l)/float(L)*360.f-180.f, float(i)+1./2., float(j), n, v);  // calcul du flux  
+                    F[1] = flux.calcul(float(l)/float(L)*360.f-180.f, float(i)-1./2., float(j), n, v);  // et conversion des entiers
+                    F[2] = flux.calcul(float(l)/float(L)*360.f-180.f, float(i), float(j)+1./2., n, v);  // vers les degrés allant de -180° à 180°
+                    F[3] = flux.calcul(float(l)/float(L)*360.f-180.f, float(i), float(j)-1./2., n, v);
                     minimiseur = (*this).grille.resolution/(*this).grille.pas*(F[0]-F[1]+F[2]-F[3]);
                     if (minimiseur<=mini){  // si la nouvelle valeur est plus petite que la valeur stockée
                         mini = minimiseur;  // on stocke la nouvelle plus petite valeur
