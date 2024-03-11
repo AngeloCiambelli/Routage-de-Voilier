@@ -112,6 +112,8 @@ int main(int argc, char *argv[])
     Dynamique_voile dynamique_voile(bassin1, voilier_de_Bob);
     // dynamique_voile.f(Vecteur<float>({0,0}),acos(route_initiale.vitesse[0][0]/sqrt(route_initiale.vitesse[0]|route_initiale.vitesse[0]))*180/(atan(1)*4), 0, com);
 
+
+
     // Test simulateur - Attention le voilier s'echoue une fois qu'il a traversé le bassin 
     // Pour observer la trajectoire : Copier/Coller la trajectoire dans le .py
     // Simulateur simulateur_test(0.1,100, com);
@@ -119,26 +121,31 @@ int main(int argc, char *argv[])
 
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//
+
     //Test Grille
-    Grille grille(10.f,10.f,1.5f,0.1f,0.5f);
+    Grille grille(10.f,10.f,2.f,0.1f,0.5f);
     // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     // cout << x <<endl;
 
     // cout << grille.find(0.601f,0.12f,0)<<endl;
 
+    // Création du score
+    Vecteur<float> v0 = create_v0(grille);
+
     // //Test interpolation
     // float y1 = 0.601f; float y2 = 0.12f; 
     // int zero = 0;
-    Vecteur<float> v0 = create_v0(grille);
-    Grille grille_mod = grille;
-    grille_mod.resolution = 20;
-    print_grille(grille_mod, v0);
+    // Grille grille_mod = grille;
+    // grille_mod.resolution = 20;
+    // print_grille(grille_mod, v0);
     // cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
     // cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
     // cout << v0[grille.find(x.X[1], x.Y[1], 0)] << ", "<<endl;
     // cout << v0[grille.find(x.X[2], x.Y[2], 0)] << ", ";
     // cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
     // cout << v0<< endl;
+
+
     //Test Flux
     Dynamique_voile fonction(bassin1, voilier_de_Bob);
     // Flux flux(grille, fonction);
@@ -153,11 +160,16 @@ int main(int argc, char *argv[])
 
     //Test route optimale
     route_optimale route(grille, fonction, v0);
-    Vecteur<float> x0({1.,2.});
-    commandes_discretes commandes = route.calcul(x0, 15);
-    cout << route.positions<<endl;
-    cout << commandes << endl;
-    cout << "gg"<<endl;
 
+
+    Vecteur<float> x0({1.,2.}); // Position de départ
+    commandes_discretes commandes = route.calcul(x0, 15); // 15 = nombre d'angle testé
+
+    cout << route.positions<<endl;  // partie à copier-coller dans le python pour afficher
+    cout << commandes << endl; 
+    cout << "Bob peut pêcher"<<endl;
+    cout <<"Appuyez sur une touche pour continuer... ";
+    cin.get();
+    return 1;
 }
 

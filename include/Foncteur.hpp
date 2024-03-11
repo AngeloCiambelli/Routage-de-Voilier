@@ -33,7 +33,7 @@ class Foncteur_polaire
 public:
   float operator()(float angle_voilier_vent, float vitesse_vent) const
   {
-    return vitesse_vent/(atan(float(1))*float(4))*(atan(-abs(float(0.5)*angle_voilier_vent)+float(3))+atan(float(1))*float(4)/float(2));
+    return vitesse_vent/(atan(float(1))*float(4))*(atan(-abs(float(0.05)*angle_voilier_vent)+float(3))+atan(float(1))*float(4)/float(2));
   }
 };
 

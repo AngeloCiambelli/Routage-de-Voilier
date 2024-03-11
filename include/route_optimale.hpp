@@ -49,7 +49,7 @@ class route_optimale{
         positions.X.clear();
         positions.Y.clear();
         if(HJB.resolved==0){HJB.resolve(L);} // On résout HJB si il n'a jamais été résolu, sinon on peut procédé
-        print_grille(grille, HJB.v);
+        // print_grille(grille, HJB.v);
         Bi_vecteur<int> loca = grille.localisation(x0[0], x0[1]); // localisation du point de départ dans la grille
         float vx = interpolation<float, Vecteur<float>>(loca, x0[0], x0[1], 0, HJB.v, grille); // interpolation sur v du point de départ
         int iter = 0;

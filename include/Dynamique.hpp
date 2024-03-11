@@ -115,7 +115,7 @@ Vecteur<float> Dynamique_voile::f(const Vecteur<float> &y,const float &u, const 
     float angle_vent_bateau = angle_relatif(angle(V_v), u);
 
     // Calcul de dy/dt
-    valeur = (V_c + (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
+    valeur = (0.5f*V_c + (W_u*voilier.V_b(angle_vent_bateau,sqrt(V_v|V_v))));
 
     return(valeur);
 };
