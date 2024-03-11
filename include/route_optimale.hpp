@@ -24,7 +24,6 @@ class route_optimale{
     int max_iter = 1000;
     Dynamique_voile vitesse;
     HJB HJB;
-    Bi_vecteur<float> positions;
 
     public:
     Bi_vecteur<float> positions;

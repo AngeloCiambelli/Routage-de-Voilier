@@ -32,10 +32,10 @@ int main(int argc, char *argv[])
 {
     // cout << "Hello world!" << std::endl;
 
-    // //test Vecteur
+    // Test Vecteur
     // cout << Vecteur({1,2,3}) << endl;
 
-    // //test Bi_vecteur
+    // Test Bi_vecteur
     // Vecteur<float> A({1,2,3});
     // Vecteur<float> B({1,2,4});
     // cout << A << endl;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     // champs.pushback(Vecteur({a,b}));
     // cout << champs << endl;
 
-    //test Route
+    // Test Route
     Vecteur<float> x_start({0.01});
     Vecteur<float> y_start({0.01});
     Vecteur<float> x_vit_start({1});
@@ -54,36 +54,38 @@ int main(int argc, char *argv[])
     Bi_vecteur<float> pos(x_start,y_start);
     Bi_vecteur<float> vit(x_vit_start,y_vit_start);
 
-    Route<float> route_initiale(Vecteur<float>({0.01, 0.01}), Vecteur<float>({1,1}), pos, vit);
+    Route<float> route_initiale(Vecteur<float>({x_start[0], y_start[0]}),
+                                Vecteur<float>({x_vit_start[0],y_vit_start[0]}), 
+                                pos, vit);
+
     // cout << route_initiale.position << endl;
     // cout << route_initiale.vitesse << endl << endl;
 
-    //test commande
-    Foncteur_commande fun;
-    Commande com(fun);
+    // Test commande
+    Foncteur_commande f_com;
+    Commande com(f_com);
     // cout << com.commande_f(1) << endl << endl;
 
-    // //test polaire
-    string chemin = "include/test.csv";
+    // Test polaire
+    string chemin = "include/table_polaire.csv";
     // polaire<float> pol(chemin, ';', "tabule");
     // cout << pol.polaire_tabule_entete << endl;
     // cout << pol.polaire_tabule_valeur << endl << endl;
 
-    //test voilier
+    // Test voilier
     pair<float, float> min_max_com(-80,80); 
     Foncteur_polaire polaire_analytique;
 
-    //Création du voilier de bob de maniere analytique ou tabule
+    // Création du voilier de bob de maniere analytique ou tabule
     //Voilier<float, float> voilier_de_Bob(min_max_com, chemin, ';');
     Voilier<float, float> voilier_de_Bob(min_max_com, polaire_analytique);
 
-    //Verification de la cohérence des commandes pour le voilier de Bob
+    // Verification de la cohérence des commandes pour le voilier de Bob
     com.verification_commande(voilier_de_Bob);
 
-    //test Bassin
+    // Test Bassin
     Foncteur_vent f;
     Foncteur_courant g;
-    
     float pas = 0.5;
     pair<float, float> bas(0,0);
     pair<float, float> haut(10,10);
@@ -97,22 +99,23 @@ int main(int argc, char *argv[])
     // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].first, "output/simple_X_courant");
     // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].second, "output/simple_Y_courant");
 
-    //test csv vers tableau
+    // Test csv vers tableau
     // string chemin_tableau = "include/test_tableau.csv";
     // Vecteur<Vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
     // cout << test << endl;
 
-    //test data export
+    // Test data export
     // Vecteur<pair<Vecteur<Vecteur<float>>, Vecteur<Vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
     // table_vers_csv<float>(test_export[0].first, "output/X_test");
 
-    //Test dynamique
+    // Test dynamique
     Dynamique_voile dynamique_voile(bassin1, voilier_de_Bob);
     // dynamique_voile.f(Vecteur<float>({0,0}),acos(route_initiale.vitesse[0][0]/sqrt(route_initiale.vitesse[0]|route_initiale.vitesse[0]))*180/(atan(1)*4), 0, com);
 
-    //Test simulateur
-    Simulateur simulateur_test(0.1,100, com);
-    cout << simulateur_test.mise_en_route(route_initiale, dynamique_voile).position<<endl;
+    // Test simulateur - Attention le voilier s'echoue une fois qu'il a traversé le bassin 
+    // Pour observer la trajectoire : Copier/Coller la trajectoire dans le .py
+    // Simulateur simulateur_test(0.1,100, com);
+    // cout << simulateur_test.mise_en_route(route_initiale, dynamique_voile).position<<endl;
 
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//

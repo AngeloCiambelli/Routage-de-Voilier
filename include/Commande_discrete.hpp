@@ -20,7 +20,7 @@ using namespace std;
 // Classe commande discrete fournissant la liste des valeurs discrètes des commandes 
 // et une description de contraintes simples.
 //
-// Note: Pas de fichier cpp a cause des templates
+// Note:
 //
 //===========================================================================
 //                 Definition de la class Commande_discrete
@@ -32,7 +32,7 @@ class commandes_discretes
   float contrainte;
 
   public:
-  vecteur<float> commandes;
+  Vecteur<float> commandes;
 
 
   bool check_commandes()
