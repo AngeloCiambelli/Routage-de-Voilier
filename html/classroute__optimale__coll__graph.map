@@ -1,0 +1,9 @@
+<map id="route_optimale" name="route_optimale">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,279,123,305"/>
+<area shape="rect" id="Node000002" href="$class_bi__vecteur.html" title=" " alt="" coords="5,188,135,215"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,230,73,278,67,278,67,230"/>
+<area shape="rect" id="Node000003" href="$class_vecteur.html" title=" " alt="" coords="13,81,127,108"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="73,123,73,188,67,188,67,123"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="16,5,124,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="73,47,73,81,67,81,67,47"/>
+</map>

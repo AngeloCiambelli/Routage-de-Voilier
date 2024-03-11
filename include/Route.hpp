@@ -27,25 +27,33 @@ using namespace std;
 //===========================================================================
 
 template <typename T>
-class route
+class Route
 {
 public:
-  vecteur<T> depart;
-  vecteur<T> vitesse_initiale;
-  bi_vecteur<T> position;
-  bi_vecteur<T> vitesse;
+  Vecteur<T> depart;
+  Vecteur<T> vitesse_initiale;
+  Bi_vecteur<T> position;
+  Bi_vecteur<T> vitesse;
 
-  route(vecteur<T> _depart, vecteur<T> _vitesse_initiale, bi_vecteur<T> _position, bi_vecteur<T> _vitesse) : position(), vitesse()
-  {
-    depart = _depart;
-    vitesse_initiale = _vitesse_initiale;;
-
-    position = _position;
-    position.pushback(_depart);
-
-    vitesse = _vitesse;
-    vitesse.pushback(_vitesse_initiale);
-  }
+  //Constructeur
+  Route(Vecteur<T> _depart, Vecteur<T> _vitesse_initiale, Bi_vecteur<T> _position, Bi_vecteur<T> _vitesse);
 };
+
+//===========================================================================
+//                            Fonctions membres
+//===========================================================================
+
+template<typename T>
+Route<T>::Route(Vecteur<T> _depart, Vecteur<T> _vitesse_initiale, Bi_vecteur<T> _position, Bi_vecteur<T> _vitesse) : position(), vitesse()
+{
+  depart = _depart;
+  vitesse_initiale = _vitesse_initiale;;
+
+  position = _position;
+  position.pushback(_depart);
+
+  vitesse = _vitesse;
+  vitesse.pushback(_vitesse_initiale);
+}
 
 #endif

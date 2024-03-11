@@ -19,16 +19,13 @@ using namespace std;
 //
 // Receuil des fonctions nécéssaires à l'import et l'export de fichier csv
 //
-// Note: Pour les fonctions sans template les implémentation sont ajoutées dans 
-// un fichier .cpp?
-//
-// Code inspipré de https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+// Code d'import inspiré de https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 //
 //===========================================================================
-//                            CSV vers tableau
+//                            .csv vers tableau
 //===========================================================================
 
-// csv to string, 
+// Fonction convertissant les .csv en string
 string fichier_vers_string(const string &chemin)
 {
   auto ss = ostringstream{};
@@ -42,14 +39,18 @@ string fichier_vers_string(const string &chemin)
   return ss.str();
 };
 
+// Fonction qui importe un fichier .csv (sans entêtes) en table Vecteur<Vecteur<T>>
 template <typename T>
-vecteur<vecteur<T>> csv_vers_table(const string& chemin, char sep)
+Vecteur<Vecteur<T>> csv_vers_table(const string& chemin, char sep)
 {
-  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
-  istringstream sstream(contenu);              // conversion du contenu en "stream" type pour utiliser la fonction getline()
-  vecteur<T> element;                          // element de la ligne entiere
-  string memoire;                              // element entre chaque séparateur normalement "espace nombre espace"
-  vecteur<vecteur<T>> tableFinale;             // store the element
+  // Import des données csv en "string" puis "istringstream"
+  string contenu = fichier_vers_string(chemin); // Contenu du .csv en string
+  istringstream sstream(contenu);               // Conversion du contenu en "stream" type pour utiliser la fonction getline()
+  
+  // Definition des variables
+  Vecteur<T> element;                           // Element de la ligne entiere
+  string memoire;                               // Element entre chaque séparateur normalement "espace nombre espace"
+  Vecteur<Vecteur<T>> tableFinale;              // Table finale de stockage du csv
 
   // Compteur du numero de la ligne
   int compteur = 0;
@@ -60,10 +61,10 @@ vecteur<vecteur<T>> csv_vers_table(const string& chemin, char sep)
     // transformer la ligne en type "stream" necessaire pour getline()
     istringstream ligne(memoire);
 
-    // trouver tous les elements de chaques lignes
+    // Trouver tous les elements de chaques lignes
     while (getline(ligne, memoire, sep))
     {
-      // Nettoyer les elements des espaces autour
+      // Nettoyer les elements des espaces autour quand il y en a
       memoire.erase(std::remove_if(memoire.begin(), memoire.end(), [](unsigned char x){ return std::isspace(x); }),memoire.end());
       
       // Convertir le type string dans le type T
@@ -72,7 +73,7 @@ vecteur<vecteur<T>> csv_vers_table(const string& chemin, char sep)
       element.push_back(memoire_type_T);
     }
 
-    // Remplir le tableau de valeur des polaires du voilier
+    // Remplir le tableau de valeur ligne par ligne
     tableFinale.push_back(element);
 
     // Nettoyer les variables
@@ -83,29 +84,31 @@ vecteur<vecteur<T>> csv_vers_table(const string& chemin, char sep)
 };
 
 //===========================================================================
-//                            Tableau vers csv
+//                            Tableau vers .csv
 //===========================================================================
 
+// Fonction qui exporte une table Vecteur<Vecteur<T>> en .csv
 template<typename T>
-void table_vers_csv(const vecteur<vecteur<T>>& table, const string& chemin) {
-    ofstream fichier(chemin);
+void table_vers_csv(const Vecteur<Vecteur<T>>& table, const string& chemin) 
+{
+  ofstream fichier(chemin);
 
-    if (!fichier.is_open()) {
-        cerr << "Ne peut pas ouvrir pour remplir " << chemin << endl;
-        return;
-    }
+  if (!fichier.is_open()) {
+      cerr << "Ne peut pas ouvrir pour remplir " << chemin << endl;
+      return;
+  }
 
-    for (const auto& ligne : table) {
-        for (auto it = ligne.begin(); it != ligne.end(); ++it) {
-            fichier << *it;
-            if (it != ligne.end() - 1) {
-                fichier << ',';
-            }
-        }
-        fichier << endl;
-    }
+  for (const auto& ligne : table) {
+      for (auto it = ligne.begin(); it != ligne.end(); ++it) {
+          fichier << *it;
+          if (it != ligne.end() - 1) {
+              fichier << ',';
+          }
+      }
+      fichier << endl;
+  }
 
-    fichier.close();
+  fichier.close();
 };
 
 #endif

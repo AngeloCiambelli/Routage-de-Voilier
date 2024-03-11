@@ -18,97 +18,104 @@
 //                            Description
 //===========================================================================
 //
-// On prend une grille de [0,10]x[0,10] avec un pas de 0.5
-// Le bassin et defini avec les fonctions dans foncteur f_vent et f_courant
-// Dans l'état tel quel le voilier a des polaires qui viennent de test.csv 
-// PS : le bateau aiment pas beaucoup allez dans des direction differentes du vent
+// On prend un bassin de [0,10]x[0,10] et un pas de grille de 0.5
+// Les champs de vent et courants sont definis avec foncteur_vent et foncteur_courant
+// Dans l'état tel quel le voilier a des polaires analytique 
+// PS : le bateau n'est pas très rapide quand il va dans des direction differentes du vent
 
-// Les vecteurs de courant et vent sont aussi stocké de maniere tabulé.
+// Les vecteurs de courant et vent sont stocké analytiquement.
 
-// Dans la simulation on fait 50 pas avec un pas de temps de 0.1 (Attention le bateau va vite!)
+// Dans la simulation on fait 50 pas avec un pas de temps de 0.1 (Attention le bateau va vite et s'échoue)
 
 
 int main(int argc, char *argv[])
 {
     // cout << "Hello world!" << std::endl;
 
-    // //test vecteur
-    // cout << vecteur({1,2,3}) << endl;
+    // Test Vecteur
+    // cout << Vecteur({1,2,3}) << endl;
 
-    // //test bi_vecteur
-    // vecteur<float> A({1,2,3});
-    // vecteur<float> B({1,2,4});
+    // Test Bi_vecteur
+    // Vecteur<float> A({1,2,3});
+    // Vecteur<float> B({1,2,4});
     // cout << A << endl;
-    // bi_vecteur<float> champs(A,B);
+    // Bi_vecteur<float> champs(A,B);
     // cout << champs << endl;
     // float a=8;
     // float b=9;
-    // champs.pushback(vecteur({a,b}));
+    // champs.pushback(Vecteur({a,b}));
     // cout << champs << endl;
 
-    //test route
-    vecteur<float> x_start(0);
-    vecteur<float> y_start(0);
-    bi_vecteur<float> pos(x_start,y_start);
-    bi_vecteur<float> vit(x_start,y_start);
-    route<float> route1(vecteur<float>({0.01, 0.01}), vecteur<float>({0,1}), pos, vit);
-    cout << route1.position << endl;
-    cout << route1.vitesse << endl << endl;
-    //test commande
-    foncteur_commande fun;
-    Commande com(fun);
-    cout << com.commande_f(1) << endl << endl;
+    // Test Route
+    Vecteur<float> x_start({0.01});
+    Vecteur<float> y_start({0.01});
+    Vecteur<float> x_vit_start({1});
+    Vecteur<float> y_vit_start({1});
+    Bi_vecteur<float> pos(x_start,y_start);
+    Bi_vecteur<float> vit(x_vit_start,y_vit_start);
 
-    // //test polaire
-    string chemin = "include/test.csv";
+    Route<float> route_initiale(Vecteur<float>({x_start[0], y_start[0]}),
+                                Vecteur<float>({x_vit_start[0],y_vit_start[0]}), 
+                                pos, vit);
+
+    // cout << route_initiale.position << endl;
+    // cout << route_initiale.vitesse << endl << endl;
+
+    // Test commande
+    Foncteur_commande f_com;
+    Commande com(f_com);
+    // cout << com.commande_f(1) << endl << endl;
+
+    // Test polaire
+    string chemin = "include/table_polaire.csv";
     // polaire<float> pol(chemin, ';', "tabule");
     // cout << pol.polaire_tabule_entete << endl;
     // cout << pol.polaire_tabule_valeur << endl << endl;
 
-    //test voilier
+    // Test voilier
     pair<float, float> min_max_com(-80,80); 
-    foncteur_polaire polaire_analytique;
-    //Voilier<float, float> voilier_the_first(min_max_com, chemin, ';');
-    Voilier<float, float> voilier_the_first(min_max_com, polaire_analytique);
-    // cout << voilier_the_first.polaire_voilier.vitesse_voilier << endl << endl;
+    Foncteur_polaire polaire_analytique;
 
-    //Verification des commandes pour le voilier de bob
-    com.verification_commande(voilier_the_first);
-    
-    //test Bassin
-    foncteur_vent f;
-    foncteur_courant g;
-    
+    // Création du voilier de bob de maniere analytique ou tabule
+    //Voilier<float, float> voilier_de_Bob(min_max_com, chemin, ';');
+    Voilier<float, float> voilier_de_Bob(min_max_com, polaire_analytique);
+
+    // Verification de la cohérence des commandes pour le voilier de Bob
+    com.verification_commande(voilier_de_Bob);
+
+    // Test Bassin
+    Foncteur_vent f;
+    Foncteur_courant g;
     float pas = 0.5;
     pair<float, float> bas(0,0);
     pair<float, float> haut(10,10);
-    string sto("tabule"); //"tabule"
+    string sto("analytique"); //"tabule"
     Bassin bassin1(bas,haut,pas,f,g,sto);
-    Bassin bassin2();
     
-    // Exporter les données de champs de vent et courant pour l'affichage python
-    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].first, "output/X_vent");
-    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].second, "output/Y_vent");
-    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].first, "output/X_courant");
-    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].second, "output/Y_courant");
+    // Exporter les données de champs de vent et courant pour l'affichage python 
+    // Attention: necessite le stockage tabule dans bassin
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].first, "output/simple_X_vent");
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille)[0].second, "output/simple_Y_vent");
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].first, "output/simple_X_courant");
+    // table_vers_csv(bi_vecteur_vers_table(bassin1.champs_courant, bassin1.grille)[0].second, "output/simple_Y_courant");
 
-    // //test csv vers tableau
+    // Test csv vers tableau
     // string chemin_tableau = "include/test_tableau.csv";
-    // vecteur<vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
-    // // cout << test << endl;
+    // Vecteur<Vecteur<float>> test = csv_vers_table<float>(chemin_tableau, ';');
+    // cout << test << endl;
 
-    // //test data export
-    // // vecteur<pair<vecteur<vecteur<float>>, vecteur<vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
-    // // table_vers_csv<float>(test_export[0].first, "output/X_test");
+    // Test data export
+    // Vecteur<pair<Vecteur<Vecteur<float>>, Vecteur<Vecteur<float>>>> test_export = bi_vecteur_vers_table(bassin1.champs_vent, bassin1.grille);
+    // table_vers_csv<float>(test_export[0].first, "output/X_test");
 
-    // //Test dynamique
-    Dynamique_voile dynamique_test1(bassin1, voilier_the_first);
-    // // cout << acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4) << endl;
-    // // dynamique_test1.f(vecteur<float>({0,0}),acos(route1.vitesse[0][0]/sqrt(route1.vitesse[0]|route1.vitesse[0]))*180/(atan(1)*4), 0, com);
+    // Test dynamique
+    Dynamique_voile dynamique_voile(bassin1, voilier_de_Bob);
+    // dynamique_voile.f(Vecteur<float>({0,0}),acos(route_initiale.vitesse[0][0]/sqrt(route_initiale.vitesse[0]|route_initiale.vitesse[0]))*180/(atan(1)*4), 0, com);
 
-    // //Test simulateur
-    // Simulateur simulateur_test(0.1,50, com);
-    // cout << simulateur_test.mise_en_route(route1, dynamique_test1).position<<endl;
+    // Test simulateur - Attention le voilier s'echoue une fois qu'il a traversé le bassin 
+    // Pour observer la trajectoire : Copier/Coller la trajectoire dans le .py
+    // Simulateur simulateur_test(0.1,100, com);
+    // cout << simulateur_test.mise_en_route(route_initiale, dynamique_voile).position<<endl;
 
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//
@@ -122,7 +129,7 @@ int main(int argc, char *argv[])
     // //Test interpolation
     // float y1 = 0.601f; float y2 = 0.12f; 
     // int zero = 0;
-    vecteur<float> v0 = create_v0(grille);
+    Vecteur<float> v0 = create_v0(grille);
     Grille grille_mod = grille;
     grille_mod.resolution = 20;
     print_grille(grille_mod, v0);
@@ -133,20 +140,20 @@ int main(int argc, char *argv[])
     // cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
     // cout << v0<< endl;
     //Test Flux
-    Dynamique_voile fonction(bassin1, voilier_the_first);
+    Dynamique_voile fonction(bassin1, voilier_de_Bob);
     // Flux flux(grille, fonction);
     // cout << flux.calcul(0, 5.5, 6, 0, v0)<< endl;
 
-    //Test HJB
-    // HJB HJB(v0,grille, fonction);
+    // //Test HJB
+    // // HJB HJB(v0,grille, fonction);
     
-    // print_grille(grille, HJB.v);
-    // HJB.resolve(10);
-    // print_grille(grille, HJB.v);
+    // // print_grille(grille, HJB.v);
+    // // HJB.resolve(10);
+    // // print_grille(grille, HJB.v);
 
     //Test route optimale
     route_optimale route(grille, fonction, v0);
-    vecteur<float> x0({1.,8.});
+    Vecteur<float> x0({1.,2.});
     commandes_discretes commandes = route.calcul(x0, 15);
     cout << route.positions<<endl;
     cout << commandes << endl;

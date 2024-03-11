@@ -18,54 +18,53 @@ using namespace std;
 //                            Description
 //===========================================================================
 //
-// Classes foncteurs pour générer les champs de courants et les chamsp de vents
-//
-// Note: 
+// Classes foncteurs pour générer: 
+//      - Les polaires analytiquement
+//      - Les champs de courants et les champs de vents
+//      - La commande analytiquement
 //
 //===========================================================================
 //                 Definition des classes foncteurs 
 //===========================================================================
 
-// foncteur pour definir analytiquement les polaires
-class foncteur_polaire
+// Foncteur pour definir analytiquement les polaires
+class Foncteur_polaire
 {
 public:
-  float operator()(float angle_voilier, float vitesse_vent) const
+  float operator()(float angle_voilier_vent, float vitesse_vent) const
   {
-    //cout << "vitesse bateau (polaire) = " << vitesse_vent/(float(1)+abs(angle_voilier)) << endl;
-    return vitesse_vent/atan(1.f)*4.f*(atan(-1.f*abs(0.05f*angle_voilier)+3.f)+atan(1.f)*4./2.f);
+    return vitesse_vent/(atan(float(1))*float(4))*(atan(-abs(float(0.5)*angle_voilier_vent)+float(3))+atan(float(1))*float(4)/float(2));
   }
 };
 
-// foncteur pour definir analytiquement le champ de vent
-class foncteur_vent
+// Foncteur pour definir le champ de vent
+class Foncteur_vent
 {
 public:
-  vecteur<float> operator()(float a, float b) const
+  Vecteur<float> operator()(float a, float b) const
   {
-    return vecteur<float>({a, sin(a)+sin(b)+float(1)});
+    return Vecteur<float>({a, sin(a)+sin(b)+float(1)});
   }
 };
 
-// foncteur pour definir analytiquement le champ de courant
-class foncteur_courant
+// Foncteur pour definir le champ de courant
+class Foncteur_courant
 {
 public:
-  vecteur<float> operator()(float a, float b) const
+  Vecteur<float> operator()(float a, float b) const
   {
-    return vecteur<float>({a + float(0.4), sin(a)+sin(b)+float(0.8)});
+    return Vecteur<float>({a + float(0.4), sin(a)+sin(b)+float(0.8)});
   }
 };
 
-// foncteur pour definir analytiquement la commande (changement d'angle en fonction de l'ancien angle du bateau)
-class foncteur_commande
+// Foncteur pour definir analytiquement la commande (changement d'angle en fonction de l'ancien angle du bateau)
+class Foncteur_commande
 {
 public:
-  float operator()(float u) const
+  float operator()(const float &u) const
   {
-    return u;
+    return(u); // Conserve le cap (angle d'arrivée) -> In fine, se fait porter par le vent et courant
   }
 };
-
 
 #endif

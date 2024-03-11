@@ -25,12 +25,12 @@ class HJB{
     Flux flux;
 
     public:
-    vecteur<float> v;  // vecteur des scores
+    Vecteur<float> v;  // vecteur des scores
     bool resolved=0;  // est-ce que l'on a calculé HJB pour tout t
 
     HJB(float X, float Y, float Time, float res, float p, const Dynamique_voile &f); // constructeur par défaut
 
-    HJB(const vecteur<float> &v0, const Grille &g, const Dynamique_voile &f) : flux(g, f){   // constructeur utile 
+    HJB(const Vecteur<float> &v0, const Grille &g, const Dynamique_voile &f) : flux(g, f){   // constructeur utile 
         grille = g;
 
         // Initialisation de v, avec v0 pour t = 0 , 0 pour le reste
@@ -60,7 +60,7 @@ grille(X,Y,Time,res,p), v(X*Y*Time), flux(grille, f){ // Initialisation "à la m
 
 
 void HJB::resolve(const int &L){
-    vecteur<float> F(4);  // vecteur avec les 4 flux nécessaire pour l'iteration sur v
+    Vecteur<float> F(4);  // vecteur avec les 4 flux nécessaire pour l'iteration sur v
     for(int n=1;n<=int((*this).grille.Temps/(*this).grille.resolution);n++){  // pour chaque pas de temps
         for(int j=0; j<=int((*this).grille.taille_X/(*this).grille.pas); j++){  //pour chaque ligne
             for(int i=0;i<=int((*this).grille.taille_Y/(*this).grille.pas);i++){  //pour chaque point

@@ -23,13 +23,13 @@ class Flux{
     Flux(const Grille &g, const Dynamique_voile &f): grille(g),vitesse(f){}; //constructeur par défaut
 
 
-    float calcul(float u, float i, float j, int n,const vecteur<float> &v_prec){
+    float calcul(float u, float i, float j, int n,const Vecteur<float> &v_prec){
         //fonction de calcul du Flux
         if(i<0||j<0||i>grille.taille_X/grille.pas||j>grille.taille_Y/grille.pas){
             return 0.f;}// si on est en dehors de la zone globale, le flux est nul
     
-        vecteur<float> xij({float(i)*grille.pas, float(j)*grille.pas});
-        vecteur<float> f = vitesse.f(xij, u, n); // calcul de la vitesse du bateau au point étudié, avec la commande u
+        Vecteur<float> xij({float(i)*grille.pas, float(j)*grille.pas});
+        Vecteur<float> f = vitesse.f(xij, u, n); // calcul de la vitesse du bateau au point étudié, avec la commande u
         
         float tmp;
         if(modf(i, &tmp)==.0f){ // si i est un entier (cf le sujet)
