@@ -110,7 +110,7 @@ float angle(vecteur<float> v)
   return sgn(v[1])*valeur;
 }
 
-vecteur<float> create_v0(Grille grille){
+vecteur<float> create_v0(const Grille &grille){
   // création analytique d'un vecteur des scores, associé à la grille en entrée
   float b = 40.; // Scaling pour la taille de la zone cible
   float c = grille.taille_X;  // Constante pour que taille de la zone cible soit cohérente avec la taille de la zone globale
@@ -143,7 +143,7 @@ float angle_relatif(float u, float v)
   return(angle_relatif);
 }
 
-void print_grille(Grille grille, vecteur<float> val){
+void print_grille(const Grille &grille,const vecteur<float> &val){
   // fonction pour afficher les vecteurs de façon élégante, en cohérence avec la grille associée
   for(int t = 0; t<=int(grille.Temps/grille.resolution); t++){
         for(int j = 0; j<=int(grille.taille_Y/grille.pas); j++){

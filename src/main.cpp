@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
     //Test route optimale
     route_optimale route(grille, fonction, v0);
-    vecteur<float> x0({1.,2.});
+    vecteur<float> x0({1.,8.});
     commandes_discretes commandes = route.calcul(x0, 15);
     cout << route.positions<<endl;
     cout << commandes << endl;
