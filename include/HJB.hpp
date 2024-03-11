@@ -21,13 +21,13 @@ using namespace std;
 
 class HJB{
     public:
-    vecteur<float> v;
+    Vecteur<float> v;
     Grille grille;
     Flux flux;
     bool resolved=0;
 
     HJB(float X, float Y, float Time, float res, float p, Dynamique_voile f);
-    HJB(const vecteur<float> &v0, const Grille &g, Dynamique_voile f) : flux(g, f){
+    HJB(const Vecteur<float> &v0, const Grille &g, Dynamique_voile f) : flux(g, f){
         grille = g;
         int taille = (int(grille.taille_X/grille.pas)+1)*
                      (int(grille.taille_Y/grille.pas)+1)*
@@ -55,7 +55,7 @@ grille(X,Y,Time,res,p), v(X*Y*Time), flux(grille, f){ // Initialisation "à la m
 
 
 void HJB::resolve(const int &L){
-    vecteur<float> F(4);
+    Vecteur<float> F(4);
     for(int n=1;n<=int((*this).grille.Temps/(*this).grille.resolution);n++){
         for(int j=0; j<=int((*this).grille.taille_X/(*this).grille.pas); j++){
             for(int i=0;i<=int((*this).grille.taille_Y/(*this).grille.pas);i++){

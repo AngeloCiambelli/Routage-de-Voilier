@@ -27,102 +27,133 @@ using namespace std;
 //===========================================================================
 
 template <typename T>
-class vecteur : public vector<T>
+class Vecteur : public vector<T>
 {
 public:
-  vecteur(int d = 0, const T &v0 = T()) : vector<T>(d, v0) {} // dim et composantes constantes
-  vecteur(const initializer_list<T> &vs) : vector<T>(vs) {}   // depuis une liste explicite
+  Vecteur(int d = 0, const T &v0 = T()) : vector<T>(d, v0) {} // dim et composantes constantes
+  Vecteur(const initializer_list<T> &vs) : vector<T>(vs) {}   // depuis une liste explicite
 
-  T operator()(int i) const { return this->at(i - 1); } // valeur    1->dim (indice non testé)
-  T &operator()(int i) { return this->at(i - 1); }      // référence 1->dim (indice non testé)
+  T operator()(int i) const; // valeur    1->dim (indice non testé)
+  T &operator()(int i);      // référence 1->dim (indice non testé)
 
-  vecteur<T> &operator+=(const vecteur<T> &v)
-  {
-    int n = (*this).size();
-    if (n != v.size())
-    {
-      cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs";
-      exit(1);
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-      (*this)[i] += v[i];
-    }
-    return *this;
-  } // u += v
-  vecteur<T> &operator-=(const vecteur<T> &v)
-  {
-    int n = (*this).size();
-    if (n != v.size())
-    {
-      cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs";
-      exit(1);
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-      (*this)[i] -= v[i];
-    }
-    return *this;
-  } // u -= v
-  vecteur<T> &operator+=(const T &x)
-  {
-    int n = (*this).size();
-    vecteur<T> a(n, x);
-
-    (*this) += a;
-
-    return *this;
-  } // u += x
-  vecteur<T> &operator-=(const T &x)
-  {
-    int n = (*this).size();
-    vecteur<T> a(n, x);
-
-    (*this) -= a;
-
-    return *this;
-  } // u -= x
-  vecteur<T> &operator*=(const T &x)
-  {
-    int n = (*this).size();
-
-    for (int i = 0; i < n; i++)
-    {
-      (*this)[i] *= x;
-    }
-
-    return *this;
-  } // u *= x
-  vecteur<T> &operator/=(const T &x)
-  {
-    int n = (*this).size();
-
-    for (int i = 0; i < n; i++)
-    {
-      (*this)[i] /= x;
-    }
-
-    return *this;
-  } // u /= x
-  T operator|(const vecteur<T> &v) const
-  {
-    int n = (*this).size();
-    if (n != v.size())
-    {
-      cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs (produit scalaire)";
-      exit(1);
-    }
-
-    T valeur = T();
-    for (int i = 0; i < n; i++)
-    {
-      valeur += (*this)[i] * v[i];
-    }
-    return valeur;
-  } // u|v
+  Vecteur<T> &operator+=(const Vecteur<T> &v); // u += v
+  Vecteur<T> &operator-=(const Vecteur<T> &v); // u -= v
+  Vecteur<T> &operator+=(const T &x);          // u += x
+  Vecteur<T> &operator-=(const T &x);          // u -= x
+  Vecteur<T> &operator*=(const T &x);          // u *= x
+  Vecteur<T> &operator/=(const T &x);          // u /= x
+  T operator|(const Vecteur<T> &v) const;      // u|v
 };  // fin de définition de la classe
+
+//===========================================================================
+//                          Fonctions membres
+//===========================================================================
+
+template<typename T>
+T Vecteur<T>::operator()(int i) const {return this->at(i-1);}
+
+template<typename T>
+T& Vecteur<T>::operator()(int i) {return this->at(i-1);}
+
+template<typename T>
+Vecteur<T>& Vecteur<T>::operator+=(const Vecteur<T> &v)
+{
+  int n = (*this).size();
+  if (n != v.size())
+  {
+    cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs";
+    exit(1);
+  }
+
+  for (int i = 0; i < n; i++)
+  {
+    (*this)[i] += v[i];
+  }
+  return *this;
+}
+
+template<typename T>
+Vecteur<T>& Vecteur<T>::operator-=(const Vecteur<T> &v)
+{
+  int n = (*this).size();
+  if (n != v.size())
+  {
+    cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs";
+    exit(1);
+  }
+
+  for (int i = 0; i < n; i++)
+  {
+    (*this)[i] -= v[i];
+  }
+  return *this;
+}
+
+template<typename T>
+Vecteur<T>& Vecteur<T>::operator+=(const T &x)
+{
+  int n = (*this).size();
+  Vecteur<T> a(n, x);
+
+  (*this) += a;
+
+  return *this;
+}
+
+template<typename T>
+Vecteur<T>& Vecteur<T>::operator-=(const T &x)
+{
+  int n = (*this).size();
+  Vecteur<T> a(n, x);
+
+  (*this) -= a;
+
+  return *this;
+}
+
+template<typename T>
+Vecteur<T>& Vecteur<T>::operator*=(const T &x)
+{
+  int n = (*this).size();
+
+  for (int i = 0; i < n; i++)
+  {
+    (*this)[i] *= x;
+  }
+
+  return *this;
+} 
+
+template<typename T>
+Vecteur<T>& Vecteur<T>::operator/=(const T &x)
+{
+  int n = (*this).size();
+
+  for (int i = 0; i < n; i++)
+  {
+    (*this)[i] /= x;
+  }
+
+  return *this;
+} 
+
+template<typename T>
+ T Vecteur<T>::operator|(const Vecteur<T> &v) const
+{
+  int n = (*this).size();
+  if (n != v.size())
+  {
+    cout << "hop hop hop ils n'ont pas la meme taille tes vecteurs (produit scalaire)";
+    exit(1);
+  }
+
+  T valeur = T();
+  for (int i = 0; i < n; i++)
+  {
+    valeur += (*this)[i] * v[i];
+  }
+  return valeur;
+}
 
 //===========================================================================
 //                          Fonctions externes
@@ -143,8 +174,9 @@ ostream &operator<<(ostream &out, const vector<T> &v)
   out << "]";
   return (out);
 };
+
 template <typename T>
-vecteur<T> operator+(const vecteur<T> &u, const vecteur<T> &v)
+Vecteur<T> operator+(const Vecteur<T> &u, const Vecteur<T> &v)
 {
   int n = u.size();
   if (n != v.size())
@@ -153,7 +185,7 @@ vecteur<T> operator+(const vecteur<T> &u, const vecteur<T> &v)
     exit(1);
   }
 
-  vecteur<T> nouveau(n);
+  Vecteur<T> nouveau(n);
 
   for (int i = 0; i < n; i++)
   {
@@ -161,18 +193,21 @@ vecteur<T> operator+(const vecteur<T> &u, const vecteur<T> &v)
   }
   return nouveau;
 } // u + v
+
 template <typename T>
-vecteur<T> operator-(const vecteur<T> &u, const vecteur<T> &v)
+Vecteur<T> operator-(const Vecteur<T> &u, const Vecteur<T> &v)
 {
   return (u + (-v));
 } // u - v
+
 template <typename T>
-vecteur<T> operator+(const vecteur<T> &u) { return u; } // +u
+Vecteur<T> operator+(const Vecteur<T> &u) { return u; } // +u
+
 template <typename T>
-vecteur<T> operator-(const vecteur<T> &u)
+Vecteur<T> operator-(const Vecteur<T> &u)
 {
   int n = u.size();
-  vecteur<T> nouveau(n);
+  Vecteur<T> nouveau(n);
 
   for (int i = 0; i < n; i++)
   {
@@ -180,23 +215,26 @@ vecteur<T> operator-(const vecteur<T> &u)
   }
   return nouveau;
 } // +u
+
 template <typename T>
-vecteur<T> operator+(const vecteur<T> &u, const T &x)
+Vecteur<T> operator+(const Vecteur<T> &u, const T &x)
 {
   int n = u.size();
-  vecteur<T> nouveau(n);
-  vecteur<T> x_vector(n, x);
+  Vecteur<T> nouveau(n);
+  Vecteur<T> x_vector(n, x);
 
   nouveau = u + x_vector;
   return nouveau;
 } // u + x
+
 template <typename T>
-vecteur<T> operator-(const vecteur<T> &u, const T &x) { return u + (-x); } // u - x
+Vecteur<T> operator-(const Vecteur<T> &u, const T &x) { return u + (-x); } // u - x
+
 template <typename T>
-vecteur<T> operator*(const vecteur<T> &u, const T &x)
+Vecteur<T> operator*(const Vecteur<T> &u, const T &x)
 {
   int n = u.size();
-  vecteur<T> nouveau(n);
+  Vecteur<T> nouveau(n);
 
   for (int i = 0; i < n; i++)
   {
@@ -204,13 +242,15 @@ vecteur<T> operator*(const vecteur<T> &u, const T &x)
   }
   return nouveau;
 } // u * x
+
 template <typename T>
-vecteur<T> operator*(const T &x, const vecteur<T> &u) { return u * x; } // x*u
+Vecteur<T> operator*(const T &x, const Vecteur<T> &u) { return u * x; } // x*u
+
 template <typename T>
-vecteur<T> operator/(const vecteur<T> &u, const T &x)
+Vecteur<T> operator/(const Vecteur<T> &u, const T &x)
 {
   int n = u.size();
-  vecteur<T> nouveau(n);
+  Vecteur<T> nouveau(n);
 
   for (int i = 0; i < n; i++)
   {

@@ -28,80 +28,98 @@ using namespace std;
 //===========================================================================
 
 template <typename T>
-class polaire
+class Polaire
 {
 public:
-  bi_vecteur<int> polaire_tabule_entete;
-  vecteur<vecteur<T>> polaire_tabule_valeur;
-  foncteur_polaire polaire_analytique;
-  string methode_stockage;
+  Bi_vecteur<float>   entete;         // Entêtes du tableau des polaires, X: Nom des lignes (Angle bateau % Angle vent), Y: Nom des colonnes (Vitesse vent)
+  Vecteur<Vecteur<T>> table_valeur;   // Valeurs du tableau des polaires.
+  Foncteur_polaire    analytique;     // Foncteur Polaire définissant les polaires de manière analytique
+  string              stockage;       // Méthode de stockage employé
 
-  polaire(const string &chemin, char separateur,const string& stockage);
-  polaire(const foncteur_polaire& f_polaire, const string& stockage);
-  polaire();
+  // Constructeurs
+  Polaire(const string &chemin, char separateur,const string& stockage);
+  Polaire(const Foncteur_polaire& f_polaire, const string& stockage);
+  Polaire();
 };
 
 template <typename T>
-polaire<T>::polaire(const string &chemin, char separateur, const string &stockage) // inspiré code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
+Polaire<T>::Polaire(const string &chemin, char separateur, const string &sto) // inspiré du code https://www.delftstack.com/fr/howto/cpp/read-csv-file-in-cpp/
 {
-  string contenu = fichier_vers_string(chemin); // contenu du .csv en string
-  istringstream sstream(contenu);               // conversion du contenu en "stream" type pour utiliser la fonction getline()
-  vecteur<T> element;                           // element de la ligne entiere
-  string memoire;                              // element entre chaque séparateur normalement "espace nombre espace"
-  int compteur_1 = 0;                          // Compteurs pour savoir dans quelle ligne on est
-  methode_stockage = stockage;
+  // Retenir qu'on stocke les informations de manière tabulée
+  stockage = sto;
 
-  while (getline(sstream, memoire)) // Pour toutes les lignes
+  string contenu = fichier_vers_string(chemin); // Contenu du .csv en string
+  istringstream sstream(contenu);               // Conversion du contenu en "stream" type pour utiliser la fonction getline()
+  
+  // Variable qui acceuillent ce qu'on importe
+  Vecteur<T> element;                           // Element de la ligne entiere
+  string memoire;                               // Element entre chaque séparateur ','. Normalement on obtient "espace nombre espace"
+  int compteur_1 = 0;                           // Compteurs de ligne
+
+  // Pour toutes les lignes
+  while (getline(sstream, memoire)) 
   {
-    istringstream ligne(memoire); // transformer la ligne en type "stream" necessaire pour getline()
-    int compteur_2 = 0; // A quel élément de la ligne (compteur_2) on est.
+    istringstream ligne(memoire);               // transformer la ligne en type "stream" necessaire pour getline()
+    int compteur_2 = 0;                         // Compteur d'element de la ligne
 
-    while (std::getline(ligne, memoire, separateur)) // trouver tous les elements de chaques lignes
-    {                                             
-      if ((compteur_2 == 0) && (compteur_1 != 0)) // Ajouter  dans le bi_vecteur des noms des lignes ou le tableau des valeurs
+     // Pour tous les elements de la ligne
+    while (std::getline(ligne, memoire, separateur))
+    { 
+      // Nettoyer l'element memoire de possible espace autour de la valeur                                           
+      memoire.erase(remove_if(memoire.begin(), memoire.end(), [](unsigned char x){ return isspace(x); }),memoire.end());
+
+      // Ajouter dans le Bi_vecteur.X les noms des lignes 
+      if ((compteur_2 == 0) && (compteur_1 != 0)) 
       {
-        int memoire_int;
-        istringstream(memoire) >> memoire_int; // Convertir le type string en entier
-        (polaire_tabule_entete.X).push_back(memoire_int);
+        // Convertir le type string en float
+        float memoire_float;
+        istringstream(memoire) >> memoire_float; 
+        (entete.X).push_back(memoire_float);
       }
-      else
-      {
-        memoire.erase(remove_if(memoire.begin(), memoire.end(), [](unsigned char x){ return isspace(x); }),memoire.end()); // Nettoyer les elements des espaces autour
 
-        if ((compteur_1 == 0) && (compteur_2 != 0)) // Ajouter l'element dans le bi_vecteur contenant les noms des colonnes ou dans le table de valeur
+      // Ajouter dans Bi_vecteur.Y le nom des colonnes ou dans la table des valeurs les valeurs des polaires
+      else
+      { 
+        // Ajouter le nom de la colonne dans B_vecteur.Y 
+        if ((compteur_1 == 0) && (compteur_2 != 0)) 
         {
-          int memoire_int;
-          istringstream(memoire) >> memoire_int; // Convertir le type string en entier
-          (polaire_tabule_entete.Y).push_back(memoire_int);
+          // Convertir le type string en float
+          float memoire_float;
+          istringstream(memoire) >> memoire_float; 
+          (entete.Y).push_back(memoire_float);
         }
+
+        // Ajouter la valeur dans la ligne d'element qui sera ensuite ajouté dans la table des valeurs
         else
         {
+          // Convertir le type string dans le type T
           T memoire_T;
-          istringstream(memoire) >> memoire_T; // Convertir le type string dans le type T
-          element.push_back(memoire_T);        // Ajouter cet element a la ligne d'element
+          istringstream(memoire) >> memoire_T; 
+          element.push_back(memoire_T);
         }
       }
       compteur_2 += 1;
     }
 
-    if (compteur_1 != 0) // Remplir le tableau de valeur des polaires du voilier
+    // Remplir le tableau de valeur des polaires du voilier
+    if (compteur_1 != 0) 
     {
-      polaire_tabule_valeur.push_back(element);
+      table_valeur.push_back(element);
     }
 
     element.clear(); // Nettoyer les variables
-    compteur_1 += 1;
+    compteur_1 += 1; // Passe à la prochaine ligne
   }
 };
 
 template <typename T>
-polaire<T>::polaire(const foncteur_polaire& f_polaire, const string& stockage)
+Polaire<T>::Polaire(const Foncteur_polaire& f_polaire, const string& sto)
 {
-  methode_stockage = stockage;
-  polaire_analytique = f_polaire;
+  stockage = sto;
+  analytique = f_polaire;
 }
 
 template <typename T>
-polaire<T>::polaire() : polaire_tabule_entete(), polaire_tabule_valeur(), methode_stockage(){}
+Polaire<T>::Polaire() : entete(), table_valeur(), stockage(){}
 
 #endif

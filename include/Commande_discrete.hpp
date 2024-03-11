@@ -29,7 +29,7 @@ using namespace std;
 class commandes_discretes
 {
 public:
-  vecteur<float> commandes;
+  Vecteur<float> commandes;
   float contrainte;
   bool check_commandes()
   {

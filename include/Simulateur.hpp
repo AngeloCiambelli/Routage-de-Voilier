@@ -25,7 +25,7 @@ using namespace std;
 //===========================================================================
 //
 // Classe Simulateur  contenant le pas de temps, le nombre de pas de temps ainsi que la fonction
-// générant une route à partir d’une dynamique
+// générant une Route à partir d’une dynamique
 //
 // Note: 
 //
@@ -40,38 +40,51 @@ class Simulateur
     int nb_pas;
     Commande commande;
 
-    Simulateur(const float &delta, const int &nombre_pas, const Commande& com){delta_temps=delta; nb_pas=nombre_pas; commande=com;};
-    route<float> mise_en_route(route<float> &route, const Dynamique &dynamique)
+    // Constructeurs
+    Simulateur(const float &delta, const int &nombre_pas, const Commande& com);
+
+    // Fonctions membres
+    Route<float> mise_en_route(Route<float> &route, const Dynamique &dynamique);
+};
+
+//===========================================================================
+//                   Fonctions membres
+//===========================================================================
+
+Simulateur::Simulateur(const float &delta, const int &nombre_pas, const Commande& com)
+{
+    delta_temps=delta; nb_pas=nombre_pas; commande=com;
+};
+
+Route<float> Simulateur::mise_en_route(Route<float> &route, const Dynamique &dynamique)
+{
+    for (int i=0; i<=nb_pas; i++)
     {
-        for (int i=0; i<=nb_pas; i++)
-        {   
-            cout << "route vitesse" << route.vitesse[i] << endl;
-            
-            float u;
+        // Definition temporaire de la commande u
+        float u;
 
-            // Calcule de l'angle du bateau par rapport a son ancienne direction de vitesse
-            if(commande.stockage=="analytique")
-            {
-                float u = commande.commande_f(angle(route.vitesse[i]));
-            } 
-            else if (commande.stockage=="tabule")
-            {
-                float u = commande.vecteur_commande[i];
-            }
+        // Si les commandes sont stockés analytiquement, 
+        // Calculer de la commande apartir de l'ancien angle de vitesse (angle d'arrivée)
+        if(commande.stockage=="analytique")
+        {
+            u = commande.commande_f(angle(route.vitesse[i]));
+        } 
 
-            
-
-            cout << "Angle bateau" << u << endl;
-            // Vitesse voilier au temps i
-            route.vitesse.pushback(dynamique.f(route.position[i], u, i));
-
-            // Nouvelle position au temps i+1
-            (route.position).pushback(route.position[i]+(delta_temps*route.vitesse[i]));
-            cout << "positions =" << route.position << endl;
+        // Si les commandes sont stockées de manière tabulés, extraire la i^eme commande
+        else if (commande.stockage=="tabule")
+        {
+            u = commande.vecteur_commande[i];
         }
-        
-        return(route);
-    };
+
+        // Vitesse voilier au temps i
+        route.vitesse.pushback(dynamique.f(route.position[i], u, i));
+
+        // Nouvelle position au temps i+1
+        (route.position).pushback(route.position[i]+(delta_temps*route.vitesse[i]));
+        cout << route.position << endl << endl;
+    }
+    
+    return(route);
 };
 
 #endif

@@ -16,14 +16,27 @@
 
 using namespace std;
 
-template <typename T> int sgn(T val) {
+//===========================================================================
+//                            Description
+//===========================================================================
+//
+// Fonctions externes au classes qui sont utilisés dans le code
+//
+//===========================================================================
+//                            Implémentation
+//===========================================================================
+
+// Fonction qui trouve le signe d'un float
+template <typename T> 
+int sgn(T val) 
+{
     return (T(0) < val) - (val < T(0));
 }
 
 template<typename T1, typename T2>  
 // T1 : float, int , ou vect<float> X,Y
 // T2 : vect ou bivect <float>
-T1 interpolation(const bi_vecteur<int> &position_rect, const float &x, const float &y, const int &timestamp, const T2 &valeur,const Grille& grille){
+T1 interpolation(const Bi_vecteur<int> &position_rect, const float &x, const float &y, const int &timestamp, const T2 &valeur,const Grille& grille){
   T1 sum;
   float x1 = float(position_rect.X[0])*grille.pas;float x2 = float(position_rect.X[2])*grille.pas;
   float y1 = float(position_rect.Y[0])*grille.pas;float y2 = float(position_rect.Y[2])*grille.pas;
@@ -46,8 +59,8 @@ T1 interpolation(const bi_vecteur<int> &position_rect, const float &x, const flo
   return sum;
 };
 
-
-float interpolation(const bi_vecteur<int>& indice_rect, const bi_vecteur<int>& entete, const float &x, const float &y, const vecteur<vecteur<float>>& valeur){
+//Fonction d'interpolation des polaires. Elle fonctionne similairement à l'interpolation précédente.
+float interpolation(const Bi_vecteur<int>& indice_rect, const Bi_vecteur<float>& entete, const float &x, const float &y, const Vecteur<Vecteur<float>>& valeur){
   float sum = float();
   float i1 = indice_rect.X[2];float i2 = indice_rect.X[1];
   float j1 = indice_rect.Y[2];float j2 = indice_rect.Y[1];
@@ -64,13 +77,16 @@ float interpolation(const bi_vecteur<int>& indice_rect, const bi_vecteur<int>& e
   return sum;
 };
 
+// Fonction qui convertit un Bi_vecteur<T> de stockage d'une grille en tables des X et tables des Y pour chaque pas de temps
 template<typename T>
-vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> bi_vecteur_vers_table(const bi_vecteur<T>& v,const Grille& grille)
+Vecteur<pair<Vecteur<Vecteur<T>>, Vecteur<Vecteur<T>>>> bi_vecteur_vers_table(const Bi_vecteur<T>& v,const Grille& grille)
 {
-  vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> table(grille.Temps/grille.resolution, 
-                                  pair(vecteur<vecteur<T>>(grille.taille_Y/grille.pas+1, vecteur<T>(grille.taille_X/grille.pas+1)), 
-                                       vecteur<vecteur<T>>(grille.taille_Y/grille.pas+1, vecteur<T>(grille.taille_X/grille.pas+1))));
+  // Définition de l'objet final contenant les pair de tables X et Y
+  Vecteur<pair<Vecteur<Vecteur<T>>, Vecteur<Vecteur<T>>>> table(grille.Temps/grille.resolution, 
+                                  pair(Vecteur<Vecteur<T>>(grille.taille_Y/grille.pas+1, Vecteur<T>(grille.taille_X/grille.pas+1)), 
+                                       Vecteur<Vecteur<T>>(grille.taille_Y/grille.pas+1, Vecteur<T>(grille.taille_X/grille.pas+1))));
 
+  // Remplissage
   for (int t=0; t<(grille.Temps/grille.resolution); t++)
   {
     for (int i=0; i<=grille.taille_Y/grille.pas; i++)
@@ -85,9 +101,9 @@ vecteur<pair<vecteur<vecteur<T>>, vecteur<vecteur<T>>>> bi_vecteur_vers_table(co
   return table;
 };
 
-bool controle_position(const vecteur<float> &position, const Bassin &bassin)
+// Fonction qui vérifie si la position (x,y) est toujours dans le bassin
+bool controle_position(const Vecteur<float> &position, const Bassin &bassin)
 { 
-  //cout << bassin.coin_bas_gauche.second << bassin.coin_haut_droit.second << endl;
   bool test     ((bassin.coin_bas_gauche.first <= position[0]) 
             and (position[0] <= bassin.coin_haut_droit.first) 
             and (bassin.coin_bas_gauche.second <= position[1]) 
@@ -95,19 +111,28 @@ bool controle_position(const vecteur<float> &position, const Bassin &bassin)
   return test;
 };
 
-float angle(vecteur<float> v)
+// Fonction qui donne l'angle absolu d'un vecteur (de 180° à -180°)
+float angle(Vecteur<float> v)
 {
+  // Definition de la variable
   float valeur;
-  if (v[0] < 0){valeur = float(180) - (acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4)));}
-  else {valeur = acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4));}
-  return sgn(v[1])*valeur;
+
+  if (v[0] < 0)
+  {
+    valeur = float(180) - (acos(-v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4)));
+  }
+  else 
+  {
+    valeur = acos(v[0]/sqrt(v|v))*float(180)/(atan(float(1))*float(4));
+  }
+  return (sgn(v[1])*valeur);
 }
 
-vecteur<float> create_v0(Grille grille){
+Vecteur<float> create_v0(Grille grille){
   float alpha = 40.*grille.taille_X;
   int n = int(grille.taille_X/grille.pas);
   int m = int(grille.taille_Y/grille.pas);
-  vecteur<float> v0((n+1)*(m+1));
+  Vecteur<float> v0((n+1)*(m+1));
   for(int j=0; j<=m; j++){
     for(int i=0;i<=n; i++){
       float floati = float(i)*grille.pas;float floatj = float(j)*grille.pas;
@@ -118,10 +143,12 @@ vecteur<float> create_v0(Grille grille){
   return v0;
 };
 
+// Fonction qui calcule l'angle relatif entre deux angles absolus
 float angle_relatif(float u, float v)
 {
-  // Verifier si l'angle du bateau respecte les contraintes de commande
+  // Definition de la variable
   float angle_relatif;
+
   if (sgn(u)==sgn(v))
   {
     angle_relatif = abs(abs(u)-abs(v));
@@ -130,11 +157,11 @@ float angle_relatif(float u, float v)
   {
     angle_relatif = min(abs(u)+abs(v),(180 - abs(u) + 180 - abs(v)));
   }
-  cout << angle_relatif << endl;
+
   return(angle_relatif);
 }
 
-void print_grille(Grille grille, vecteur<float> val){
+void print_grille(Grille grille, Vecteur<float> val){
   for(int t = 0; t<=int(grille.Temps/grille.resolution); t++){
         for(int j = 0; j<=int(grille.taille_Y/grille.pas); j++){
             for(int i = 0; i<=int(grille.taille_X/grille.pas); i++){
