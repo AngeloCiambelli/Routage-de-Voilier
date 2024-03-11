@@ -1,0 +1,30 @@
+<map id="Dynamique_voile" name="Dynamique_voile">
+<area shape="rect" id="Node000001" title=" " alt="" coords="329,476,447,503"/>
+<area shape="rect" id="Node000002" href="$class_dynamique.html" title=" " alt="" coords="209,385,295,412"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,419,370,473,367,478,282,423"/>
+<area shape="rect" id="Node000003" href="$class_bassin.html" title=" " alt="" coords="537,295,598,321"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="548,335,431,454,404,478,401,474,427,450,544,331"/>
+<area shape="rect" id="Node000004" href="$class_grille.html" title=" " alt="" coords="671,188,723,215"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="693,231,684,253,669,273,635,294,599,305,598,300,633,289,666,269,680,250,688,229"/>
+<area shape="rect" id="Node000005" href="$class_bi__vecteur.html" title=" " alt="" coords="355,188,484,215"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="433,228,446,249,464,269,500,288,537,299,536,304,498,293,461,273,442,253,429,230"/>
+<area shape="rect" id="Node000011" href="$class_polaire.html" title=" " alt="" coords="265,295,374,321"/>
+<area shape="poly" id="edge11_Node000011_Node000005" title=" " alt="" coords="387,226,370,241,346,269,329,296,324,293,342,266,366,237,384,222"/>
+<area shape="rect" id="Node000006" href="$class_vecteur.html" title=" " alt="" coords="363,81,477,108"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="422,123,422,188,417,188,417,123"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="366,5,473,32"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="422,47,422,81,417,81,417,47"/>
+<area shape="rect" id="Node000008" href="$class_foncteur__vent.html" title=" " alt="" coords="747,188,850,215"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="780,228,754,252,724,273,692,287,659,296,599,307,598,301,657,291,690,282,721,268,751,248,776,224"/>
+<area shape="rect" id="Node000009" href="$class_foncteur__courant.html" title=" " alt="" coords="508,188,630,215"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="571,230,570,294,565,294,566,230"/>
+<area shape="rect" id="Node000010" href="$class_voilier.html" title=" " alt="" coords="319,385,456,412"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="390,428,390,475,385,475,385,428"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="341,332,380,383,376,386,337,336"/>
+<area shape="rect" id="Node000012" href="$class_vecteur.html" title=" " alt="" coords="5,188,189,215"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="124,223,155,247,192,268,228,283,265,293,264,299,227,288,189,273,152,251,121,227"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="11,81,183,108"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="100,123,100,188,94,188,94,123"/>
+<area shape="rect" id="Node000014" href="$class_foncteur__polaire.html" title=" " alt="" coords="213,188,330,215"/>
+<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="270,230,271,250,276,269,286,282,298,292,295,296,282,286,272,272,265,251,265,230"/>
+</map>

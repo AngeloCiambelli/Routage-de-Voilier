@@ -1,0 +1,7 @@
+<map id="interpolation" name="interpolation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,97,56"/>
+<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="27,30,23,21,26,11,36,5,51,3,67,5,76,12,73,16,65,10,51,8,38,10,30,14,29,20,32,28"/>
+<area shape="rect" id="Node000002" href="$class_grille.html#a55235882a3d7897067449ef76fb64287" title=" " alt="" coords="145,29,224,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,49,129,49,129,54,97,54"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="144,37,112,36,112,31,144,32"/>
+</map>
