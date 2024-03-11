@@ -28,9 +28,9 @@ class HJB{
     Vecteur<float> v;  // vecteur des scores
     bool resolved=0;  // est-ce que l'on a calculé HJB pour tout t
 
-    HJB(float X, float Y, float Time, float res, float p, Dynamique_voile f); // constructeur par défaut
+    HJB(float X, float Y, float Time, float res, float p, const Dynamique_voile &f); // constructeur par défaut
 
-    HJB(const Vecteur<float> &v0, const Grille &g, Dynamique_voile f) : flux(g, f){   // constructeur utile 
+    HJB(const Vecteur<float> &v0, const Grille &g, const Dynamique_voile &f) : flux(g, f){   // constructeur utile 
         grille = g;
 
         // Initialisation de v, avec v0 pour t = 0 , 0 pour le reste
@@ -54,7 +54,7 @@ class HJB{
 };
 
 
-HJB::HJB(float X, float Y, float Time, float res, float p, Dynamique_voile f): 
+HJB::HJB(float X, float Y, float Time, float res, float p, const Dynamique_voile &f): 
 grille(X,Y,Time,res,p), v(X*Y*Time), flux(grille, f){ // Initialisation "à la main", à éviter
 }
 

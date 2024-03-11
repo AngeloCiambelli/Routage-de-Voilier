@@ -46,15 +46,17 @@ class route_optimale{
     }
 
     commandes_discretes calcul(Vecteur<float>& x0, int L){
+        positions.X.clear();
+        positions.Y.clear();
         if(HJB.resolved==0){HJB.resolve(L);} // On résout HJB si il n'a jamais été résolu, sinon on peut procédé
-        print_grille(grille, HJB.v);
+        // print_grille(grille, HJB.v);
         Bi_vecteur<int> loca = grille.localisation(x0[0], x0[1]); // localisation du point de départ dans la grille
         float vx = interpolation<float, Vecteur<float>>(loca, x0[0], x0[1], 0, HJB.v, grille); // interpolation sur v du point de départ
         int iter = 0;
         n = calcul_n(x0);  //calcul du nombre d'iteration nécessaire
 
         positions.pushback(x0); // bi_vecteur des positions optimales du bateau
-        while(vx>0 && iter<=grille.Temps/grille.resolution){ // tant que nous ne sommes pas arrivé dans la zone (ou très proche, lorsque iter=n)
+        while(vx>0 && iter<=n){ // tant que nous ne sommes pas arrivé dans la zone (ou très proche, lorsque iter=n)
             float mini = numeric_limits<float>::max();  // voir HJB.calcul
             float minimiseur;
             Vecteur<float> next_pos(2);  // prochaine position calculée

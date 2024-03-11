@@ -30,6 +30,27 @@
 
 int main(int argc, char *argv[])
 {
+    //  DEFINITION DES OBJETS DE BASE
+
+
+    Vecteur<float> x0({1.,2.}); // Position de départ
+
+    float pas = 0.5f;
+    float temps = 2.f;
+    float largeur = 10.f;
+    float longueur = 10.f;
+    float pas_temps = 0.1f;
+
+
+    pair<float, float> bas(0,0);
+    pair<float, float> haut(longueur,largeur);
+
+    Grille grille(longueur,largeur,temps,pas_temps,pas); // Grille dans laquelle on travaille
+
+
+    /////////////////////////////////////////////////////////////
+
+
     // cout << "Hello world!" << std::endl;
 
     // Test Vecteur
@@ -76,9 +97,9 @@ int main(int argc, char *argv[])
     pair<float, float> min_max_com(-80,80); 
     Foncteur_polaire polaire_analytique;
 
-    // Création du voilier de bob de maniere analytique ou tabule
-    //Voilier<float, float> voilier_de_Bob(min_max_com, chemin, ';');
-    Voilier<float, float> voilier_de_Bob(min_max_com, polaire_analytique);
+    // Création du voilier de bob de maniere analytique ou tabule 
+    //Voilier<float, float> voilier_de_Bob(min_max_com, chemin, ';');  // tabule
+    Voilier<float, float> voilier_de_Bob(min_max_com, polaire_analytique);  //analytique
 
     // Verification de la cohérence des commandes pour le voilier de Bob
     com.verification_commande(voilier_de_Bob);
@@ -86,9 +107,6 @@ int main(int argc, char *argv[])
     // Test Bassin
     Foncteur_vent f;
     Foncteur_courant g;
-    float pas = 0.5;
-    pair<float, float> bas(0,0);
-    pair<float, float> haut(10,10);
     string sto("analytique"); //"tabule"
     Bassin bassin1(bas,haut,pas,f,g,sto);
     
@@ -112,33 +130,42 @@ int main(int argc, char *argv[])
     Dynamique_voile dynamique_voile(bassin1, voilier_de_Bob);
     // dynamique_voile.f(Vecteur<float>({0,0}),acos(route_initiale.vitesse[0][0]/sqrt(route_initiale.vitesse[0]|route_initiale.vitesse[0]))*180/(atan(1)*4), 0, com);
 
+    
+
     // Test simulateur - Attention le voilier s'echoue une fois qu'il a traversé le bassin 
     // Pour observer la trajectoire : Copier/Coller la trajectoire dans le .py
-    // Simulateur simulateur_test(0.1,100, com);
+    // Vecteur<float> Vect_commandes({0,0,0,0})   // mettre ici un vecteur de commande à la main
+    // Commande commandes_manuelles(Vect_commandes)   
+    // Simulateur simulateur_manuelles(pas_temps,temps*50, commandes_manuelles);
+    // Simulateur simulateur_test(pas_temps,temps*50, com);
     // cout << simulateur_test.mise_en_route(route_initiale, dynamique_voile).position<<endl;
 
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//
+
     //Test Grille
-    Grille grille(10.f,10.f,1.5f,0.1f,0.5f);
     // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     // cout << x <<endl;
 
     // cout << grille.find(0.601f,0.12f,0)<<endl;
 
+    // Création du score
+    Vecteur<float> v0 = create_v0(grille);
+
     // //Test interpolation
     // float y1 = 0.601f; float y2 = 0.12f; 
     // int zero = 0;
-    Vecteur<float> v0 = create_v0(grille);
-    Grille grille_mod = grille;
-    grille_mod.resolution = 20;
-    print_grille(grille_mod, v0);
+    // Grille grille_mod = grille;
+    // grille_mod.resolution = 20;
+    // print_grille(grille_mod, v0);
     // cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
     // cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
     // cout << v0[grille.find(x.X[1], x.Y[1], 0)] << ", "<<endl;
     // cout << v0[grille.find(x.X[2], x.Y[2], 0)] << ", ";
     // cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
     // cout << v0<< endl;
+
+
     //Test Flux
     Dynamique_voile fonction(bassin1, voilier_de_Bob);
     // Flux flux(grille, fonction);
@@ -153,11 +180,15 @@ int main(int argc, char *argv[])
 
     //Test route optimale
     route_optimale route(grille, fonction, v0);
-    Vecteur<float> x0({1.,2.});
-    commandes_discretes commandes = route.calcul(x0, 15);
-    cout << route.positions<<endl;
-    cout << commandes << endl;
-    cout << "gg"<<endl;
 
+
+    commandes_discretes commandes = route.calcul(x0, 15); // 15 = nombre d'angle testé
+
+    cout << route.positions<<endl;  // partie à copier-coller dans le python pour afficher
+    cout << commandes << endl; 
+    cout << "Bob peut pecher"<<endl;
+    cout <<"Appuyez sur une touche pour continuer... ";
+    cin.get();
+    return 1;
 }
 

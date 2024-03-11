@@ -1,0 +1,15 @@
+<map id="Bassin" name="Bassin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="188,295,250,321"/>
+<area shape="rect" id="Node000002" href="$class_grille.html" title=" " alt="" coords="5,188,57,215"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="53,224,78,247,107,268,148,287,189,298,187,303,147,292,104,273,74,252,50,228"/>
+<area shape="rect" id="Node000003" href="$class_bi__vecteur.html" title=" " alt="" coords="81,188,210,215"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="144,230,145,250,152,269,168,285,189,296,187,301,165,290,147,272,140,251,139,230"/>
+<area shape="rect" id="Node000004" href="$class_vecteur.html" title=" " alt="" coords="89,81,203,108"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="148,123,148,188,143,188,143,123"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="92,5,199,32"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="148,47,148,81,143,81,143,47"/>
+<area shape="rect" id="Node000006" href="$class_foncteur__vent.html" title=" " alt="" coords="235,188,337,215"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="279,230,257,272,236,296,232,292,253,269,274,228"/>
+<area shape="rect" id="Node000007" href="$class_foncteur__courant.html" title=" " alt="" coords="361,188,483,215"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="405,229,384,252,356,273,330,286,302,295,251,306,249,301,300,290,328,281,354,268,380,248,402,225"/>
+</map>
