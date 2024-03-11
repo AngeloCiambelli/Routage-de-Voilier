@@ -116,10 +116,9 @@ int main(int argc, char *argv[])
 
 
     //=======================================Test ROUTAGE OPTIMAL===========================================//
-
     //Test Grille
-    // Grille grille(1.f,1.f,1.f,0.05f,0.1f);
-    // Bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
+    Grille grille(10.f,10.f,1.5f,0.1f,0.5f);
+    // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     // cout << x <<endl;
 
     // cout << grille.find(0.601f,0.12f,0)<<endl;
@@ -127,22 +126,20 @@ int main(int argc, char *argv[])
     // //Test interpolation
     // float y1 = 0.601f; float y2 = 0.12f; 
     // int zero = 0;
-    // Vecteur<float> v0 = create_v0(grille);
-    // Grille grille_mod = grille;
-    // grille_mod.resolution = 2;
-    // print_grille(grille_mod, v0);
-    // cout << interpolation<float, Vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
+    Vecteur<float> v0 = create_v0(grille);
+    Grille grille_mod = grille;
+    grille_mod.resolution = 20;
+    print_grille(grille_mod, v0);
+    // cout << interpolation<float, vecteur<float>>(x, y1, y2,zero, v0, grille) << endl;
     // cout << v0[grille.find(x.X[0], x.Y[0], 0)] << ", ";
     // cout << v0[grille.find(x.X[1], x.Y[1], 0)] << ", "<<endl;
     // cout << v0[grille.find(x.X[2], x.Y[2], 0)] << ", ";
     // cout << v0[grille.find(x.X[3], x.Y[3], 0)] << ", "<<endl;
     // cout << v0<< endl;
-
-
-    // //Test Flux
-    // Dynamique_voile fonction(bassin1, voilier_de_Bob);
-    // // Flux flux(grille, fonction);
-    // // cout << flux.calcul(0, 5.5, 6, 0, v0)<< endl;
+    //Test Flux
+    Dynamique_voile fonction(bassin1, voilier_de_Bob);
+    // Flux flux(grille, fonction);
+    // cout << flux.calcul(0, 5.5, 6, 0, v0)<< endl;
 
     // //Test HJB
     // // HJB HJB(v0,grille, fonction);
@@ -151,11 +148,13 @@ int main(int argc, char *argv[])
     // // HJB.resolve(10);
     // // print_grille(grille, HJB.v);
 
-    // //Test Route optimale
-    // route_optimale Route(grille, fonction, v0);
-    // Vecteur<float> x0({0.1,0.1});
-    // commandes_discretes commandes = Route.calcul(x0, 14);
-    // cout << Route.positions<<endl;
-    // cout << commandes << endl;
+    //Test route optimale
+    route_optimale route(grille, fonction, v0);
+    Vecteur<float> x0({1.,2.});
+    commandes_discretes commandes = route.calcul(x0, 15);
+    cout << route.positions<<endl;
+    cout << commandes << endl;
+    cout << "gg"<<endl;
+
 }
 

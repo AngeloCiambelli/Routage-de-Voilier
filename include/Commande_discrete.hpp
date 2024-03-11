@@ -28,15 +28,19 @@ using namespace std;
 
 class commandes_discretes
 {
-public:
-  Vecteur<float> commandes;
+  private:
   float contrainte;
+
+  public:
+  vecteur<float> commandes;
+
+
   bool check_commandes()
-  {
+  {  // vérifie que les commandes stockées soit possible (non implémentée au final)
     float a = commandes[0];
     for (int i = 1; i < commandes.size(); i++)
     {
-      if (fmod(abs(commandes[i] - a), 360.) > contrainte)
+      if (angle_relatif(commandes[i], a) > contrainte)
       {
         cout << "Erreur : commande invalide. Il y a un changment brusque de direction.";
         return 0;
@@ -45,6 +49,7 @@ public:
     }
     return 1;
   }
+  
 };
 
 ostream &operator<<(ostream &out, const commandes_discretes &c)
