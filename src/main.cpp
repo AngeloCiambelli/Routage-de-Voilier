@@ -30,6 +30,27 @@
 
 int main(int argc, char *argv[])
 {
+    //  DEFINITION DES OBJETS DE BASE
+
+
+    Vecteur<float> x0({1.,2.}); // Position de départ
+
+    float pas = 0.5f;
+    float temps = 2.f;
+    float largeur = 10.f;
+    float longueur = 10.f;
+    float pas_temps = 0.1f;
+
+
+    pair<float, float> bas(0,0);
+    pair<float, float> haut(longueur,largeur);
+
+    Grille grille(longueur,largeur,temps,pas_temps,pas); // Grille dans laquelle on travaille
+
+
+    /////////////////////////////////////////////////////////////
+
+
     // cout << "Hello world!" << std::endl;
 
     // Test Vecteur
@@ -86,9 +107,6 @@ int main(int argc, char *argv[])
     // Test Bassin
     Foncteur_vent f;
     Foncteur_courant g;
-    float pas = 0.5;
-    pair<float, float> bas(0,0);
-    pair<float, float> haut(10,10);
     string sto("analytique"); //"tabule"
     Bassin bassin1(bas,haut,pas,f,g,sto);
     
@@ -123,7 +141,6 @@ int main(int argc, char *argv[])
     //=======================================Test ROUTAGE OPTIMAL===========================================//
 
     //Test Grille
-    Grille grille(10.f,10.f,2.f,0.1f,0.5f);
     // bi_vecteur<int> x = grille.localisation(0.601f,0.12f);
     // cout << x <<endl;
 
@@ -162,7 +179,6 @@ int main(int argc, char *argv[])
     route_optimale route(grille, fonction, v0);
 
 
-    Vecteur<float> x0({1.,2.}); // Position de départ
     commandes_discretes commandes = route.calcul(x0, 15); // 15 = nombre d'angle testé
 
     cout << route.positions<<endl;  // partie à copier-coller dans le python pour afficher
