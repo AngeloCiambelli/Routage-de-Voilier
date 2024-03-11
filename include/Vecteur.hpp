@@ -30,9 +30,12 @@ template <typename T>
 class Vecteur : public vector<T>
 {
 public:
+
+  // Constructeur
   Vecteur(int d = 0, const T &v0 = T()) : vector<T>(d, v0) {} // dim et composantes constantes
   Vecteur(const initializer_list<T> &vs) : vector<T>(vs) {}   // depuis une liste explicite
 
+  // Fonctions membres
   T operator()(int i) const; // valeur    1->dim (indice non testé)
   T &operator()(int i);      // référence 1->dim (indice non testé)
 

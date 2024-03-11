@@ -33,9 +33,11 @@ class Bi_vecteur
     Vecteur<T> X;
     Vecteur<T> Y;
 
+    // Constructeurs
     Bi_vecteur(const Vecteur<T> &_X, const Vecteur<T> &_Y);
     Bi_vecteur();
 
+    // Fonctions membres
     Vecteur<T> operator[](const int &i) const;
     Bi_vecteur<T> &operator=(const Bi_vecteur<T> &vect);
     Bi_vecteur<T> &pushback(Vecteur<T> xy);
