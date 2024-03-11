@@ -97,9 +97,9 @@ int main(int argc, char *argv[])
     pair<float, float> min_max_com(-80,80); 
     Foncteur_polaire polaire_analytique;
 
-    // Création du voilier de bob de maniere analytique ou tabule
-    //Voilier<float, float> voilier_de_Bob(min_max_com, chemin, ';');
-    Voilier<float, float> voilier_de_Bob(min_max_com, polaire_analytique);
+    // Création du voilier de bob de maniere analytique ou tabule 
+    //Voilier<float, float> voilier_de_Bob(min_max_com, chemin, ';');  // tabule
+    Voilier<float, float> voilier_de_Bob(min_max_com, polaire_analytique);  //analytique
 
     // Verification de la cohérence des commandes pour le voilier de Bob
     com.verification_commande(voilier_de_Bob);
@@ -130,11 +130,14 @@ int main(int argc, char *argv[])
     Dynamique_voile dynamique_voile(bassin1, voilier_de_Bob);
     // dynamique_voile.f(Vecteur<float>({0,0}),acos(route_initiale.vitesse[0][0]/sqrt(route_initiale.vitesse[0]|route_initiale.vitesse[0]))*180/(atan(1)*4), 0, com);
 
-
+    
 
     // Test simulateur - Attention le voilier s'echoue une fois qu'il a traversé le bassin 
     // Pour observer la trajectoire : Copier/Coller la trajectoire dans le .py
-    // Simulateur simulateur_test(0.1,100, com);
+    // Vecteur<float> Vect_commandes({0,0,0,0})   // mettre ici un vecteur de commande à la main
+    // Commande commandes_manuelles(Vect_commandes)   
+    // Simulateur simulateur_manuelles(pas_temps,temps*50, commandes_manuelles);
+    // Simulateur simulateur_test(pas_temps,temps*50, com);
     // cout << simulateur_test.mise_en_route(route_initiale, dynamique_voile).position<<endl;
 
 
@@ -183,7 +186,7 @@ int main(int argc, char *argv[])
 
     cout << route.positions<<endl;  // partie à copier-coller dans le python pour afficher
     cout << commandes << endl; 
-    cout << "Bob peut pêcher"<<endl;
+    cout << "Bob peut pecher"<<endl;
     cout <<"Appuyez sur une touche pour continuer... ";
     cin.get();
     return 1;
