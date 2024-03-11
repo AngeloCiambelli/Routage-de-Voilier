@@ -18,14 +18,14 @@
 //                            Description
 //===========================================================================
 //
-// On prend une grille de [0,10]x[0,10] avec un pas de 0.5
-// Le bassin et defini avec les fonctions dans foncteur f_vent et f_courant
-// Dans l'état tel quel le voilier a des polaires qui viennent de test.csv 
-// PS : le bateau aiment pas beaucoup allez dans des direction differentes du vent
+// On prend un bassin de [0,10]x[0,10] et un pas de grille de 0.5
+// Les champs de vent et courants sont definis avec foncteur_vent et foncteur_courant
+// Dans l'état tel quel le voilier a des polaires analytique 
+// PS : le bateau n'est pas très rapide quand il va dans des direction differentes du vent
 
-// Les vecteurs de courant et vent sont aussi stocké de maniere tabulé.
+// Les vecteurs de courant et vent sont stocké analytiquement.
 
-// Dans la simulation on fait 50 pas avec un pas de temps de 0.1 (Attention le bateau va vite!)
+// Dans la simulation on fait 50 pas avec un pas de temps de 0.1 (Attention le bateau va vite et s'échoue)
 
 
 int main(int argc, char *argv[])
